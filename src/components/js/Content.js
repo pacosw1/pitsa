@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import Clientes from "./Catalogo";
-import { Catalogo } from "./Catalogo";
+import Catalogo from "./Catalogo";
 import {
   clientes,
   vendedores,
@@ -41,12 +41,7 @@ class Content extends Component {
           exact
           path="/catalogo/clientes/get/:id"
           render={props => (
-            <Form
-              header="Editar Cliente"
-              fields={clientes}
-              edit={true}
-              {...props}
-            />
+            <Form header="Clientes" fields={clientes} edit={true} {...props} />
           )}
         />
 

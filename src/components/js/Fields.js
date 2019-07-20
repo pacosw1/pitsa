@@ -1,5 +1,5 @@
 exports.clientes = [
-  "Razon Social",
+  "Empresa",
   "Direccion",
   "Colonia",
   "Poblacion",

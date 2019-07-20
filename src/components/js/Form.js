@@ -1,10 +1,20 @@
 import React, { Component } from "react";
 import "../css/Form.css";
+let axios = require("../config/axios");
 
 class Form extends Component {
   state = {
     fields: {}
   };
+
+  async componentDidMount() {
+    let { match, edit, header } = this.props;
+    if (edit) {
+      let id = match.params.id;
+      let result = await axios.getItem(header.toLowerCase(), id);
+      this.setState({ fields: result });
+    }
+  }
 
   updateField = field => {
     let { fields } = this.state;

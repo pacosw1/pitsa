@@ -1,0 +1,28 @@
+.sidebar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  width: 200px;
+  border-right: 0.5px solid;
+  justify-content: space-between;
+  padding: 1.8rem 2rem;
+  border-color: rgb(209, 209, 209);
+}
+#top {
+  padding: 0.5rem 0rem;
+}
+#bottom {
+  padding: 2rem 0rem;
+}
+
+#tab-text {
+  font-size: 1rem;
+  margin: 1rem 0rem;
+}
+#tab {
+  font-size: 1rem !important;
+}
+#tab-item {
+  font-size: 0.9rem;
+}

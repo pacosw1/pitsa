@@ -1,0 +1,14 @@
+.App {
+  display: flex;
+  height: 100vh;
+}
+.App h4 {
+  color: rgb(37, 37, 37);
+}
+
+.no-link {
+  text-decoration: "none";
+  text-decoration-line: none;
+  text-decoration-color: black;
+  text-decoration-style: none;
+}

@@ -1,0 +1,27 @@
+.t {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0.2rem;
+  font-size: 0.9rem !important;
+}
+
+.t button {
+  color: white;
+  width: 10rem;
+  height: 2rem;
+  border-radius: 0.2rem !important;
+  border: none;
+  margin: 1rem 0rem !important;
+  background-color: #000000;
+}
+button {
+  color: white;
+  height: 2rem;
+  border-radius: 0.2rem !important;
+  border: none;
+  background-color: #000000;
+}
+
+.table-item:hover {
+  background-color: rgba(133, 133, 133, 0.178);
+}

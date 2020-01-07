@@ -7,7 +7,8 @@ import {
   vendedores,
   parametros,
   unidades,
-  proovedores
+  proovedores,
+  cotizaciones
 } from "./Fields";
 import Form from "./Form";
 require("../css/Content.css");
@@ -52,6 +53,39 @@ class Content extends Component {
             <Catalogo header="Vendedores" fields={vendedores} {...props} />
           )}
         />
+
+        <Route
+          exact
+          path="/catalogo/cotizaciones"
+          render={props => (
+            <Catalogo header="Cotizaciones" fields={cotizaciones} {...props} />
+          )}
+        />
+        <Route
+          exact
+          path="/catalogo/cotizaciones/new"
+          render={props => (
+            <Form
+              header="Cotizaciones"
+              fields={cotizaciones}
+              onChange={console.log("onchange")}
+              onSumbit={console.log("onsubmit")}
+              {...props}
+            />
+          )}
+        />
+        <Route
+          path="/catalogo/cotizaciones/get/:id"
+          render={props => (
+            <Form
+              header="Cotizaciones"
+              fields={cotizaciones}
+              edit={true}
+              {...props}
+            />
+          )}
+        />
+
         <Route
           exact
           path="/catalogo/vendedores/new"

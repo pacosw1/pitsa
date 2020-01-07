@@ -11,9 +11,10 @@ class Sidebar extends Component {
         items: [
           "Proovedores",
           "Clientes",
-          "Vendedores",
-          "Parametros",
-          "Unidades"
+          "Cotizaciones",
+          "Vendedores"
+          // "Parametros",
+          // "Unidades"
         ],
         open: false
       },

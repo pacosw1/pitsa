@@ -44,12 +44,44 @@ class Catalogo extends Component {
       );
     });
     let dataList = data.map(record => {
+      var status = [
+        "Cancelada por Cliente",
+        "En Proceso",
+        "Perdida",
+        "Aprobada"
+      ];
       let td = fields.map(field => {
-        return (
-          <td key={field.name} onClick={() => this.selectRecord(record._id)}>
-            {record[field.name]}
-          </td>
-        );
+        console.log(field);
+        if (
+          field.name == "Cliente" ||
+          (field.name == "Planta" && header == "Cotizaciones")
+        ) {
+          return (
+            <td
+              key={field.name.Empresa}
+              onClick={() => this.selectRecord(record._id)}
+            >
+              {field.name == "Planta"
+                ? record["Cliente"]["Planta"]
+                : record["Cliente"]["Empresa"]}
+            </td>
+          );
+        } else if (field.name == "Status") {
+          return (
+            <td
+              key={field.name.Empresa}
+              onClick={() => this.selectRecord(record._id)}
+            >
+              {status[record[field.name]]}
+            </td>
+          );
+        } else {
+          return (
+            <td key={field.name} onClick={() => this.selectRecord(record._id)}>
+              {record[field.name]}
+            </td>
+          );
+        }
       });
       return (
         <tr key={record._id} className="table-item">

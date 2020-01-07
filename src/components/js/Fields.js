@@ -7,6 +7,7 @@ exports.clientes = [
   {
     type: "select",
     name: "Vendedor",
+    route: "vendedores",
     placeholder: "Vendedor"
   },
   {
@@ -58,12 +59,13 @@ exports.clientes = [
     type: "input",
     name: "Pais",
     placeholder: "Pais"
-  },
-  {
-    type: "select",
-    name: "Status",
-    placeholder: "Status"
   }
+  // {
+  //   type: "select",
+  //   name: "Status",
+  //   route: undefined,
+  //   placeholder: "Status"
+  // }
 ];
 
 exports.vendedores = [
@@ -77,6 +79,26 @@ exports.unidades = [
   { name: "Descripcion", type: "input", placeholder: "descripcion" }
 ];
 
+exports.cotizaciones = [
+  { name: "Folio", placeholder: "Folio", type: "input" },
+  { name: "Fecha", placeholder: "Fecha", type: "input" },
+  {
+    name: "Cliente",
+    placeholder: "Cliente",
+    type: "select",
+    route: "clientes"
+  },
+  {
+    name: "Status",
+    placeholder: "Estatus",
+    type: "select",
+    route: "status",
+    isStatic: true
+  },
+  { name: "Planta", placeholder: "Planta", type: "input" },
+  { name: "Concepto", placeholder: "Concepto", type: "input" },
+  { name: "Total", placeholder: "Total", type: "input" }
+];
 exports.proovedores = [
   "RazonSocial",
   "Direccion",
@@ -90,4 +112,11 @@ exports.proovedores = [
   "Vendedor",
   "Status",
   "CP"
+];
+
+exports.status = [
+  { value: 0, placeholder: "Cancelada por Cliente" },
+  { value: 1, placeholder: "En proceso" },
+  { value: 2, placeholder: "Perdida" },
+  { value: 3, placeholder: "Aprobada" }
 ];

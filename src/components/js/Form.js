@@ -7,20 +7,44 @@ let _ = require("lodash");
 
 class Form extends Component {
   state = {
-    fields: {},
+    fields: {
+      Fecha: new Date().toLocaleDateString(),
+      status: 0
+    },
     selectData: {
-      vendedor: { curr: "paco", data: ["paco", "juan"] },
-      status: { curr: 0, data: [0, 1] }
+      // vendedor: { curr: "paco", data: ["paco", "juan"] },
+      status: fieldData.status
     },
     loaded: false,
     error: false
   };
 
   async componentWillMount() {
-    let { selectData } = this.state;
+    let { selectData, fields } = this.state;
 
     var result;
     let { match, edit, header } = this.props;
+
+    let selects = fieldData[header.toLowerCase()].filter(
+      x => x.type == "select"
+    );
+
+    selects.forEach(async ({ route, name, placeholder, isStatic }) => {
+      console.log(route);
+      if (!isStatic) {
+        try {
+          var result = await axios.getData(route);
+          if (result.status == 200) {
+            selectData[route] = result.data;
+            fields[name] = result.data[0];
+            this.setState({ selectData });
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    });
+
     if (edit) {
       let id = match.params.id;
       result = (await axios.getItem(header.toLowerCase(), id)) || [];
@@ -28,17 +52,6 @@ class Form extends Component {
       if (result.status !== 200) this.setState({ error: true });
       else {
         this.setState({ fields: result.data, loaded: true });
-        console.log(fieldData);
-        let selects = fieldData[header.toLowerCase()].filter(
-          field => field.type == "select"
-        );
-        console.log(selects);
-
-        selects.forEach(async ({ name, route }) => {
-          let data = await axios.getData(route);
-          selectData[name] = data.data;
-          this.setState({ selectData });
-        });
       }
     } else {
       this.setState({ loaded: true, error: false });
@@ -51,7 +64,8 @@ class Form extends Component {
 
     if (this.props.edit) {
       let id = this.props.match.params.id;
-      fields = _.pick(fields, [...this.props.fields]);
+
+      console.log("fields");
       console.log(fields);
       await axios.editItem(header, fields, id);
     } else {
@@ -71,11 +85,11 @@ class Form extends Component {
   };
 
   updateSelect = ({ value, name }) => {
-    console.log(name);
-    let { selectData } = this.state;
-    selectData[name.toLowerCase()].curr = value;
+    let { selectData, fields } = this.state;
+    fields[name] = value;
     this.setState({
-      selectData
+      selectData,
+      fields
     });
   };
 
@@ -83,35 +97,72 @@ class Form extends Component {
     let { fields, onChange, header } = this.props;
 
     let inputs = fields.filter(field => field.type == "input");
+
     let selects = fieldData[header.toLowerCase()].filter(
       x => x.type == "select"
     );
     console.log(selects);
 
-    let renderInputs = selects.map(({ name, placeholder }) => {
-      var options = this.state.selectData[name.toLowerCase()];
+    let renderInputs = selects.map(({ name, placeholder, route }) => {
+      var optField = {
+        clientes: "Empresa",
+        vendedores: "Nombre",
+        status: "status"
+      };
+      var options = this.state.selectData[route];
       console.log(options);
-      let renderOptions = options.data.map(opt => {
-        return (
-          <option key={opt} placeholder={opt} name={"paco"} value={opt}>
-            {opt}
-          </option>
-        );
-      });
+      if (options) {
+        let renderOptions = options.map(option => {
+          if (route == "status") {
+            return (
+              <option
+                key={option.value}
+                placeholder={option.placeholder}
+                name={route}
+                value={option.value}
+              >
+                {option.placeholder}
+              </option>
+            );
+          } else if (route == "clientes") {
+            return (
+              <option
+                key={option[optField[route]]}
+                placeholder={option[optField[route]]}
+                name={route}
+                value={option}
+              >
+                {option[optField[route]]}
+              </option>
+            );
+          } else {
+            return (
+              <option
+                key={option[optField[route]]}
+                placeholder={option[optField[route]]}
+                name={option[optField[route]]}
+                value={option[optField[route]]}
+              >
+                {option[optField[route]]}
+              </option>
+            );
+          }
+        });
 
-      return (
-        <div className="input-div" key={name}>
-          <span>{placeholder}</span>
-          <select
-            value={this.state.selectData[name.toLowerCase()].curr}
-            onChange={e =>
-              this.updateSelect({ value: e.target.value, name: name })
-            }
-          >
-            {renderOptions}
-          </select>
-        </div>
-      );
+        return (
+          <div className="input-div" key={name}>
+            <span>{placeholder}</span>
+            <select
+              value={this.state.selectData[route].curr}
+              onChange={e =>
+                this.updateSelect({ value: e.target.value, name: name })
+              }
+            >
+              {renderOptions}
+            </select>
+          </div>
+        );
+      }
     });
     let form = inputs.map(({ name, placeholder }) => {
       return (

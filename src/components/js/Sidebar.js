@@ -51,6 +51,7 @@ class Sidebar extends Component {
       let { title, items, open, id } = tab;
       return (
         <Tab
+          key={id}
           id={id}
           title={title}
           items={items}
@@ -75,7 +76,7 @@ class Sidebar extends Component {
 const Tab = props => {
   let { id, onToggle } = props;
   let list = props.items.map(item => {
-    return <TabItem title={item} />;
+    return <TabItem key={item} title={item} />;
   });
   return (
     <div id="tab">

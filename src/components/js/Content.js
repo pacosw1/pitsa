@@ -29,7 +29,7 @@ class Content extends Component {
           path="/catalogo/clientes/new"
           render={props => (
             <Form
-              header="Nuevo Cliente"
+              header="Clientes"
               fields={clientes}
               onChange={console.log("onchange")}
               onSumbit={console.log("onsubmit")}
@@ -57,7 +57,7 @@ class Content extends Component {
           path="/catalogo/vendedores/new"
           render={props => (
             <Form
-              header="Nuevo Vendedor"
+              header="Vendedores"
               fields={vendedores}
               onChange={console.log("onchange")}
               onSumbit={console.log("onsubmit")}
@@ -69,7 +69,7 @@ class Content extends Component {
           path="/catalogo/vendedores/get/:id"
           render={props => (
             <Form
-              header="Editar Vendedor"
+              header="Vendedores"
               fields={vendedores}
               edit={true}
               {...props}
@@ -89,7 +89,7 @@ class Content extends Component {
           path="/catalogo/proovedores/new"
           render={props => (
             <Form
-              header="Nuevo Proovedor"
+              header="Proovedores"
               fields={proovedores}
               onChange={console.log("onchange")}
               onSumbit={console.log("onsubmit")}
@@ -101,7 +101,7 @@ class Content extends Component {
           path="/catalogo/proovedores/get/:id"
           render={props => (
             <Form
-              header="Editar Proovedor"
+              header="Proovedores"
               fields={proovedores}
               edit={true}
               {...props}
@@ -120,7 +120,7 @@ class Content extends Component {
           path="/catalogo/parametros/new"
           render={props => (
             <Form
-              header="Nuevo Parametro"
+              header="Parametros"
               fields={parametros}
               onChange={console.log("onchange")}
               onSumbit={console.log("onsubmit")}
@@ -132,7 +132,7 @@ class Content extends Component {
           path="/catalogo/parametros/get/:id"
           render={props => (
             <Form
-              header="Editar Parametro"
+              header="Parametros"
               fields={parametros}
               edit={true}
               {...props}
@@ -151,7 +151,7 @@ class Content extends Component {
           path="/catalogo/unidades/new"
           render={props => (
             <Form
-              header="Nueva Unidad"
+              header="Unidades"
               fields={unidades}
               onChange={console.log("onchange")}
               onSumbit={console.log("onsubmit")}
@@ -162,12 +162,7 @@ class Content extends Component {
         <Route
           path="/catalogo/unidades/get/:id"
           render={props => (
-            <Form
-              header="Editar Unidad"
-              fields={unidades}
-              edit={true}
-              {...props}
-            />
+            <Form header="Unidades" fields={unidades} edit={true} {...props} />
           )}
         />
       </div>

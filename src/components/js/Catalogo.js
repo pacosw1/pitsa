@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "../css/Table.css";
+
 import "bootstrap/dist/css/bootstrap.css";
 import { NavLink } from "react-router-dom";
 import ErrorPage from "./Error";
@@ -98,19 +99,33 @@ class Catalogo extends Component {
       );
     });
     return (
-      <div>
+      <div className="t">
         {this.state.error ? (
           <ErrorPage />
         ) : (
           <div>
             <div className="t">
               <h2>{header}</h2>
-              <NavLink
-                className="no-link"
-                to={`/catalogo/${header.toLowerCase()}/new`}
-              >
-                <button>Nuevo</button>
-              </NavLink>
+              <div className="head-actions">
+                <div>
+                  <NavLink
+                    className="no-link"
+                    to={`/catalogo/${header.toLowerCase()}/new`}
+                  >
+                    <button>Nuevo</button>
+                  </NavLink>
+                </div>
+                <div>
+                  <select style={{ height: "2rem" }}>
+                    <option>Por Empresa</option>
+                  </select>
+                  <input
+                    placeholder="Search"
+                    style={{ width: "10rem", height: "2rem" }}
+                  ></input>
+                  <button className="search-button">Buscar</button>
+                </div>
+              </div>
               <div id="tables">
                 {!this.state.loaded ? (
                   <LoadingScreen />

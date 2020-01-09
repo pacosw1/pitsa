@@ -33,12 +33,10 @@ class Form extends Component {
       if (!isStatic) {
         try {
           var result = await axios.getData(route);
-          if (result.status == 200) {
-            console.log(result.data[0]);
-            selectData[route] = result.data;
-            fields[name] = result.data[0]._id;
-            this.setState({ selectData, fields });
-          }
+
+          selectData[route] = result.data;
+          fields[name] = result.data[0]._id;
+          this.setState({ selectData, fields });
         } catch (err) {
           console.log(err);
         }
@@ -63,23 +61,23 @@ class Form extends Component {
     let header = this.props.header.toLowerCase();
 
     if (header == "clientes") {
-      let vendedor = await axios.getItem(
-        "vendedores",
-        this.state.fields.Vendedor
-      );
-
-      if (vendedor.status == 200) {
+      try {
+        let vendedor = await axios.getItem(
+          "vendedores",
+          this.state.fields.Vendedor
+        );
         console.log(vendedor.data);
         fields["Vendedor"] = vendedor.data;
+      } catch (err) {
+        alert(err.message);
       }
     } else if (header == "cotizaciones") {
-      let client = await axios.getItem("clientes", this.state.fields.Cliente);
-
-      if (client.status == 200) {
-        console.log(client.data);
+      try {
+        let client = await axios.getItem("clientes", this.state.fields.Cliente);
         fields["Cliente"] = client.data;
+      } catch (err) {
+        alert(err.message);
       }
-      console.log(fields);
     }
 
     if (this.props.edit) {
@@ -87,9 +85,17 @@ class Form extends Component {
 
       console.log("fields");
       console.log(fields);
-      await axios.editItem(header, fields, id);
+      try {
+        await axios.editItem(header, fields, id);
+      } catch (err) {
+        alert(err.message);
+      }
     } else {
-      await axios.createItem(header, fields);
+      try {
+        await axios.createItem(header, fields);
+      } catch (err) {
+        alert(err.message);
+      }
     }
     return (window.location = "/catalogo/" + header);
   }

@@ -59,45 +59,35 @@ class Form extends Component {
   async onSubmit() {
     let { fields } = this.state;
     let header = this.props.header.toLowerCase();
+    let id = this.props.match.params.id;
 
-    if (header == "clientes") {
-      try {
+    try {
+      //try to perfor save / edit request
+      //handle save request for different tables
+      if (header == "clientes") {
         let vendedor = await axios.getItem(
           "vendedores",
           this.state.fields.Vendedor
         );
-        console.log(vendedor.data);
         fields["Vendedor"] = vendedor.data;
-      } catch (err) {
-        alert(err.message);
-      }
-    } else if (header == "cotizaciones") {
-      try {
+      } else if (header == "cotizaciones") {
+        //async call
         let client = await axios.getItem("clientes", this.state.fields.Cliente);
+        //update with asyc result;
         fields["Cliente"] = client.data;
-      } catch (err) {
-        alert(err.message);
       }
-    }
+      //case where an existing record needs updating
+      if (this.props.edit) await axios.editItem(header, fields, id);
+      //edit item
+      else await axios.createItem(header, fields); //or create it
 
-    if (this.props.edit) {
-      let id = this.props.match.params.id;
-
-      console.log("fields");
-      console.log(fields);
-      try {
-        await axios.editItem(header, fields, id);
-      } catch (err) {
-        alert(err.message);
-      }
-    } else {
-      try {
-        await axios.createItem(header, fields);
-      } catch (err) {
-        alert(err.message);
-      }
+      //if nothing fails, redirect to  current catalog;
+      return (window.location = "/catalogo/" + header);
+    } catch (err) {
+      //if erro save it for display inside state;
+      alert("error");
+      this.setState({ error: true, errorData: err });
     }
-    return (window.location = "/catalogo/" + header);
   }
 
   updateField = field => {

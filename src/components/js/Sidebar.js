@@ -9,27 +9,28 @@ class Sidebar extends Component {
         id: 0,
         title: "Catalogos",
         items: [
-          "Proovedores",
+          // "Proovedores",
           "Clientes",
           "Cotizaciones",
-          "Vendedores"
+          "Vendedores",
+          "Ordenes"
           // "Parametros",
           // "Unidades"
         ],
         open: false
       },
-      {
-        id: 1,
-        title: "Procesos",
-        items: ["Test"],
-        open: false
-      },
-      {
-        id: 2,
-        title: "Admin",
-        items: ["Ordenes de Compra", "Remisiones"],
-        open: false
-      },
+      // {
+      //   id: 1,
+      //   title: "Procesos",
+      //   items: ["Test"],
+      //   open: false
+      // },
+      // {
+      //   id: 2,
+      //   title: "Admin",
+      //   items: ["Ordenes de Compra", "Remisiones"],
+      //   open: false
+      // },
       {
         id: 3,
         title: "Reportes",

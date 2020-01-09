@@ -79,6 +79,29 @@ exports.unidades = [
   { name: "Descripcion", type: "input", placeholder: "descripcion" }
 ];
 
+exports.ordenes = [
+  { type: "input", placeholder: "Folio", name: "Folio" },
+  { type: "input", placeholder: "Fecha", name: "Fecha" },
+  {
+    type: "select",
+    placeholder: "Cliente",
+    name: "Cliente",
+    route: "clientes"
+  },
+  { type: "input", placeholder: "Importe", name: "Importe" },
+  { type: "input", placeholder: "Pedido", name: "Pedido" },
+  { type: "input", placeholder: "Concepto", name: "TipoMaterial" },
+  { type: "input", placeholder: "Condiciones", name: "CondPago" },
+  { type: "input", placeholder: "Fecha Limite", name: "Entrega" }
+
+  // {
+  //   type: "select",
+  //   placeholder: "vendedor",
+  //   name: "Vendedor",
+  //   route: "vendedores"
+  // }
+];
+
 exports.cotizaciones = [
   { name: "Folio", placeholder: "Folio", type: "input" },
   { name: "Fecha", placeholder: "Fecha", type: "input" },
@@ -95,7 +118,6 @@ exports.cotizaciones = [
     route: "status",
     isStatic: true
   },
-  { name: "Planta", placeholder: "Planta", type: "input" },
   { name: "Concepto", placeholder: "Concepto", type: "input" },
   { name: "Total", placeholder: "Total", type: "input" }
 ];

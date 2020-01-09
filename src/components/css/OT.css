@@ -1,0 +1,87 @@
+.OT {
+  display: flex;
+  flex: 1 100%;
+  max-height: 100vh;
+  margin-top: 2rem;
+}
+
+.OT button {
+  max-width: 95%;
+  border-radius: 0.2rem;
+  border: 1px solid;
+
+  margin: 1rem 0rem;
+  height: 2.5rem;
+}
+.split-left {
+  flex: 1 35%;
+  display: flex;
+  flex-direction: column;
+}
+.split {
+  flex: 1 65%;
+  display: flex;
+  flex-direction: column;
+}
+.datos {
+  display: flex;
+  flex-direction: column;
+}
+input::placeholder {
+  margin: 2rem;
+}
+
+.vendido {
+  display: flex;
+  flex-direction: column;
+}
+
+.OT select {
+  margin: 0.3rem 0rem;
+  border-radius: 0.2rem;
+  appearance: none;
+  padding: 0.1rem 0.4rem;
+  max-width: 95%;
+
+  height: 2.6rem;
+}
+
+.disabled {
+  background-color: rgb(211, 211, 211);
+}
+
+.scroll {
+  height: 400px;
+  width: 100% !important;
+  overflow-y: scroll;
+  display: block;
+  border-bottom: 1px solid;
+  border-color: rgb(160, 159, 159);
+}
+
+.OT input {
+  margin: 0.3rem 0rem;
+  border-radius: 0.2rem;
+  border: 1px solid;
+  border-color: rgba(0, 0, 0, 0.644);
+  padding: 0.1rem 0.4rem;
+  margin: 0.3rem 0rem;
+  padding: 0.5rem;
+  max-width: 95%;
+}
+.enviar {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.currencySelect {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.currencyBorder {
+  border-right: none !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}

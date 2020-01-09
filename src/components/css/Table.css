@@ -6,6 +6,10 @@
   height: 100vh !important;
   font-size: 0.9rem !important;
 }
+
+input::placeholder {
+  margin: 2rem !important;
+}
 .delete-button {
   color: white;
   width: 2.5rem !important;

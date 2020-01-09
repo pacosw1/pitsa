@@ -50,3 +50,11 @@ input::placeholder {
 .input-div * {
   width: 100%;
 }
+select {
+  margin: 0.3rem 0rem;
+  border-radius: 0.2rem;
+  padding: 0.1rem 0.4rem;
+  max-width: 95%;
+
+  height: 2.2rem;
+}

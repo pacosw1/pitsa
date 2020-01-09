@@ -4,6 +4,7 @@ import Clientes from "./Catalogo";
 import Catalogo from "./Catalogo";
 import {
   clientes,
+  ordenes,
   vendedores,
   parametros,
   unidades,
@@ -11,6 +12,7 @@ import {
   cotizaciones
 } from "./Fields";
 import Form from "./Form";
+import OrdenTrabajo from "./OrdenTrabajo";
 require("../css/Content.css");
 
 class Content extends Component {
@@ -52,6 +54,25 @@ class Content extends Component {
           render={props => (
             <Catalogo header="Vendedores" fields={vendedores} {...props} />
           )}
+        />
+
+        <Route
+          exact
+          path="/catalogo/ordenes"
+          render={props => (
+            <Catalogo header="Ordenes" fields={ordenes} {...props} />
+          )}
+        />
+
+        <Route
+          exact
+          path="/catalogo/ordenes/new"
+          render={props => <OrdenTrabajo />}
+        />
+        <Route
+          exact
+          path="/catalogo/ordenes/get/:id"
+          render={props => <OrdenTrabajo edit={true} {...props} />}
         />
 
         <Route

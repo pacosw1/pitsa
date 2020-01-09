@@ -9,10 +9,9 @@ class Form extends Component {
   state = {
     fields: {
       Fecha: new Date().toLocaleDateString(),
-      status: 0
+      Status: 0
     },
     selectData: {
-      // vendedor: { curr: "paco", data: ["paco", "juan"] },
       status: fieldData.status
     },
     loaded: false,
@@ -35,9 +34,10 @@ class Form extends Component {
         try {
           var result = await axios.getData(route);
           if (result.status == 200) {
+            console.log(result.data[0]);
             selectData[route] = result.data;
-            fields[name] = result.data[0];
-            this.setState({ selectData });
+            fields[name] = result.data[0]._id;
+            this.setState({ selectData, fields });
           }
         } catch (err) {
           console.log(err);
@@ -61,6 +61,29 @@ class Form extends Component {
   async onSubmit() {
     let { fields } = this.state;
     let header = this.props.header.toLowerCase();
+
+    if (header == "clientes") {
+      let vendedor = await axios.getItem(
+        "vendedores",
+        this.state.fields.Vendedor
+      );
+
+      if (vendedor.status == 200) {
+        console.log(vendedor.data);
+        fields["Vendedor"] = {
+          sellerId: vendedor.data._id,
+          name: vendedor.data.Nombre
+        };
+      }
+    } else if (header == "cotizaciones") {
+      let client = await axios.getItem("clientes", this.state.fields.Cliente);
+
+      if (client.status == 200) {
+        console.log(client.data);
+        fields["Cliente"] = client.data;
+      }
+      console.log(fields);
+    }
 
     if (this.props.edit) {
       let id = this.props.match.params.id;
@@ -86,7 +109,9 @@ class Form extends Component {
 
   updateSelect = ({ value, name }) => {
     let { selectData, fields } = this.state;
+
     fields[name] = value;
+
     this.setState({
       selectData,
       fields
@@ -130,7 +155,19 @@ class Form extends Component {
                 key={option[optField[route]]}
                 placeholder={option[optField[route]]}
                 name={route}
-                value={option}
+                value={option._id}
+              >
+                {option[optField[route]]}
+              </option>
+            );
+          } else if (route == "vendedores") {
+            return (
+              <option
+                key={option[optField[route]]}
+                placeholder={option[optField[route]]}
+                name={option[optField[route]]}
+                value={option._id}
+                seller={option[optField[route]]}
               >
                 {option[optField[route]]}
               </option>
@@ -141,7 +178,7 @@ class Form extends Component {
                 key={option[optField[route]]}
                 placeholder={option[optField[route]]}
                 name={option[optField[route]]}
-                value={option[optField[route]]}
+                value={option._id}
               >
                 {option[optField[route]]}
               </option>

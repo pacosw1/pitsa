@@ -57,14 +57,26 @@ class Catalogo extends Component {
           field.name == "Cliente" ||
           (field.name == "Planta" && header == "Cotizaciones")
         ) {
+          console.log(record);
           return (
-            <td
-              key={field.name.Empresa}
-              onClick={() => this.selectRecord(record._id)}
-            >
+            <td key={field.name} onClick={() => this.selectRecord(record._id)}>
               {field.name == "Planta"
-                ? record["Cliente"]["Planta"]
-                : record["Cliente"]["Empresa"]}
+                ? record["Cliente"]["planta"]
+                : record["Cliente"].Empresa}
+            </td>
+          );
+        } else if (field.name == "Fecha") {
+          let date = record["Fecha"].slice(0, 10);
+          return (
+            <td key={field} onClick={() => this.selectRecord(record._id)}>
+              {date}
+            </td>
+          );
+        } else if (field.name == "Vendedor") {
+          console.log(record);
+          return (
+            <td key={field} onClick={() => this.selectRecord(record._id)}>
+              {record["Vendedor"]["name"]}
             </td>
           );
         } else if (field.name == "Status") {

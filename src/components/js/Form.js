@@ -70,10 +70,7 @@ class Form extends Component {
 
       if (vendedor.status == 200) {
         console.log(vendedor.data);
-        fields["Vendedor"] = {
-          sellerId: vendedor.data._id,
-          name: vendedor.data.Nombre
-        };
+        fields["Vendedor"] = vendedor.data;
       }
     } else if (header == "cotizaciones") {
       let client = await axios.getItem("clientes", this.state.fields.Cliente);

@@ -76,7 +76,7 @@ class Catalogo extends Component {
           console.log(record);
           return (
             <td key={field} onClick={() => this.selectRecord(record._id)}>
-              {record["Vendedor"]["name"]}
+              {record["Vendedor"]["Nombre"]}
             </td>
           );
         } else if (field.name == "Status") {

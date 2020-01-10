@@ -36,7 +36,7 @@ class Form extends Component {
           var result = await axios.getData(route);
           var data = _.get(result, "data");
           if (data) {
-            if (data.Vendedor) fields.Vendedor = data.Vendedor._id;
+            if (data.Vendedor && !edit) fields.Vendedor = data.Vendedor._id;
             selectData[route] = _.get(result, "data");
             fields[name] = data._id;
           }
@@ -46,6 +46,8 @@ class Form extends Component {
       });
     } catch (err) {
       //catch error and save message to state
+      console.log("error");
+      console.log(err);
       this.setState({ error: true, errorData: err.message });
     }
     var data;
@@ -63,12 +65,14 @@ class Form extends Component {
       console.log(data);
       if (data) if (data.Vendedor) seller = data.Vendedor._id;
 
-      if (seller) fields.Vendedor = seller;
-    }
+      console.log(seller);
+      if (seller) data.Vendedor = seller;
+    } else data = true;
 
     if (data) {
       this.setState({ fields: data, loaded: true }); //set the info into fields in state
     } else {
+      console.log(data);
       this.setState({ error: true });
     }
   }
@@ -199,11 +203,13 @@ class Form extends Component {
           }
         });
 
+        console.log(name);
+
         return (
           <div className="input-div" key={name}>
             <span>{placeholder}</span>
             <select
-              value={this.state.selectData[route].curr}
+              defaultValue={this.state.fields[name]}
               onChange={e =>
                 this.updateSelect({ value: e.target.value, name: name })
               }

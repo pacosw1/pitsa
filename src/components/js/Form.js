@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "../css/Form.css";
 import { LoadingScreen } from "./loadingScreen";
+import ErrorPage from "./Error";
 let axios = require("../config/axios");
 let fieldData = require("./Fields");
 let _ = require("lodash");
@@ -20,39 +21,55 @@ class Form extends Component {
 
   async componentWillMount() {
     let { selectData, fields } = this.state;
-
-    var result;
     let { match, edit, header } = this.props;
+    var result;
 
-    let selects = fieldData[header.toLowerCase()].filter(
-      x => x.type == "select"
-    );
-
-    selects.forEach(async ({ route, name, placeholder, isStatic }) => {
-      console.log(route);
-      if (!isStatic) {
-        try {
+    try {
+      //find select to be filled by data
+      let selects = fieldData[header.toLowerCase()].filter(
+        x => x.type == "select"
+      );
+      //fill all selects with their respective data from server
+      selects.forEach(async ({ route, name, placeholder, isStatic }) => {
+        console.log(route);
+        if (!isStatic) {
           var result = await axios.getData(route);
+          var data = _.get(result, "data");
+          if (data) {
+            if (data.Vendedor) fields.Vendedor = data.Vendedor._id;
+            selectData[route] = _.get(result, "data");
+            fields[name] = data._id;
+          }
 
-          selectData[route] = result.data;
-          fields[name] = result.data[0]._id;
           this.setState({ selectData, fields });
-        } catch (err) {
-          console.log(err);
         }
-      }
-    });
-
+      });
+    } catch (err) {
+      //catch error and save message to state
+      this.setState({ error: true, errorData: err.message });
+    }
+    var data;
+    //if form is has existing info
     if (edit) {
       let id = match.params.id;
-      result = (await axios.getItem(header.toLowerCase(), id)) || [];
-
-      if (result.status !== 200) this.setState({ error: true });
-      else {
-        this.setState({ fields: result.data, loaded: true });
+      try {
+        result = await axios.getItem(header.toLowerCase(), id); //get the info
+      } catch (err) {
+        console.log(err);
       }
+      var seller;
+      data = _.get(result, "data"); //selects can only have ids;
+      console.log("data");
+      console.log(data);
+      if (data) if (data.Vendedor) seller = data.Vendedor._id;
+
+      if (seller) fields.Vendedor = seller;
+    }
+
+    if (data) {
+      this.setState({ fields: data, loaded: true }); //set the info into fields in state
     } else {
-      this.setState({ loaded: true, error: false });
+      this.setState({ error: true });
     }
   }
 
@@ -65,16 +82,19 @@ class Form extends Component {
       //try to perfor save / edit request
       //handle save request for different tables
       if (header == "clientes") {
-        let vendedor = await axios.getItem(
-          "vendedores",
-          this.state.fields.Vendedor
+        //find seller specified in select
+        var seller = this.state.selectData["vendedores"].find(
+          seller => seller._id == this.state.fields.Vendedor
         );
-        fields["Vendedor"] = vendedor.data;
+        //set its object value in its field in state;
+        fields["Vendedor"] = seller;
       } else if (header == "cotizaciones") {
         //async call
         let client = await axios.getItem("clientes", this.state.fields.Cliente);
         //update with asyc result;
-        fields["Cliente"] = client.data;
+
+        var data = _.get(client, "data");
+        if (data) fields["Cliente"] = client.data;
       }
       //case where an existing record needs updating
       if (this.props.edit) await axios.editItem(header, fields, id);
@@ -82,11 +102,11 @@ class Form extends Component {
       else await axios.createItem(header, fields); //or create it
 
       //if nothing fails, redirect to  current catalog;
-      return (window.location = "/catalogo/" + header);
+      await (window.location = "/catalogo/" + header);
     } catch (err) {
       //if erro save it for display inside state;
-      alert("error");
       this.setState({ error: true, errorData: err });
+    } finally {
     }
   }
 
@@ -209,21 +229,26 @@ class Form extends Component {
     });
     return (
       <div id="form">
-        <h4 style={{ margin: "0rem 1rem" }}>{header}</h4>
-        {!this.state.loaded ? (
-          <LoadingScreen />
+        {this.state.error ? (
+          <ErrorPage />
         ) : (
           <React.Fragment>
-            <div id="fields">
-              {" "}
-              {form}
-              {renderInputs}
-            </div>
-            <div id="fields"> </div>
+            <h4 style={{ margin: "0rem 1rem" }}>{header}</h4>
+            {!this.state.loaded ? (
+              <LoadingScreen />
+            ) : (
+              <React.Fragment>
+                <div id="fields">
+                  {" "}
+                  {form}
+                  {renderInputs}
+                </div>
+                <div id="fields"> </div>
+              </React.Fragment>
+            )}
+            <button onClick={() => this.onSubmit()}>Guardar</button>
           </React.Fragment>
         )}
-
-        <button onClick={() => this.onSubmit()}>Guardar</button>
       </div>
     );
   }

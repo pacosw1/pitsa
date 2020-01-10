@@ -60,11 +60,9 @@ class OrdenTrabajo extends Component {
     try {
       result = await axios.getData("clientes");
 
-      if (result.status == 200) {
-        copy["Cliente"] = result.data[0];
-        copy.Enviar = { Direccion: "", Cliente: "" };
-        this.setState({ clientes: result.data, fields: copy });
-      } else console.log(result.status);
+      copy["Cliente"] = result.data[0];
+      copy.Enviar = { Direccion: "", Cliente: "" };
+      this.setState({ clientes: result.data, fields: copy });
     } catch (err) {
       console.log(err);
     }
@@ -82,14 +80,11 @@ class OrdenTrabajo extends Component {
       let id = match.params.id;
       result = (await axios.getItem("ordenes", id)) || [];
 
-      if (result.status !== 200) this.setState({ error: true });
-      else {
-        this.setState({
-          fields: result.data,
-          loaded: true,
-          parts: result.data.Parts
-        });
-      }
+      this.setState({
+        fields: result.data,
+        loaded: true,
+        parts: result.data.Parts
+      });
     } else {
       this.setState({ loaded: true, error: false, parts: copy });
     }
@@ -125,6 +120,7 @@ class OrdenTrabajo extends Component {
         alert(err.message);
       }
     }
+    await (window.location = "/catalogo/" + "ordenes");
   };
 
   deletePart = id => {

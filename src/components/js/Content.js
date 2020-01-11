@@ -13,6 +13,9 @@ import {
 } from "./Fields";
 import Form from "./Form";
 import OrdenTrabajo from "./OrdenTrabajo";
+import Vendedor from "./Vendedores";
+import Cliente from "./Clientes";
+import Cotizacion from "./Cotizacion";
 require("../css/Content.css");
 
 class Content extends Component {
@@ -30,22 +33,12 @@ class Content extends Component {
         <Route
           exact
           path="/catalogo/clientes/new"
-          render={props => (
-            <Form
-              header="Clientes"
-              fields={clientes}
-              onChange={console.log("onchange")}
-              onSumbit={console.log("onsubmit")}
-              {...props}
-            />
-          )}
+          render={props => <Cliente {...props} />}
         />
         <Route
           exact
           path="/catalogo/clientes/get/:id"
-          render={props => (
-            <Form header="Clientes" fields={clientes} edit={true} {...props} />
-          )}
+          render={props => <Cliente edit={true} {...props} />}
         />
 
         <Route
@@ -85,51 +78,21 @@ class Content extends Component {
         <Route
           exact
           path="/catalogo/cotizaciones/new"
-          render={props => (
-            <Form
-              header="Cotizaciones"
-              fields={cotizaciones}
-              onChange={console.log("onchange")}
-              onSumbit={console.log("onsubmit")}
-              {...props}
-            />
-          )}
+          render={props => <Cotizacion {...props} />}
         />
         <Route
           path="/catalogo/cotizaciones/get/:id"
-          render={props => (
-            <Form
-              header="Cotizaciones"
-              fields={cotizaciones}
-              edit={true}
-              {...props}
-            />
-          )}
+          render={props => <Cotizacion edit={true} {...props} />}
         />
 
         <Route
           exact
           path="/catalogo/vendedores/new"
-          render={props => (
-            <Form
-              header="Vendedores"
-              fields={vendedores}
-              onChange={console.log("onchange")}
-              onSumbit={console.log("onsubmit")}
-              {...props}
-            />
-          )}
+          render={props => <Vendedor {...props} />}
         />
         <Route
           path="/catalogo/vendedores/get/:id"
-          render={props => (
-            <Form
-              header="Vendedores"
-              fields={vendedores}
-              edit={true}
-              {...props}
-            />
-          )}
+          render={props => <Vendedor edit={true} {...props} />}
         />
 
         <Route

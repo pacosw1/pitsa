@@ -110,7 +110,6 @@ class Form extends Component {
     } catch (err) {
       //if erro save it for display inside state;
       this.setState({ error: true, errorData: err });
-    } finally {
     }
   }
 

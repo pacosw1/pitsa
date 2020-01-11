@@ -82,6 +82,7 @@ export const onSubmit = async (route, id, fields, edit) => {
     } catch (err) {
       error = err;
     }
+    data = _.get(result, "data");
     if (data) return data;
     else return false;
   }

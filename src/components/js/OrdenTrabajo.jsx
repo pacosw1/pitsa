@@ -19,9 +19,12 @@ class OrdenTrabajo extends Component {
     fields: {
       Enviar: { Direccion: "", Cliente: "" },
       Parts: [],
+      CondPago: 100,
+      Planta: 0,
+      Moneda: "MXN",
       Status: 0,
       Fecha: new Date().toLocaleDateString(),
-      Cliente: { Vendedor: "name" }
+      Cliente: ""
     },
     clientes: [],
 
@@ -56,6 +59,19 @@ class OrdenTrabajo extends Component {
         { _id: "USD", value: "USD" }
       ]
     }
+  };
+
+  updateField = field => {
+    let { fields } = this.state;
+    let { name, value } = field;
+    if (field.Enviar) {
+      fields.Enviar[name] = value;
+    } else {
+      fields[name] = value;
+    }
+    this.setState({
+      fields: fields
+    });
   };
 
   numberWithCommas(x) {
@@ -105,6 +121,7 @@ class OrdenTrabajo extends Component {
     if (clientData) {
       selects["Clientes"] = utils.loadSelectData(clientData, "Empresa");
       Data["Clientes"] = clientData;
+      fields.Cliente = clientData[0]._id;
     } else this.setState({ error: true });
 
     //////////// load static data selects
@@ -133,6 +150,7 @@ class OrdenTrabajo extends Component {
       if (result) {
         var currClient = result.Cliente;
         result.Cliente = result.Cliente._id;
+
         this.setState({ fields: result, Cliente: currClient });
       } else this.setState({ error: true });
     }
@@ -144,16 +162,18 @@ class OrdenTrabajo extends Component {
   //fucntions
 
   onSubmit = async () => {
-    let { fields, parts } = this.state;
+    let { fields } = this.state;
     let { match, edit } = this.props;
-    let id = match.params.id;
     var result;
 
     fields.Cliente = this.state.Data.Clientes.find(
       client => client._id == fields.Cliente
     );
-    if (edit) result = await utils.onSubmit("ordenes", id, fields, true);
-    else result = await utils.onSubmit("ordenes", fields, id, false);
+    if (edit) {
+      let id = match.params.id;
+
+      result = await utils.onSubmit("ordenes", id, fields, true);
+    } else result = await utils.onSubmit("ordenes", "", fields, false);
 
     if (!result) this.setState({ error: true });
     else await (window.location = "/catalogo/" + "ordenes");
@@ -280,7 +300,11 @@ class OrdenTrabajo extends Component {
                   defaultValue={this.state.fields.Enviar["Cliente"] || ""}
                   placeholder="Cliente"
                   onChange={e =>
-                    this.updateField({ name: "cliente", value: e.target.value })
+                    this.updateField({
+                      Enviar: true,
+                      name: "Cliente",
+                      value: e.target.value
+                    })
                   }
                 />
                 <input
@@ -288,6 +312,7 @@ class OrdenTrabajo extends Component {
                   defaultValue={this.state.fields.Enviar["Direccion"] || ""}
                   onChange={e =>
                     this.updateField({
+                      Enviar: true,
                       name: "Direccion",
                       value: e.target.value
                     })

@@ -1,7 +1,7 @@
 let axios = require("axios");
 
-axios.defaults.baseURL = "http://67.207.87.121:5000/";
-
+axios.defaults.baseURL = "http://localhost:5000/";
+///67.207.87.121
 exports.getData = async route => {
   var result;
   try {
@@ -34,15 +34,15 @@ exports.editItem = async (route, fields, id) => {
   }
 };
 
-exports.createItem = (route, fields) =>
-  axios
-    .post(route, fields)
-    .then(result => {
-      return result.data;
-    })
-    .catch(err => {
-      return err;
-    });
+exports.createItem = async (route, fields) => {
+  var result;
+  try {
+    result = await axios.post(route, fields);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 exports.deleteItem = (route, id) =>
   axios

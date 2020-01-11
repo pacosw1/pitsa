@@ -17,7 +17,7 @@ class Sidebar extends Component {
           // "Parametros",
           // "Unidades"
         ],
-        open: false
+        open: true
       },
       // {
       //   id: 1,

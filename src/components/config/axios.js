@@ -1,6 +1,6 @@
 let axios = require("axios");
 
-axios.defaults.baseURL = "http://localhost:5000/";
+axios.defaults.baseURL = "http://67.207.87.121:5000/";
 ///67.207.87.121
 exports.getData = async route => {
   var result;

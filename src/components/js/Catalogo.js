@@ -24,7 +24,6 @@ class Catalogo extends Component {
       this.setState({ data: result.data, loaded: true });
     }
 
-    console.log(result);
     // this.setState({ data: result });
   }
 
@@ -52,12 +51,10 @@ class Catalogo extends Component {
         "Aprobada"
       ];
       let td = fields.map(field => {
-        console.log(field);
         if (
           field.name == "Cliente" ||
           (field.name == "Planta" && header == "Cotizaciones")
         ) {
-          console.log(record);
           return (
             <td key={field.name} onClick={() => this.selectRecord(record._id)}>
               {field.name == "Planta"
@@ -73,7 +70,6 @@ class Catalogo extends Component {
             </td>
           );
         } else if (field.name == "Vendedor") {
-          console.log(record);
           return (
             <td key={field} onClick={() => this.selectRecord(record._id)}>
               {record["Vendedor"]["Nombre"]}

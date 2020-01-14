@@ -5,11 +5,14 @@ import { LoadingScreen } from "./loadingScreen";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
 let _ = require("lodash");
+let { vendedorSchema } = require("./Fields");
 
 class Vendedor extends Component {
   state = {
     error: false,
     loaded: false,
+    errorField: {},
+    errorMessage: "",
     fields: {}
   };
 
@@ -44,22 +47,36 @@ class Vendedor extends Component {
   onSubmit = async () => {
     let { fields } = this.state;
     let { match, edit } = this.props;
-    var result;
+    var result,
+      res,
+      errorField = {};
 
-    if (edit) {
-      let id = match.params.id;
+    try {
+      res = await vendedorSchema.validateAsync({ ...fields });
+      if (edit) {
+        let id = match.params.id;
 
-      result = await utils.onSubmit("vendedores", id, fields, true);
-    } else result = await utils.onSubmit("vendedores", "id", fields, false);
-    console.log(result);
-    if (!result) this.setState({ error: true });
-    else await (window.location = "/catalogo/vendedores");
+        result = await utils.onSubmit("vendedores", id, fields, true);
+      } else result = await utils.onSubmit("vendedores", "id", fields, false);
+      console.log(result);
+      if (!result) this.setState({ error: true });
+      else await (window.location = "/catalogo/vendedores");
+    } catch (err) {
+      let { message, path } = err.details[0];
+      errorField[path[0]] = message;
+      this.setState({
+        validateFailed: true,
+        errorField,
+        errorMessage: message
+      });
+    }
   };
 
   render() {
     //options for cond de pago.
 
     let { Parts } = this.state.fields;
+    let { errorField } = this.state;
 
     return (
       <div className="OT">
@@ -72,16 +89,32 @@ class Vendedor extends Component {
             ) : (
               <React.Fragment>
                 <div className="split-left">
-                  <h4>Nuevo Vendedor</h4>
+                  <div className="split-header">
+                    <h4>
+                      {this.props.edit ? "Editar Vendedor" : "Nuevo Vendedor"}
+                    </h4>
+                    <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                  </div>
+                  {utils.renderInput(
+                    "fields",
+                    "Nombre",
+                    this,
+                    errorField["Nombre"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Zona",
+                    this,
+                    errorField["Zona"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Telefono",
+                    this,
+                    errorField["Telefono"] ? true : false
+                  )}
 
-                  {utils.renderInput("fields", "Nombre", this)}
-                  {utils.renderInput("fields", "Zona", this)}
-                  {utils.renderInput("fields", "Telefono", this)}
-
-                  <button
-                    onClick={() => this.onSubmit()}
-                    style={{ width: "35rem" }}
-                  >
+                  <button onClick={() => this.onSubmit()} className="subBtn">
                     Guardar
                   </button>
                 </div>

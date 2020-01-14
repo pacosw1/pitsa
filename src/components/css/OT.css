@@ -1,7 +1,8 @@
 .OT {
   display: flex;
-  flex: 1 100%;
-  max-height: 100vh;
+  flex: 1 100% !important;
+  flex-direction: column;
+  height: 100vh !important;
   margin-top: 2rem;
 }
 
@@ -13,10 +14,23 @@
   margin: 1rem 0rem;
   height: 2.5rem;
 }
-.split-left {
-  flex: 1 35%;
+
+.subBtn {
+  width: 400px;
+}
+
+.split-header {
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+
+.split-left {
+  display: flex;
+  flex: 1 100%;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 90%;
 }
 .split {
   flex: 1 65%;
@@ -36,12 +50,17 @@ input::placeholder {
   flex-direction: column;
 }
 
+.errorInput {
+  border: 2px solid !important;
+  border-color: red !important;
+}
+
 .OT select {
   margin: 0.3rem 0rem;
   border-radius: 0.2rem;
   appearance: none;
   padding: 0.1rem 0.4rem;
-  max-width: 95%;
+  width: 400px;
 
   height: 2.6rem;
 }
@@ -50,11 +69,17 @@ input::placeholder {
   background-color: rgb(211, 211, 211);
 }
 
-.scroll {
+.scroll-body {
   height: 400px;
-  width: 100% !important;
   overflow-y: scroll;
-  display: block;
+
+  width: 100%;
+}
+
+.scroll {
+  max-height: 400px !important;
+  overflow: hidden;
+  width: 100%;
   border-bottom: 1px solid;
   border-color: rgb(160, 159, 159);
 }
@@ -67,7 +92,7 @@ input::placeholder {
   padding: 0.1rem 0.4rem;
   margin: 0.3rem 0rem;
   padding: 0.5rem;
-  max-width: 95%;
+  width: 400px;
 }
 .enviar {
   display: flex;
@@ -84,4 +109,20 @@ input::placeholder {
   border-right: none !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .split-left {
+    flex-wrap: nowrap;
+  }
+
+  select {
+    width: 400px !important;
+  }
+  .OT {
+    align-content: center;
+    font-size: 18px !important;
+    align-items: center;
+    border: 1px solid;
+  }
 }

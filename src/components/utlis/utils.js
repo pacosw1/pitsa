@@ -50,17 +50,21 @@ export var searchData = (dataObject, resultObject, field, value) => {
   this.setState({ [resultObject]: resultData });
 };
 
-export const renderInput = (stateObject, field, x, functions = []) => {
-  if (functions.length >= 1) {
-    functions.forEach(f => f(x.state.fields.field));
-  }
+export const renderInput = (stateObject, field, x, error = false) => {
   return (
-    <input
-      className="input"
-      onChange={e => updateField(stateObject, field, e.target.value, x)}
-      placeholder={field}
-      defaultValue={x.state[stateObject][field]}
-    />
+    <div>
+      <h1
+        style={{ fontSize: "15px", marginBottom: "0px", paddingTop: ".2rem" }}
+      >
+        {field}
+      </h1>
+      <input
+        className={error ? "errorInput" : "input"}
+        onChange={e => updateField(stateObject, field, e.target.value, x)}
+        placeholder={field}
+        defaultValue={x.state[stateObject][field]}
+      />
+    </div>
   );
 };
 
@@ -109,13 +113,20 @@ export const updateSelect = (stateObject, field, value, x) => {
 
 export const renderSelect = (field, options, stateObject, x) => {
   return (
-    <select
-      className="select"
-      value={x.state[stateObject][field]}
-      onChange={e => updateSelect(stateObject, field, e.target.value, x)}
-    >
-      {options}
-    </select>
+    <div>
+      <h1
+        style={{ fontSize: "15px", marginBottom: "0px", paddingTop: ".2rem" }}
+      >
+        {field}
+      </h1>
+      <select
+        className="select"
+        value={x.state[stateObject][field]}
+        onChange={e => updateSelect(stateObject, field, e.target.value, x)}
+      >
+        {options}
+      </select>
+    </div>
   );
 };
 

@@ -4,12 +4,15 @@ import ErrorPage from "./Error";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
 let _ = require("lodash");
+let { cotizSchema } = require("./Fields");
 
 class Cotizacion extends Component {
   state = {
     Data: {
       Clientes: []
     },
+    errorField: {},
+    errorMessage: "",
     selects: { Clientes: [] },
     error: false,
     options: {
@@ -20,7 +23,9 @@ class Cotizacion extends Component {
         { _id: 3, value: "Terminada" }
       ]
     },
-    fields: {}
+    fields: {
+      Status: 0
+    }
   };
 
   async componentWillMount() {
@@ -54,6 +59,7 @@ class Cotizacion extends Component {
       if (result) {
         var currClient = result.Cliente;
         result.Cliente = result.Cliente._id;
+        result.Fecha = result.Fecha.slice(0, 10);
 
         this.setState({ fields: result, Cliente: currClient, loaded: true });
       } else {
@@ -72,29 +78,43 @@ class Cotizacion extends Component {
   onSubmit = async () => {
     let { fields } = this.state;
     let { match, edit } = this.props;
-    var result;
+    var result,
+      res,
+      errorField = {};
 
     //format data
 
-    fields.Cliente = this.state.Data.Clientes.find(
-      client => client._id == fields.Cliente
-    );
+    try {
+      res = await cotizSchema.validateAsync({ ...fields });
 
-    if (edit) {
-      let id = match.params.id;
+      fields.Cliente = this.state.Data.Clientes.find(
+        client => client._id == fields.Cliente
+      );
 
-      result = await utils.onSubmit("cotizaciones", id, fields, true);
-    } else result = await utils.onSubmit("cotizaciones", "id", fields, false);
-    console.log(result);
-    if (!result) this.setState({ error: true });
-    else await (window.location = "/catalogo/cotizaciones");
+      if (edit) {
+        let id = match.params.id;
+
+        result = await utils.onSubmit("cotizaciones", id, fields, true);
+      } else result = await utils.onSubmit("cotizaciones", "id", fields, false);
+      console.log(result);
+      if (!result) this.setState({ error: true });
+      else await (window.location = "/catalogo/cotizaciones");
+    } catch (err) {
+      let { message, path } = err.details[0];
+      errorField[path[0]] = message;
+      this.setState({
+        validateFailed: true,
+        errorField,
+        errorMessage: message
+      });
+    }
   };
 
   render() {
     //options for cond de pago.
 
     let { Clientes, Status } = this.state.selects;
-
+    let { errorField } = this.state;
     return (
       <div className="OT">
         {!this.state.loaded ? (
@@ -107,21 +127,51 @@ class Cotizacion extends Component {
               <React.Fragment>
                 <div className="split-left">
                   <h4>
-                    {this.props.edit ? "Editar Cliente" : "Nuevo Cliente"}
+                    {this.props.edit ? "Editar Cotizacion" : "Nueva Cotizacion"}
                   </h4>
+                  <p style={{ color: "red" }}>{this.state.errorMessage}</p>
 
-                  {utils.renderInput("fields", "Folio", this)}
-                  {utils.renderInput("fields", "Fecha", this)}
-                  {utils.renderInput("fields", "Concepto", this)}
-                  {utils.renderInput("fields", "Total", this)}
+                  {utils.renderInput(
+                    "fields",
+                    "Folio",
+                    this,
+                    errorField["Folio"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Fecha",
+                    this,
+                    errorField["Fecha"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Concepto",
+                    this,
+                    errorField["Concepto"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Total",
+                    this,
+                    errorField["Total"] ? true : false
+                  )}
 
-                  {utils.renderSelect("Cliente", Clientes, "fields", this)}
-                  {utils.renderSelect("Status", Status, "fields", this)}
+                  {utils.renderSelect(
+                    "Cliente",
+                    Clientes,
+                    "fields",
+                    this,
+                    errorField["Cliente"] ? true : false
+                  )}
+                  {utils.renderSelect(
+                    "Status",
+                    Status,
+                    "fields",
+                    this,
+                    errorField["Status"] ? true : false
+                  )}
 
-                  <button
-                    onClick={() => this.onSubmit()}
-                    style={{ width: "35rem" }}
-                  >
+                  <button onClick={() => this.onSubmit()} className="subBtn">
                     Guardar
                   </button>
                 </div>

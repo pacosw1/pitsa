@@ -7,7 +7,7 @@ import Dashboard from "./components/js/Content";
 function App() {
   return (
     <div className="App">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <Dashboard />
     </div>
   );

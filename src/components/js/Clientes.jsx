@@ -4,10 +4,14 @@ import ErrorPage from "./Error";
 import { LoadingScreen } from "./loadingScreen";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
+let { clientesSchema } = require("./Fields");
 let _ = require("lodash");
+let Joi = require("@hapi/joi");
 
 class Cliente extends Component {
   state = {
+    errorField: {},
+    errorMessage: "",
     Data: {
       Vendedores: []
     },
@@ -53,30 +57,44 @@ class Cliente extends Component {
 
   onSubmit = async () => {
     let { fields } = this.state;
-    let { match, edit } = this.props;
-    var result;
+    let { edit, match } = this.props;
+    var result,
+      errorField = {};
+
+    try {
+      await clientesSchema.validateAsync({ ...fields });
+      //
+
+      fields.Vendedor = this.state.Data.Vendedores.find(
+        client => client._id == fields.Vendedor
+      );
+
+      if (edit) {
+        let id = match.params.id;
+
+        result = await utils.onSubmit("clientes", id, fields, true);
+      } else result = await utils.onSubmit("clientes", "id", fields, false);
+      console.log(result);
+      if (!result) this.setState({ error: true });
+      else await (window.location = "/catalogo/clientes");
+    } catch (err) {
+      let { message, path } = err.details[0];
+      errorField[path[0]] = message;
+      this.setState({
+        validateFailed: true,
+        errorField,
+        errorMessage: message
+      });
+    }
 
     //format data
-
-    fields.Vendedor = this.state.Data.Vendedores.find(
-      client => client._id == fields.Vendedor
-    );
-
-    if (edit) {
-      let id = match.params.id;
-
-      result = await utils.onSubmit("clientes", id, fields, true);
-    } else result = await utils.onSubmit("clientes", "id", fields, false);
-    console.log(result);
-    if (!result) this.setState({ error: true });
-    else await (window.location = "/catalogo/clientes");
   };
 
   render() {
     //options for cond de pago.
 
     let { Vendedores } = this.state.selects;
-
+    let { errorField } = this.state;
     return (
       <div className="OT">
         {!this.state.loaded ? (
@@ -87,28 +105,88 @@ class Cliente extends Component {
               <ErrorPage />
             ) : (
               <React.Fragment>
-                <div className="split-left">
+                <div className="split-header">
                   <h4>
                     {this.props.edit ? "Editar Cliente" : "Nuevo Cliente"}
                   </h4>
+                  <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                </div>
+                <div className="split-left">
+                  {utils.renderInput(
+                    "fields",
+                    "Empresa",
+                    this,
+                    errorField["Empresa"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Calle",
+                    this,
+                    errorField["Calle"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Colonia",
+                    this,
+                    errorField["Colonia"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Planta",
+                    this,
+                    errorField["Planta"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "NumProvedor",
+                    this,
+                    errorField["NumProvedor"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Ciudad",
+                    this,
+                    errorField["Ciudad"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Estado",
+                    this,
+                    errorField["Estado"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "CP",
+                    this,
+                    errorField["CP"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Telefono",
+                    this,
+                    errorField["Telefono"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "RFC",
+                    this,
+                    errorField["RFC"] ? true : false
+                  )}
+                  {utils.renderInput(
+                    "fields",
+                    "Pais",
+                    this,
+                    errorField["Pais"] ? true : false
+                  )}
+                  {utils.renderSelect(
+                    "Vendedor",
+                    Vendedores,
+                    "fields",
+                    this,
+                    errorField["Vendedor"] ? true : false
+                  )}
 
-                  {utils.renderInput("fields", "Empresa", this)}
-                  {utils.renderInput("fields", "Calle", this)}
-                  {utils.renderInput("fields", "Colonia", this)}
-                  {utils.renderInput("fields", "Planta", this)}
-                  {utils.renderInput("fields", "NumProvedor", this)}
-                  {utils.renderInput("fields", "Ciudad", this)}
-                  {utils.renderInput("fields", "Estado", this)}
-                  {utils.renderInput("fields", "CP", this)}
-                  {utils.renderInput("fields", "Telefono", this)}
-                  {utils.renderInput("fields", "RFC", this)}
-                  {utils.renderInput("fields", "Pais", this)}
-                  {utils.renderSelect("Vendedor", Vendedores, "fields", this)}
-
-                  <button
-                    onClick={() => this.onSubmit()}
-                    style={{ width: "35rem" }}
-                  >
+                  <button onClick={() => this.onSubmit()} className="subBtn">
                     Guardar
                   </button>
                 </div>

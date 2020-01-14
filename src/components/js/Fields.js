@@ -1,3 +1,149 @@
+let Joi = require("@hapi/joi");
+
+exports.clientesSchema = Joi.object({
+  __v: Joi.number(),
+  _id: Joi.string(),
+  Status: Joi.number(),
+  Vendedor: Joi.string()
+    .alphanum()
+    .length(24)
+    .required(),
+  Empresa: Joi.string()
+    .min(3)
+    .max(30)
+    .required(),
+  Calle: Joi.string()
+    .min(3)
+    .max(20)
+    .required(),
+  Colonia: Joi.string()
+    .min(3)
+    .max(50)
+    .required(),
+  Planta: Joi.string()
+    .min(3)
+    .max(20)
+    .required(),
+  NumProvedor: Joi.string()
+    .min(3)
+    .max(20),
+
+  Ciudad: Joi.string()
+    .min(3)
+    .max(20)
+    .required(),
+
+  Estado: Joi.string()
+    .min(3)
+    .max(20)
+    .required(),
+
+  CP: Joi.number()
+    .min(10000)
+    .max(99999)
+    .required(),
+  Telefono: Joi.string(),
+
+  RFC: Joi.string()
+    .alphanum()
+    .max(20)
+    .required(),
+
+  Pais: Joi.string()
+    .min(3)
+    .max(20)
+    .required()
+});
+
+exports.cotizSchema = Joi.object({
+  __v: Joi.number(),
+  _id: Joi.string(),
+  Folio: Joi.number()
+    .min(1)
+    .required(),
+  Fecha: Joi.date().required(),
+  Concepto: Joi.string()
+    .min(3)
+    .max(30)
+    .required(),
+  Total: Joi.number()
+    .min(0)
+    .required(),
+  Cliente: Joi.string()
+    .length(24)
+    .required(),
+  Status: Joi.number()
+    .min(0)
+    .max(5)
+    .required()
+});
+
+exports.ordenSchema = Joi.object({
+  __v: Joi.number(),
+  _id: Joi.string(),
+  Folio: Joi.number()
+    .min(1)
+    .required(),
+  Nombre: Joi.string()
+    .min(1)
+    .max(20)
+    .required(),
+  Pedido: Joi.string()
+    .min(1)
+    .max(20)
+    .required(),
+  NumCot: Joi.string()
+    .alphanum()
+    .min(1)
+    .max(20)
+    .required(),
+  Encargado: Joi.string()
+    .min(1)
+    .max(20)
+    .required(),
+  TipoMaterial: Joi.string()
+    .min(1)
+    .max(20)
+    .required(),
+  Fecha: Joi.date().required(),
+  Entrega: Joi.date().required(),
+  CondPago: Joi.string()
+    .length(24)
+    .required(),
+  Planta: Joi.number()
+    .min(0)
+    .max(1)
+    .required(),
+  Cliente: Joi.string()
+    .length(24)
+    .required(),
+  Direccion: Joi.string()
+    .min(3)
+    .max(30)
+    .required(),
+  cliente: Joi.string()
+    .min(10)
+    .max(20)
+    .required()
+});
+
+exports.vendedorSchema = Joi.object({
+  __v: Joi.number(),
+  _id: Joi.string(),
+  Nombre: Joi.string()
+    .min(1)
+    .max(20)
+    .required(),
+  Zona: Joi.string()
+    .min(4)
+    .max(20)
+    .required(),
+  Telefono: Joi.string()
+    .min(10)
+    .max(20)
+    .required()
+});
+
 exports.clientes = [
   {
     type: "input",

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "../css/Table.css";
 
 import "bootstrap/dist/css/bootstrap.css";
-import { NavLink } from "react-router-dom";
+import { Redirect, NavLink } from "react-router-dom";
 import ErrorPage from "./Error";
 import { LoadingScreen } from "./loadingScreen";
 let axios = require("../config/axios");
@@ -13,7 +13,9 @@ class Catalogo extends Component {
   };
 
   selectRecord = id => {
-    return (window.location = `/catalogo/${this.props.header.toLowerCase()}/get/${id}`);
+    this.props.history.push(
+      `/catalogo/${this.props.header.toLowerCase()}/get/${id}`
+    );
   };
   async componentWillMount() {
     let { header } = this.props;

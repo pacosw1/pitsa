@@ -32,12 +32,12 @@
 
   display: block;
   justify-content: space-between;
-
   background-color: white;
   padding: 1.8rem 2rem;
 
   position: relative;
   visibility: hidden;
+
   z-index: 1;
   max-width: 200px;
   min-width: 0%;

@@ -52,13 +52,15 @@ class Sidebar extends Component {
   render() {
     let { toggle, onMenu } = this.props;
     let widthVal = "",
-      display = "";
+      display = "",
+      dis = "";
     if (toggle) {
       widthVal = "100%";
       display = "visible";
     } else {
       widthVal = 0;
       display = "hidden";
+      dis = "none";
     }
     console.log(widthVal);
     let { tabs } = this.state;
@@ -79,7 +81,10 @@ class Sidebar extends Component {
     });
 
     return (
-      <div id="sidebar" style={{ width: widthVal, visibility: display }}>
+      <div
+        id="sidebar"
+        style={{ width: widthVal, visibility: display, display: dis }}
+      >
         <div id="top">{list}</div>
         <div id="bottom">{/* <Tab title="Cerrar Session" /> */}</div>
       </div>

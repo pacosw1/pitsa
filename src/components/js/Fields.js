@@ -85,6 +85,10 @@ exports.ordenSchema = Joi.object({
     .min(1)
     .required(),
   Parts: Joi.array(),
+  Status: Joi.number()
+    .min(0)
+    .max(2)
+    .required(),
 
   Pedido: Joi.string()
     .min(1)

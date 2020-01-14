@@ -81,10 +81,7 @@ class Sidebar extends Component {
     });
 
     return (
-      <div
-        id="sidebar"
-        style={{ width: widthVal, visibility: display, display: dis }}
-      >
+      <div id="sidebar" style={{ width: widthVal, visibility: display }}>
         <div id="top">{list}</div>
         <div id="bottom">{/* <Tab title="Cerrar Session" /> */}</div>
       </div>

@@ -124,14 +124,14 @@ class Catalogo extends Component {
                   </NavLink>
                 </div>
                 <div>
-                  <select style={{ height: "2rem" }}>
+                  {/* <select style={{ height: "2rem" }}>
                     <option>Por Empresa</option>
-                  </select>
-                  <input
+                  </select> */}
+                  {/* <input
                     placeholder="Search"
                     style={{ width: "10rem", height: "2rem" }}
                   ></input>
-                  <button className="search-button">Buscar</button>
+                  <button className="search-button">Buscar</button> */}
                 </div>
               </div>
               <div id="tables">

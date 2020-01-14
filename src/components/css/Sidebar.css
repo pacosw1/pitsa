@@ -1,14 +1,13 @@
-.sidebar {
-  height: 100%;
+/* .sidebar {
   display: flex;
   flex-direction: column;
 
   width: 200px;
-  border-right: 0.5px solid;
   justify-content: space-between;
   padding: 1.8rem 2rem;
   border-color: rgb(209, 209, 209);
-}
+  height: 100%;
+} */
 #top {
   padding: 0.5rem 0rem;
 }
@@ -25,4 +24,35 @@
 }
 #tab-item {
   font-size: 0.9rem;
+}
+
+#sidebar {
+  display: flex;
+  height: 100vh;
+
+  display: block;
+  justify-content: space-between;
+
+  background-color: white;
+  padding: 1.8rem 2rem;
+
+  position: relative;
+  visibility: hidden;
+  z-index: 1;
+  max-width: 200px;
+  min-width: 0%;
+  border-right: 1px solid;
+  border-radius: 0.2rem;
+  border-color: rgb(212, 212, 212);
+  transition: width 1s !important;
+}
+#sidebar p {
+  margin: 2rem;
+}
+@media only screen and (max-width: 1000px) {
+  #sidebar {
+    width: 100%;
+    max-width: 100%;
+    position: absolute;
+  }
 }

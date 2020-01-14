@@ -50,22 +50,52 @@ export var searchData = (dataObject, resultObject, field, value) => {
   this.setState({ [resultObject]: resultData });
 };
 
-export const renderInput = (stateObject, field, x, error = false) => {
-  return (
-    <div>
-      <h1
-        style={{ fontSize: "15px", marginBottom: "0px", paddingTop: ".2rem" }}
-      >
-        {field}
-      </h1>
-      <input
-        className={error ? "errorInput" : "input"}
-        onChange={e => updateField(stateObject, field, e.target.value, x)}
-        placeholder={field}
-        defaultValue={x.state[stateObject][field]}
-      />
-    </div>
-  );
+export const renderInput = (
+  stateObject,
+  field,
+  x,
+  error = false,
+  style = ""
+) => {
+  if (field == "Importe") {
+    return (
+      <div>
+        <h1
+          style={{ fontSize: "15px", marginBottom: "0px", paddingTop: ".2rem" }}
+        >
+          {field}
+        </h1>
+        <input
+          className={`${style}  ${error ? "errorInput" : "input"}`}
+          onChange={e => [
+            updateField(stateObject, field, e.target.value, x),
+            x.updateTotal(x.state[stateObject]["Parts"])
+          ]}
+          disabled
+          placeholder={field}
+          value={x.state[stateObject][field]}
+        />
+      </div>
+    );
+  } else
+    return (
+      <div>
+        <h1
+          style={{ fontSize: "15px", marginBottom: "0px", paddingTop: ".2rem" }}
+        >
+          {field}
+        </h1>
+        <input
+          className={`${style}  ${error ? "errorInput" : "input"}`}
+          onChange={e => [
+            updateField(stateObject, field, e.target.value, x),
+            x.updateTotal(x.state[stateObject]["Parts"])
+          ]}
+          placeholder={field}
+          defaultValue={x.state[stateObject][field]}
+        />
+      </div>
+    );
 };
 
 export const onSubmit = async (route, id, fields, edit) => {
@@ -111,7 +141,14 @@ export const updateSelect = (stateObject, field, value, x) => {
   });
 };
 
-export const renderSelect = (field, options, stateObject, x) => {
+export const renderSelect = (
+  field,
+  options,
+  stateObject,
+  x,
+  error = false,
+  style = ""
+) => {
   return (
     <div>
       <h1
@@ -120,7 +157,7 @@ export const renderSelect = (field, options, stateObject, x) => {
         {field}
       </h1>
       <select
-        className="select"
+        className={`${style}`}
         value={x.state[stateObject][field]}
         onChange={e => updateSelect(stateObject, field, e.target.value, x)}
       >

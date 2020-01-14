@@ -170,7 +170,6 @@ class Cotizacion extends Component {
                     this,
                     errorField["Status"] ? true : false
                   )}
-
                   <button onClick={() => this.onSubmit()} className="subBtn">
                     Guardar
                   </button>

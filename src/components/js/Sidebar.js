@@ -41,12 +41,26 @@ class Sidebar extends Component {
   };
 
   onToggle = id => {
+    let { toggle, onMenu } = this.props;
+
     let { tabs } = this.state;
     let x = tabs.find(item => item.id == id);
     x.open = !x.open;
     this.setState({ tabs: tabs });
   };
+
   render() {
+    let { toggle, onMenu } = this.props;
+    let widthVal = "",
+      display = "";
+    if (toggle) {
+      widthVal = "100%";
+      display = "visible";
+    } else {
+      widthVal = 0;
+      display = "hidden";
+    }
+    console.log(widthVal);
     let { tabs } = this.state;
 
     let list = tabs.map(tab => {
@@ -56,6 +70,7 @@ class Sidebar extends Component {
           key={id}
           id={id}
           title={title}
+          onMenu={onMenu}
           items={items}
           open={open}
           onToggle={this.onToggle}
@@ -64,11 +79,8 @@ class Sidebar extends Component {
     });
 
     return (
-      <div className="sidebar">
-        <div id="top">
-          <h3>PITSA</h3>
-          {list}
-        </div>
+      <div id="sidebar" style={{ width: widthVal, visibility: display }}>
+        <div id="top">{list}</div>
         <div id="bottom">{/* <Tab title="Cerrar Session" /> */}</div>
       </div>
     );
@@ -76,9 +88,9 @@ class Sidebar extends Component {
 }
 
 const Tab = props => {
-  let { id, onToggle } = props;
+  let { id, onToggle, onMenu } = props;
   let list = props.items.map(item => {
-    return <TabItem key={item} title={item} />;
+    return <TabItem key={item} title={item} onMenu={onMenu} />;
   });
   return (
     <div id="tab">
@@ -95,6 +107,7 @@ const TabItem = props => {
     <div style={{ margin: "0rem .5rem", color: "grey" }}>
       <NavLink
         className="no-link"
+        onClick={() => props.onMenu()}
         to={`/catalogo/${props.title.toLowerCase()}`}
       >
         <h4 id="tab-item">{props.title}</h4>

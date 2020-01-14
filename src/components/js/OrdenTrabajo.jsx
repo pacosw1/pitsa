@@ -84,7 +84,7 @@ class OrdenTrabajo extends Component {
 
   updateTotal = parts => {
     let { fields } = this.state;
-
+    console.log("updated total");
     var copy = fields;
 
     var sum = 0.0;
@@ -96,7 +96,7 @@ class OrdenTrabajo extends Component {
     sum = sum.toFixed(2);
     copy.Importe = sum;
     sum = this.numberWithCommas(sum);
-    copy.ImporteDisplay = sum;
+    // copy.ImporteDisplay = sum;
     this.setState({ fields: copy });
   };
 
@@ -134,7 +134,10 @@ class OrdenTrabajo extends Component {
       "value"
     );
 
-    selects["Moneda"] = utils.loadSelectData(this.state.options.Moneda);
+    selects["Moneda"] = utils.loadSelectData(
+      this.state.options.Moneda,
+      "value"
+    );
     selects["Planta"] = utils.loadSelectData(
       this.state.options.Planta,
       "value"
@@ -155,6 +158,7 @@ class OrdenTrabajo extends Component {
         var currClient = result.Cliente;
         result.Cliente = result.Cliente._id;
         result.Entrega = result.Entrega.slice(0, 10);
+
         this.setState({ fields: result, Cliente: currClient });
       } else this.setState({ error: true });
     }
@@ -389,40 +393,16 @@ class OrdenTrabajo extends Component {
                       })
                     }
                   />
-
-                  <input
-                    placeholder="Importe"
-                    disabled
-                    defaultValue={this.state.fields.Importe}
-                    className="currencyBorder disabled"
-                  />
-                  {utils.renderSelect(
-                    "Moneda",
-                    Moneda,
-                    "fields",
-                    this,
-                    errorField["Moneda"] ? true : false
-                  )}
-                  <input
-                    className={errorField["IVA"] ? "errorInput" : "input"}
-                    placeholder="ex. 16"
-                    defaultValue={this.state.fields.IVA}
-                    onChange={e => [
-                      utils.updateSelect("fields", "IVA", e.target.value, this),
-                      this.updateTotal(this.state.fields.Parts)
-                    ]}
-                  />
                 </div>
-                <div className="tables">
-                  <button
-                    style={{ width: "10rem" }}
-                    onClick={() => this.addPart()}
-                  >
-                    Nueva Parte
-                  </button>
-
-                  <table className="table scroll">
-                    <thead className="header">
+                <button
+                  style={{ width: "7rem" }}
+                  onClick={() => this.addPart()}
+                >
+                  Nueva Parte
+                </button>
+                <div className="tableX">
+                  <table className=" table">
+                    <thead>
                       <tr scope="col">
                         <th scope="col">Parte</th>
                         <th scope="col">Cantidad</th>
@@ -434,10 +414,28 @@ class OrdenTrabajo extends Component {
 
                     <tbody className="scroll-body">{renderParts}</tbody>
                   </table>
-                  <button onClick={() => this.onSubmit()} className="subBtn">
-                    Guardar
-                  </button>
                 </div>
+                <div className="ot-total">
+                  {utils.renderInput(
+                    "fields",
+                    "Importe",
+                    this,
+                    false,
+                    "currencyBorder disabled"
+                  )}
+                  {utils.renderSelect(
+                    "Moneda",
+                    Moneda,
+                    "fields",
+                    this,
+                    errorField["Moneda"] ? true : false,
+                    "currencySelect"
+                  )}
+                  {utils.renderInput("fields", "IVA", this, false, "IVA")}
+                </div>
+                <button onClick={() => this.onSubmit()} className="subBtn">
+                  Guardar
+                </button>
               </React.Fragment>
             )}
           </React.Fragment>

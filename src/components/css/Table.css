@@ -1,9 +1,10 @@
 .t {
   display: flex;
   flex-direction: column;
-  flex: 1 100% !important;
-  padding: 2rem 0.2rem;
-  height: 100vh !important;
+  width: 100%;
+  /* min-height: 100vh; */
+  margin-left: 0.3rem;
+  margin-top: 1.1rem;
   font-size: 0.9rem !important;
 }
 
@@ -42,7 +43,8 @@ select {
 
 #tables {
   overflow-y: scroll;
-  height: 100vh;
+  overflow-x: scroll;
+  width: 100%;
 }
 .t button {
   color: white;
@@ -73,4 +75,10 @@ button {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+}
+
+@media only screen and (max-width: 600px) {
+  .table {
+    overflow-x: scroll;
+  }
 }

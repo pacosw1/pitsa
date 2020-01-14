@@ -1,11 +1,16 @@
 .App {
   display: flex;
-  height: 100vh;
+  flex: 1 100%;
+  height: 100%;
 }
 .App h4 {
   color: rgb(37, 37, 37);
 }
 
+.Wrapper {
+  display: flex;
+  flex-direction: column;
+}
 .no-link {
   text-decoration: "none";
   text-decoration-line: none;

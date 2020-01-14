@@ -185,7 +185,6 @@ class Cliente extends Component {
                     this,
                     errorField["Vendedor"] ? true : false
                   )}
-
                   <button onClick={() => this.onSubmit()} className="subBtn">
                     Guardar
                   </button>

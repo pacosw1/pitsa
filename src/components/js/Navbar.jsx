@@ -9,7 +9,7 @@ class Navbar extends Component {
     return (
       <div id="navbar">
         <div id="left">
-          <button class="btn btn-purple-outline" onClick={() => onMenu()}>
+          <button className="btn btn-purple-outline" onClick={() => onMenu()}>
             PITSA
           </button>
         </div>

@@ -158,6 +158,7 @@ class OrdenTrabajo extends Component {
         var currClient = result.Cliente;
         result.Cliente = result.Cliente._id;
         result.Entrega = result.Entrega.slice(0, 10);
+        result.Fecha = result.Fecha.slice(0, 10);
 
         this.setState({ fields: result, Cliente: currClient });
       } else this.setState({ error: true });

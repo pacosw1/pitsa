@@ -64,7 +64,7 @@ class Catalogo extends Component {
                 : record["Cliente"].Empresa}
             </td>
           );
-        } else if (field.name == "Fecha") {
+        } else if (field.name == "Fecha" || field.name == "Entrega") {
           let date = record["Fecha"].slice(0, 10);
           return (
             <td key={field} onClick={() => this.selectRecord(record._id)}>

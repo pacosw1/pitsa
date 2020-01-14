@@ -19,6 +19,7 @@
 
 .subBtn {
   width: 400px;
+  height: 65px !important;
 }
 
 .split-left {
@@ -124,10 +125,14 @@ input::placeholder {
     margin: 0;
     margin-top: 2rem;
 
+    padding: 0;
     height: 100%;
   }
-  .OT button,
-  select,
+  .subBtn {
+    width: 90%;
+    height: 5rem !important;
+  }
+  .OT select,
   input {
     height: 3rem !important;
   }

@@ -394,10 +394,7 @@ class OrdenTrabajo extends Component {
                     }
                   />
                 </div>
-                <button
-                  style={{ width: "7rem" }}
-                  onClick={() => this.addPart()}
-                >
+                <button className="subBtn" onClick={() => this.addPart()}>
                   Nueva Parte
                 </button>
                 <div className="tableX">

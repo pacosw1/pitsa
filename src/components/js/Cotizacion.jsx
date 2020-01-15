@@ -11,6 +11,7 @@ class Cotizacion extends Component {
     Data: {
       Clientes: []
     },
+    saving: false,
     errorField: {},
     errorMessage: "",
     selects: { Clientes: [] },
@@ -30,7 +31,7 @@ class Cotizacion extends Component {
 
   async componentWillMount() {
     let { fields, Data } = this.state;
-    let { match, edit } = this.props;
+    let { match, edit, cotSession, getCotSession } = this.props;
     var selects = {};
     var result;
 
@@ -43,7 +44,6 @@ class Cotizacion extends Component {
       Data["Clientes"] = clientData;
       fields.Cliente = clientData[0]._id;
     } else {
-      alert("error");
       this.setState({ error: true });
     }
 
@@ -52,7 +52,11 @@ class Cotizacion extends Component {
       "value"
     );
 
-    if (edit) {
+    if (cotSession) {
+      let savedFields = getCotSession();
+      this.setState({ fields: savedFields });
+      this.props.toggleCot();
+    } else if (edit) {
       let id = match.params.id;
 
       result = await utils.getRecord("cotizaciones", id);
@@ -64,7 +68,6 @@ class Cotizacion extends Component {
         this.setState({ fields: result, Cliente: currClient, loaded: true });
       } else {
         this.setState({ error: true });
-        alert("error");
       }
     }
     ///////
@@ -75,7 +78,12 @@ class Cotizacion extends Component {
 
   //fucntions
 
+  newClient = () => {
+    this.props.history.push("/catalogo/clientes/new");
+  };
+
   onSubmit = async () => {
+    this.setState({ saving: true });
     let { fields } = this.state;
     let { match, edit } = this.props;
     var result,
@@ -98,8 +106,9 @@ class Cotizacion extends Component {
       } else result = await utils.onSubmit("cotizaciones", "id", fields, false);
       console.log(result);
       if (!result) this.setState({ error: true });
-      else await (window.location = "/catalogo/cotizaciones");
+      else this.props.history.push(`/catalogo/cotizaciones`);
     } catch (err) {
+      this.setState({ saving: false });
       let { message, path } = err.details[0];
       errorField[path[0]] = message;
       this.setState({
@@ -117,7 +126,7 @@ class Cotizacion extends Component {
     let { errorField } = this.state;
     return (
       <div className="OT">
-        {!this.state.loaded ? (
+        {!this.state.loaded || this.state.saving ? (
           <LoadingScreen />
         ) : (
           <React.Fragment>
@@ -125,12 +134,32 @@ class Cotizacion extends Component {
               <ErrorPage />
             ) : (
               <React.Fragment>
-                <div className="split-left">
-                  <h4>
-                    {this.props.edit ? "Editar Cotizacion" : "Nueva Cotizacion"}
-                  </h4>
-                  <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                <div className="split-header">
+                  <div>
+                    <h4>
+                      {this.props.edit
+                        ? "Editar Cotizacion"
+                        : "Nueva Cotizacion"}
+                    </h4>
+                    <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                  </div>
 
+                  <div className="btns">
+                    <button
+                      onClick={() => this.props.history.goBack()}
+                      className=" btn btn-danger subBtn"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      onClick={() => this.onSubmit()}
+                      className="btn subBtn btn-primary "
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                </div>
+                <div className="split-left">
                   {utils.renderInput(
                     "fields",
                     "Folio",
@@ -155,7 +184,19 @@ class Cotizacion extends Component {
                     this,
                     errorField["Total"] ? true : false
                   )}
-
+                  <br />
+                  <button
+                    className="btn btn-primary "
+                    onClick={() => [
+                      this.props.saveFields(this.state.fields),
+                      this.newClient()
+                    ]}
+                    style={{ width: " 400px" }}
+                  >
+                    Nuevo Cliente
+                  </button>
+                  <br />
+                  <span>O escoge cliente existente</span>
                   {utils.renderSelect(
                     "Cliente",
                     Clientes,
@@ -170,9 +211,6 @@ class Cotizacion extends Component {
                     this,
                     errorField["Status"] ? true : false
                   )}
-                  <button onClick={() => this.onSubmit()} className="subBtn">
-                    Guardar
-                  </button>
                 </div>
               </React.Fragment>
             )}

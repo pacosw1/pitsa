@@ -33,7 +33,9 @@ class Content extends Component {
         <Route
           exact
           path="/catalogo/clientes/new"
-          render={props => <Cliente {...props} />}
+          render={props => (
+            <Cliente {...props} cotActive={this.props.cotSession} />
+          )}
         />
         <Route
           exact
@@ -78,7 +80,15 @@ class Content extends Component {
         <Route
           exact
           path="/catalogo/cotizaciones/new"
-          render={props => <Cotizacion {...props} />}
+          render={props => (
+            <Cotizacion
+              {...props}
+              saveFields={this.props.saveFields}
+              toggleCot={this.props.toggleCot}
+              cotSession={this.props.cotSession}
+              getCotSession={this.props.getCotSession}
+            />
+          )}
         />
         <Route
           path="/catalogo/cotizaciones/get/:id"

@@ -9,6 +9,7 @@ let { vendedorSchema } = require("./Fields");
 
 class Vendedor extends Component {
   state = {
+    saving: false,
     error: false,
     loaded: false,
     errorField: {},
@@ -45,6 +46,8 @@ class Vendedor extends Component {
   //fucntions
 
   onSubmit = async () => {
+    this.setState({ saving: true });
+
     let { fields } = this.state;
     let { match, edit } = this.props;
     var result,
@@ -53,20 +56,24 @@ class Vendedor extends Component {
 
     try {
       res = await vendedorSchema.validateAsync({ ...fields });
+
       if (edit) {
         let id = match.params.id;
 
         result = await utils.onSubmit("vendedores", id, fields, true);
       } else result = await utils.onSubmit("vendedores", "id", fields, false);
-      console.log(result);
+
       if (!result) this.setState({ error: true });
-      else await (window.location = "/catalogo/vendedores");
+      else this.props.history.push(`/catalogo/vendedores`);
     } catch (err) {
+      this.setState({ saving: false });
+
       let { message, path } = err.details[0];
       errorField[path[0]] = message;
       this.setState({
         validateFailed: true,
         errorField,
+        saving: false,
         errorMessage: message
       });
     }
@@ -80,7 +87,7 @@ class Vendedor extends Component {
 
     return (
       <div className="OT">
-        {!this.state.loaded ? (
+        {!this.state.loaded || this.state.saving ? (
           <LoadingScreen />
         ) : (
           <React.Fragment>
@@ -88,13 +95,30 @@ class Vendedor extends Component {
               <ErrorPage />
             ) : (
               <React.Fragment>
-                <div className="split-left">
-                  <div className="split-header">
+                <div className="split-header">
+                  <div>
                     <h4>
                       {this.props.edit ? "Editar Vendedor" : "Nuevo Vendedor"}
                     </h4>
                     <p style={{ color: "red" }}>{this.state.errorMessage}</p>
                   </div>
+
+                  <div className="btns">
+                    <button
+                      onClick={() => this.props.history.goBack()}
+                      className=" btn btn-danger subBtn"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      onClick={() => this.onSubmit()}
+                      className="btn subBtn btn-primary "
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                </div>
+                <div className="split-left">
                   {utils.renderInput(
                     "fields",
                     "Nombre",
@@ -113,10 +137,6 @@ class Vendedor extends Component {
                     this,
                     errorField["Telefono"] ? true : false
                   )}
-
-                  <button onClick={() => this.onSubmit()} className="subBtn">
-                    Guardar
-                  </button>
                 </div>
               </React.Fragment>
             )}

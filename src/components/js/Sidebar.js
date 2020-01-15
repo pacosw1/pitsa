@@ -81,9 +81,12 @@ class Sidebar extends Component {
     });
 
     return (
-      <div id="sidebar" style={{ width: widthVal, visibility: display }}>
+      <div
+        id="sidebar"
+        style={{ width: widthVal, visibility: display, display: dis }}
+      >
         <div id="top">{list}</div>
-        <div id="bottom">{/* <Tab title="Cerrar Session" /> */}</div>
+        <div id="bottom">{<h4 id="tab-item">Cerrar Session</h4>}</div>
       </div>
     );
   }
@@ -106,7 +109,7 @@ const Tab = props => {
 
 const TabItem = props => {
   return (
-    <div style={{ margin: "0rem .5rem", color: "grey" }}>
+    <div style={{ margin: "0rem .5rem" }}>
       <NavLink
         className="no-link"
         onClick={() => props.onMenu()}

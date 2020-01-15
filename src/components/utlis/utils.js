@@ -71,7 +71,7 @@ export const renderInput = (
             updateField(stateObject, field, e.target.value, x),
             x.updateTotal(x.state[stateObject]["Parts"])
           ]}
-          disabled
+          disabled={field == "Importe" ? true : false}
           placeholder={field}
           value={x.state[stateObject][field]}
         />

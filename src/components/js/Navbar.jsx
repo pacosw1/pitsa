@@ -15,7 +15,7 @@ class Navbar extends Component {
         </div>
         <div id="right">
           <NavLink to="/login">
-            {/* <button class="btn btn-purple">Iniciar Sesion</button> */}
+            <button class="btn btn-purple">Iniciar Sesion</button>
           </NavLink>
         </div>
       </div>

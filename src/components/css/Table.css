@@ -29,7 +29,7 @@ input::placeholder {
 
 select {
   border: none;
-  background-color: rgb(80, 100, 105) !important;
+  background-color: #158cba;
   color: white;
 }
 
@@ -42,6 +42,17 @@ select {
   border-right: none !important;
 }
 
+.x {
+  background-color: white;
+  padding: 2rem;
+  color: #158bba;
+
+  border-radius: 0.2rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  min-height: 85vh;
+}
+
 #tables {
   overflow-y: scroll;
   overflow-x: scroll;
@@ -50,21 +61,15 @@ select {
 .t button {
   color: white;
   width: 10rem;
-  height: 2rem;
+  height: 2.5rem;
+  background-color: #158cba;
   border-radius: 0.2rem;
   border: none;
   margin: 1rem 0rem !important;
-  background-color: #000000;
-}
-button {
-  color: white;
-  height: 2rem;
-  border: none;
-  background-color: #000000;
 }
 
 .table-item:hover {
-  background-color: rgba(133, 133, 133, 0.178);
+  background-color: rgba(0, 119, 255, 0.068);
 }
 
 .table-item {

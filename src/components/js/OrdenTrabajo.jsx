@@ -9,6 +9,7 @@ let _ = require("lodash");
 
 class OrdenTrabajo extends Component {
   state = {
+    saving: false,
     errorField: {},
     errorMessage: "",
     error: false,
@@ -171,6 +172,7 @@ class OrdenTrabajo extends Component {
   //fucntions
 
   onSubmit = async () => {
+    this.setState({ saving: true });
     let { fields } = this.state;
     let { match, edit } = this.props;
     var result,
@@ -189,8 +191,10 @@ class OrdenTrabajo extends Component {
       } else result = await utils.onSubmit("ordenes", "", fields, false);
 
       if (!result) this.setState({ error: true });
-      else await (window.location = "/catalogo/" + "ordenes");
+      else this.props.history.push(`/catalogo/ordenes`);
     } catch (err) {
+      this.setState({ saving: false });
+
       let { message, path } = err.details[0];
       errorField[path[0]] = message;
       this.setState({
@@ -260,7 +264,7 @@ class OrdenTrabajo extends Component {
     let { errorField } = this.state;
     return (
       <div className="OT">
-        {!this.state.loaded ? (
+        {!this.state.loaded || this.state.saving ? (
           <LoadingScreen />
         ) : (
           <React.Fragment>
@@ -269,12 +273,29 @@ class OrdenTrabajo extends Component {
             ) : (
               <React.Fragment>
                 <div className="split-header">
-                  <h4>
-                    {this.props.edit
-                      ? "Editar Orden De Trabajo"
-                      : "Nueva Orden de Trabajo"}
-                  </h4>
-                  <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                  <div>
+                    <h4>
+                      {this.props.edit
+                        ? "Editar Orden de Trabajo"
+                        : "Nueva Orden de Trabajo"}
+                    </h4>
+                    <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                  </div>
+
+                  <div className="btns">
+                    <button
+                      onClick={() => this.props.history.goBack()}
+                      className=" btn btn-danger subBtn"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      onClick={() => this.onSubmit()}
+                      className="btn subBtn btn-primary "
+                    >
+                      Guardar
+                    </button>
+                  </div>
                 </div>
                 <div className="split-left">
                   {utils.renderInput(
@@ -349,7 +370,7 @@ class OrdenTrabajo extends Component {
                     this,
                     errorField["Cliente"] ? true : false
                   )}
-                  <span>Vendedor</span>
+                  {/* <span>Vendedor</span>
                   <input
                     disabled
                     defaultValue={this.state.Cliente.Vendedor.Nombre}
@@ -369,36 +390,87 @@ class OrdenTrabajo extends Component {
                     className="disabled"
                     disabled
                     defaultValue={this.state.Cliente.Pais}
-                  />
-                  <input
-                    defaultValue={this.state.fields.Enviar["Cliente"] || ""}
-                    placeholder="Cliente"
-                    className={errorField["cliente"] ? "errorInput" : "input"}
-                    onChange={e =>
-                      this.updateField({
-                        Enviar: true,
-                        name: "Cliente",
-                        value: e.target.value
-                      })
-                    }
-                  />
-                  <input
-                    placeholder="Direccion"
-                    className={errorField["Direccion"] ? "errorInput" : "input"}
-                    defaultValue={this.state.fields.Enviar["Direccion"] || ""}
-                    onChange={e =>
-                      this.updateField({
-                        Enviar: true,
-                        name: "Direccion",
-                        value: e.target.value
-                      })
-                    }
-                  />
+                  /> */}
+                  <div>
+                    <h1
+                      style={{
+                        fontSize: "15px",
+                        marginBottom: "0px",
+                        paddingTop: ".2rem"
+                      }}
+                    >
+                      Cliente{" "}
+                    </h1>
+                    <input
+                      defaultValue={this.state.fields.Enviar["Cliente"] || ""}
+                      placeholder="Cliente"
+                      className={errorField["cliente"] ? "errorInput" : "input"}
+                      onChange={e =>
+                        this.updateField({
+                          Enviar: true,
+                          name: "Cliente",
+                          value: e.target.value
+                        })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <h1
+                      style={{
+                        fontSize: "15px",
+                        marginBottom: "0px",
+                        paddingTop: ".2rem"
+                      }}
+                    >
+                      Direccion
+                    </h1>
+                    <input
+                      placeholder="Direccion"
+                      className={
+                        errorField["Direccion"] ? "errorInput" : "input"
+                      }
+                      defaultValue={this.state.fields.Enviar["Direccion"] || ""}
+                      onChange={e =>
+                        this.updateField({
+                          Enviar: true,
+                          name: "Direccion",
+                          value: e.target.value
+                        })
+                      }
+                    />
+                  </div>
                 </div>
-                <button className="subBtn" onClick={() => this.addPart()}>
-                  Nueva Parte
-                </button>
-                <div className="tableX">
+                <div className="split-header">
+                  <div>
+                    <button
+                      className="btn btn-primary subBtn"
+                      onClick={() => this.addPart()}
+                    >
+                      Nueva Parte
+                    </button>
+                  </div>
+                  <div>
+                    <div className="ot-total">
+                      {utils.renderInput(
+                        "fields",
+                        "Importe",
+                        this,
+                        false,
+                        "currencyBorder disabled"
+                      )}
+                      {utils.renderSelect(
+                        "Moneda",
+                        Moneda,
+                        "fields",
+                        this,
+                        errorField["Moneda"] ? true : false,
+                        "currencySelect"
+                      )}
+                      {utils.renderInput("fields", "IVA", this, false, "IVA")}
+                    </div>
+                  </div>
+                </div>
+                <div className="split-left tableX">
                   <table className=" table">
                     <thead>
                       <tr scope="col">
@@ -413,27 +485,6 @@ class OrdenTrabajo extends Component {
                     <tbody className="scroll-body">{renderParts}</tbody>
                   </table>
                 </div>
-                <div className="ot-total">
-                  {utils.renderInput(
-                    "fields",
-                    "Importe",
-                    this,
-                    false,
-                    "currencyBorder disabled"
-                  )}
-                  {utils.renderSelect(
-                    "Moneda",
-                    Moneda,
-                    "fields",
-                    this,
-                    errorField["Moneda"] ? true : false,
-                    "currencySelect"
-                  )}
-                  {utils.renderInput("fields", "IVA", this, false, "IVA")}
-                </div>
-                <button onClick={() => this.onSubmit()} className="subBtn">
-                  Guardar
-                </button>
               </React.Fragment>
             )}
           </React.Fragment>

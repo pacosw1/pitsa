@@ -8,11 +8,12 @@
   border-color: rgb(209, 209, 209);
   height: 100%;
 } */
-#top {
-  padding: 0.5rem 0rem;
+#top p,
+h4 {
+  padding: 0.1rem 2rem;
 }
-#bottom {
-  padding: 2rem 0rem;
+#bottom h4 {
+  padding: 2rem 2rem;
 }
 
 #tab-text {
@@ -26,24 +27,33 @@
   font-size: 0.9rem;
 }
 
+#sidebar h4 {
+  color: white;
+}
+#bottom {
+  background-color: #3d8197;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 #sidebar {
   display: flex;
-  height: 100vh;
+  min-height: 91vh;
+  flex-direction: column;
+  height: 100%;
+  background-color: #008bbaf5;
+  padding: 0rem 0rem;
 
-  display: block;
-  justify-content: space-between;
-  background-color: white;
-  padding: 1.8rem 2rem;
-
-  position: relative;
   visibility: hidden;
 
   z-index: 1;
   max-width: 200px;
   min-width: 0%;
-  border-right: 1px solid;
-  border-radius: 0.2rem;
-  border-color: rgb(212, 212, 212);
+  /* border-radius: 0.2rem; */
+  color: white !important;
+  justify-content: space-between;
+
   transition: width 1s !important;
 }
 #sidebar p {

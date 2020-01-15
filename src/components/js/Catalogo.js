@@ -114,7 +114,7 @@ class Catalogo extends Component {
           <ErrorPage />
         ) : (
           <div>
-            <div className="t">
+            <div className="x">
               <h2>{header}</h2>
               <div className="head-actions">
                 <div>
@@ -122,7 +122,7 @@ class Catalogo extends Component {
                     className="no-link"
                     to={`/catalogo/${header.toLowerCase()}/new`}
                   >
-                    <button>Nuevo</button>
+                    <button className="btn btn-primary">Nuevo</button>
                   </NavLink>
                 </div>
                 <div>
@@ -144,7 +144,7 @@ class Catalogo extends Component {
                     <thead>
                       <tr>
                         {fieldsList}
-                        <th />
+                        <th>Eliminar</th>
                       </tr>
                     </thead>
 

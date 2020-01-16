@@ -2,7 +2,9 @@
   display: flex;
 
   height: 100%;
+  width: 100% !important;
   background-color: white;
+  flex-direction: column;
 
   /* overflow-y: scroll; */
 }
@@ -10,6 +12,28 @@
 .split {
   display: flex;
   width: 100%;
+  border-bottom: 1px solid;
+  margin-bottom: 2rem;
+}
+
+.orden .header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid;
+  padding: 1rem 0rem;
+  margin-bottom: 1rem;
+}
+.header h1 {
+  margin-right: 2rem;
+  margin-left: 0.8rem;
+}
+.br {
+  border: 1px solid !important;
+  border-color: black !important;
+}
+.orden p {
+  margin: 0;
 }
 
 .box {
@@ -21,7 +45,9 @@
   width: 100%;
 }
 .half {
-  flex: 1 50%;
+  flex: 1 30%;
+  flex-wrap: wrap;
+  margin: 0.5rem;
 }
 div.pagebr {
   page-break-inside: avoid !important;
@@ -29,6 +55,7 @@ div.pagebr {
 
 .order {
   size: 7in 9.25in;
+  min-height: 14.25in;
   padding: 1rem 0.5rem;
   background-color: white;
   margin: 27mm 16mm 27mm 16mm;

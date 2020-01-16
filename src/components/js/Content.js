@@ -98,7 +98,13 @@ class Content extends Component {
         />
         <Route
           path="/catalogo/cotizaciones/get/:id"
-          render={props => <Cotizacion edit={true} {...props} />}
+          render={props => (
+            <Cotizacion
+              edit={true}
+              saveFields={this.props.saveFields}
+              {...props}
+            />
+          )}
         />
 
         <Route

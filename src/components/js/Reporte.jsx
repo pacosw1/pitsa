@@ -25,25 +25,23 @@ class Reporte extends Component {
       return <Orden Parts={order.Parts} order={order} />;
     });
     return (
-      <div>
-        <div className="orden">
-          <div className="x">
-            <h3>Generar Reporte</h3>
-            <select>
-              <option>Por Fecha</option>
-              <option>Por Folio</option>
-            </select>
-            <div>
-              <span>De</span>
-              <input></input>
-              <span>A</span>
-              <input></input>
-              <button className="btn btn-primary">Generar</button>
-            </div>
-
-            <h2>Resultados: </h2>
-            {renderOrders}
+      <div className="orden">
+        <div className="x">
+          <h3>Generar Reporte</h3>
+          <select>
+            <option>Por Fecha</option>
+            <option>Por Folio</option>
+          </select>
+          <div>
+            <span>De</span>
+            <input></input>
+            <span>A</span>
+            <input></input>
+            <button className="btn btn-primary">Generar</button>
           </div>
+
+          <h2>Resultados: </h2>
+          {renderOrders}
         </div>
       </div>
     );
@@ -58,12 +56,15 @@ const Orden = props => {
     Entrega,
     NumProvedor,
     Pedido,
+    Moneda,
     NumCot,
     Encargado,
     TipoMaterial,
     CondPago,
     Planta,
     Cliente,
+    Importe,
+    IVA,
     Enviar
   } = props.order;
 
@@ -92,9 +93,14 @@ const Orden = props => {
       />
     );
   });
+
   return (
     <div className="order">
-      <h1>Orden De Trabajo</h1>
+      <div className="header">
+        <h1>Orden De Trabajo</h1>
+        <h1># {Folio}</h1>
+      </div>
+
       <div className="split">
         <div className="Enviar-info half">
           <div className="box">
@@ -102,6 +108,7 @@ const Orden = props => {
             <p className="box-p">{Enviar.Cliente}</p>
             <p>{Enviar.Direccion}</p>
           </div>
+          <br className="br" />
           <div className="box">
             <h5>Vendido A</h5>
             <p>{Empresa}</p> <p className="box-p">{Calle}</p>
@@ -115,21 +122,16 @@ const Orden = props => {
         </div>
         <div className="Datos-info half">
           <div className="box">
-            <h5>Numero de Trabajo</h5>
-            <p className="box-p">{Folio}</p>
-          </div>
-
-          <div className="box">
             <h5>Fecha</h5>
-            <p className="box-p">{Fecha}</p>
+            <p className="box-p">{utils.formatDate(Fecha)}</p>
+          </div>
+          <div className="box">
+            <h5>Entregar Antes De: </h5>
+            <p className="box-p">{utils.formatDate(Entrega)}</p>
           </div>
           <div className="box">
             <h5>Pedido No.</h5>
             <p className="box-p">{Pedido}</p>
-          </div>
-          <div className="box">
-            <h5>Condiciones</h5>
-            <p className="box-p">{CondPago}</p>
           </div>
           <div className="box">
             <h5>Vendedor</h5>
@@ -137,6 +139,48 @@ const Orden = props => {
           </div>
 
           {/* <p className="box">Embarcado Por</p> */}
+        </div>
+        <div className="half">
+          <div className="box">
+            <h5>Condiciones</h5>
+            <p className="box-p">{utils.getCond(CondPago)}</p>
+          </div>
+
+          <div className="box">
+            <h5>LAB</h5>
+            <p className="box-p">
+              {Planta == 1 ? "Su Planta" : "Nuestra Planta"}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style={{ display: "flex", marginBottom: "1rem" }}>
+          <div className="box">
+            <h5>Subtotal</h5>
+            <p className="box-p">
+              {Moneda} $
+              {utils.formatMoney((Importe / (1 + IVA / 100)).toFixed(2))}
+            </p>
+          </div>
+          <div className="box">
+            <h5>IVA</h5>
+            <p className="box-p">
+              {Moneda}{" "}
+              {utils.formatMoney(
+                ((Importe / (1 + IVA / 100)) * (IVA / 100)).toFixed(2)
+              )}{" "}
+              ({IVA}
+              %)
+            </p>
+          </div>
+        </div>
+        <div className="box">
+          <h3>Total</h3>
+          <h1 className="box-p">
+            {Moneda} ${utils.formatMoney(Importe)}
+          </h1>
         </div>
       </div>
       <div className="partes">
@@ -166,7 +210,7 @@ const Part = props => {
       <td style={{ maxWidth: "20px" }}>{props.cant}</td>
       <td style={{ maxWidth: "500px" }}>{props.concepto}</td>
       <td>{props.pu}</td>
-      <td>{props.pu * props.cant}</td>
+      <td>${utils.formatMoney((props.pu * props.cant).toFixed(2))}</td>
     </tr>
   );
 };

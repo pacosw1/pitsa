@@ -12,6 +12,39 @@ export var getData = async route => {
   }
 };
 
+export var formatDate = date => {
+  var months = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre"
+  ];
+
+  var days = [
+    "Lunes",
+    "Martes",
+    "Miercoles",
+    "Jueves",
+    "Viernes",
+    "Sabado",
+    "Domingo"
+  ];
+  date = new Date(date);
+  let day = date.getDate() + 1;
+  let month = months[date.getMonth()];
+  let year = date.getFullYear();
+
+  return (date = `${month} ${day}, ${year}`);
+};
+
 export var getSelectData = async route => {
   var result, data;
   try {
@@ -174,4 +207,13 @@ export const getRecord = async (route, id) => {
   data = _.get(result, "data");
   if (data) return data;
   else return false;
+};
+
+export const getCond = cond => {
+  if (cond == 100) return "100% P/F";
+  else return `${cond} Dias`;
+};
+
+export const formatMoney = x => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

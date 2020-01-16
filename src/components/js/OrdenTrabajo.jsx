@@ -50,6 +50,7 @@ class OrdenTrabajo extends Component {
         { value: "60 dias", _id: 60 },
         { value: "90 dias", _id: 90 }
       ],
+
       Status: [
         { _id: 0, value: "Cancelada" },
         { _id: 1, value: "Vigente" },
@@ -79,10 +80,6 @@ class OrdenTrabajo extends Component {
     });
   };
 
-  numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-
   updateTotal = parts => {
     let { fields } = this.state;
     console.log("updated total");
@@ -96,7 +93,7 @@ class OrdenTrabajo extends Component {
     sum = sum * (1 + fields.IVA / 100);
     sum = sum.toFixed(2);
     copy.Importe = sum;
-    sum = this.numberWithCommas(sum);
+    sum = utils.formatMoney(sum);
     // copy.ImporteDisplay = sum;
     this.setState({ fields: copy });
   };

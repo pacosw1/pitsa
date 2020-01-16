@@ -52,11 +52,7 @@ class Cotizacion extends Component {
       "value"
     );
 
-    if (cotSession) {
-      let savedFields = getCotSession();
-      this.setState({ fields: savedFields });
-      this.props.toggleCot();
-    } else if (edit) {
+    if (edit) {
       let id = match.params.id;
 
       result = await utils.getRecord("cotizaciones", id);
@@ -69,6 +65,10 @@ class Cotizacion extends Component {
       } else {
         this.setState({ error: true });
       }
+    } else if (cotSession) {
+      let savedFields = getCotSession();
+      this.setState({ fields: savedFields });
+      this.props.toggleCot();
     }
     ///////
 

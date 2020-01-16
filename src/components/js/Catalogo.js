@@ -6,6 +6,7 @@ import { Redirect, NavLink } from "react-router-dom";
 import ErrorPage from "./Error";
 import { LoadingScreen } from "./loadingScreen";
 let axios = require("../config/axios");
+let utils = require("../utlis/utils");
 class Catalogo extends Component {
   state = {
     data: [],
@@ -65,7 +66,7 @@ class Catalogo extends Component {
             </td>
           );
         } else if (field.name == "Fecha" || field.name == "Entrega") {
-          let date = record["Fecha"].slice(0, 10);
+          let date = utils.formatDate(record["Fecha"]);
           return (
             <td key={field} onClick={() => this.selectRecord(record._id)}>
               {date}

@@ -84,8 +84,10 @@ select {
     overflow-x: scroll;
   }
   table {
-    transform: scale(0.6) !important;
+    /* transform: scale(0.6) !important; */
     margin: 0;
+    width: 100% !important;
+
     transform-origin: left top;
   }
 }

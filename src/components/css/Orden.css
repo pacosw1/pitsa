@@ -1,0 +1,46 @@
+.orden {
+  display: flex;
+
+  height: 100%;
+  background-color: white;
+
+  /* overflow-y: scroll; */
+}
+
+.split {
+  display: flex;
+  width: 100%;
+}
+
+.box {
+  display: flex;
+  margin: 0.5rem 1rem;
+  flex-direction: column;
+}
+.partes {
+  width: 100%;
+}
+.half {
+  flex: 1 50%;
+}
+div.pagebr {
+  page-break-inside: avoid !important;
+}
+
+.order {
+  size: 7in 9.25in;
+  padding: 1rem 0.5rem;
+  background-color: white;
+  margin: 27mm 16mm 27mm 16mm;
+  page-break-before: always !important;
+  border: 1px solid;
+  border-color: rgb(119, 119, 119);
+}
+td {
+  word-wrap: break-word;
+}
+h1 {
+  page-break-before: always;
+}
+table {
+}

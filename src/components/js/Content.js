@@ -16,6 +16,7 @@ import OrdenTrabajo from "./OrdenTrabajo";
 import Vendedor from "./Vendedores";
 import Cliente from "./Clientes";
 import Cotizacion from "./Cotizacion";
+import Reporte from "./Reporte";
 require("../css/Content.css");
 
 class Content extends Component {
@@ -29,6 +30,11 @@ class Content extends Component {
           render={props => (
             <Catalogo header="Clientes" fields={clientes} {...props} />
           )}
+        />
+        <Route
+          exact
+          path="/reportes/ordenes"
+          render={props => <Reporte {...props} />}
         />
         <Route
           exact

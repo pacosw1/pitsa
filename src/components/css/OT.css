@@ -98,6 +98,7 @@ input::placeholder {
   width: 100%;
   border-bottom: 1px solid;
   margin: 0rem 0rem;
+  background-color: white;
   height: 500px;
 
   border-color: rgb(184, 184, 184);

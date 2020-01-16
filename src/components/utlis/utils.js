@@ -4,7 +4,7 @@ let axios = require("../config/axios");
 export var getData = async route => {
   var result;
   try {
-    result = await axios.get(route);
+    result = await axios.getData(route);
     console.log(result);
     return result;
   } catch (err) {

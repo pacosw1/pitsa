@@ -133,7 +133,7 @@ exports.ordenSchema = Joi.object({
       .required(),
     Direccion: Joi.string()
       .min(3)
-      .max(30)
+      .max(80)
       .required()
   }
 });

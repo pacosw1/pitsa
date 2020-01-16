@@ -7,7 +7,7 @@ class Sidebar extends Component {
     tabs: [
       {
         id: 0,
-        title: "Catalogos",
+        title: "Catalogo",
         items: [
           // "Proovedores",
           "Clientes",
@@ -34,8 +34,8 @@ class Sidebar extends Component {
       {
         id: 3,
         title: "Reportes",
-        items: ["Por Vendedor", "Por Cliente", "Por Producto"],
-        open: false
+        items: ["Ordenes", "Por Cliente", "Por Producto"],
+        open: true
       }
     ]
   };
@@ -95,7 +95,14 @@ class Sidebar extends Component {
 const Tab = props => {
   let { id, onToggle, onMenu } = props;
   let list = props.items.map(item => {
-    return <TabItem key={item} title={item} onMenu={onMenu} />;
+    return (
+      <TabItem
+        key={item}
+        title={props.title.toLowerCase()}
+        item={item}
+        onMenu={onMenu}
+      />
+    );
   });
   return (
     <div id="tab">
@@ -112,10 +119,10 @@ const TabItem = props => {
     <div style={{ margin: "0rem .5rem" }}>
       <NavLink
         className="no-link"
-        onClick={() => props.onMenu()}
-        to={`/catalogo/${props.title.toLowerCase()}`}
+        // onClick={() => props.onMenu()}
+        to={`/${props.title}/${props.item}`}
       >
-        <h4 id="tab-item">{props.title}</h4>
+        <h4 id="tab-item">{props.item}</h4>
       </NavLink>
     </div>
   );

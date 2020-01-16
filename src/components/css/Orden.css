@@ -1,10 +1,13 @@
 .orden {
   display: flex;
 
-  height: 100%;
+  height: 98v;
   width: 100% !important;
-  background-color: white;
+  overflow-y: scroll;
+  /* background-color: white; */
   flex-direction: column;
+  justify-content: center;
+  padding: 0.5rem;
 
   /* overflow-y: scroll; */
 }
@@ -14,6 +17,30 @@
   width: 100%;
   border-bottom: 1px solid;
   margin-bottom: 2rem;
+}
+.wrap {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  align-items: center;
+}
+.orden .resultados {
+  /* display: flex;
+  flex-direction: column; */
+  overflow-y: scroll;
+  width: 100%;
+}
+.orden-wrapper {
+  margin-top: 0.2rem;
+  display: flex;
+  justify-content: center;
+}
+.orden-wrapper div {
+  margin-right: 1rem;
+}
+.orden button {
+  margin-top: 2rem;
+  width: 20%;
 }
 
 .orden .header {
@@ -57,9 +84,10 @@ div.pagebr {
   size: 7in 9.25in;
   min-height: 14.25in;
   padding: 1rem 0.5rem;
-  background-color: white;
+  /* background-color: white; */
   margin: 27mm 16mm 27mm 16mm;
   page-break-before: always !important;
+  background-color: white;
   border: 1px solid;
   border-color: rgb(119, 119, 119);
 }

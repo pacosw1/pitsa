@@ -4,6 +4,8 @@
   align-items: baseline;
   justify-content: space-between;
   background-color: #ffffff;
+  border-bottom: 0.5px solid;
+  border-color: #c5c5c5fd;
 }
 
 #left,

@@ -4,9 +4,15 @@ import "./App.css";
 import Sidebar from "./components/js/Sidebar";
 import Navbar from "./components/js/Navbar";
 import Content from "./components/js/Content";
+import Login from "./components/js/Login";
 
 class App extends React.Component {
-  state = { sidebarToggle: true, ClienteFields: {}, cotSession: false };
+  state = {
+    sidebarToggle: true,
+    ClienteFields: {},
+    cotSession: false,
+    login: true
+  };
 
   updateField = (field, value) => {
     let fields = this.state.ClienteFields;
@@ -40,16 +46,25 @@ class App extends React.Component {
   render() {
     return (
       <div className="Wrapper">
-        <Navbar onMenu={this.toggleMenu} />
-        <div className="App">
-          <Sidebar toggle={this.state.sidebarToggle} onMenu={this.toggleMenu} />
-          <Content
-            toggleCot={this.toggleCot}
-            saveFields={this.saveFields}
-            cotSession={this.state.cotSession}
-            getCotSession={this.getCotSession}
-          />
-        </div>
+        {this.state.login ? (
+          <React.Fragment>
+            <Navbar onMenu={this.toggleMenu} />
+            <div className="App">
+              <Sidebar
+                toggle={this.state.sidebarToggle}
+                onMenu={this.toggleMenu}
+              />
+              <Content
+                toggleCot={this.toggleCot}
+                saveFields={this.saveFields}
+                cotSession={this.state.cotSession}
+                getCotSession={this.getCotSession}
+              />
+            </div>
+          </React.Fragment>
+        ) : (
+          <Login />
+        )}
       </div>
     );
   }

@@ -17,6 +17,7 @@ import Vendedor from "./Vendedores";
 import Cliente from "./Clientes";
 import Cotizacion from "./Cotizacion";
 import Reporte from "./Reporte";
+import Login from "./Login";
 require("../css/Content.css");
 
 class Content extends Component {
@@ -205,6 +206,7 @@ class Content extends Component {
             <Form header="Unidades" fields={unidades} edit={true} {...props} />
           )}
         />
+        {/* <Route path="/" exact render={props => <Login {...props} />} /> */}
       </div>
     );
   }

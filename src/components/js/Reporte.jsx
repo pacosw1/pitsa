@@ -5,7 +5,9 @@ var axios = require("../config/axios");
 var utils = require("../utlis/utils");
 class Reporte extends Component {
   state = {
-    orders: []
+    orders: [],
+    fieldError: {},
+    fields: {}
   };
 
   async componentWillMount() {
@@ -24,24 +26,53 @@ class Reporte extends Component {
     let renderOrders = orders.map(order => {
       return <Orden Parts={order.Parts} order={order} />;
     });
+
+    let { fieldError } = this.state;
     return (
       <div className="orden">
-        <div className="x">
-          <h3>Generar Reporte</h3>
-          <select>
-            <option>Por Fecha</option>
-            <option>Por Folio</option>
-          </select>
-          <div>
-            <span>De</span>
-            <input></input>
-            <span>A</span>
-            <input></input>
+        <div className="">
+          <div className="wrap">
+            <div>
+              <h3>Generar Reporte</h3>
+            </div>
+
+            {utils.renderSelect(
+              "sort",
+              [
+                <option value="Fecha">Por Fecha</option>,
+                <option value="Folio">Por Folio</option>
+              ],
+              "fields",
+              this
+            )}
+          </div>
+          <div className="orden-wrapper">
+            {utils.renderInput(
+              "fields",
+              "Inicio",
+              this,
+              fieldError["Inicio"] ? true : false,
+              "logInput"
+            )}
+
+            <br />
+            {utils.renderInput(
+              "fields",
+              "Fin",
+              this,
+              fieldError["Fin"] ? true : false,
+              "logInput"
+            )}
+          </div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            {" "}
             <button className="btn btn-primary">Generar</button>
           </div>
 
-          <h2>Resultados: </h2>
-          {renderOrders}
+          <div className="resultados">
+            <h2 style={{ marginLeft: "3rem" }}>Resultados</h2>
+            {renderOrders}
+          </div>
         </div>
       </div>
     );
@@ -137,6 +168,10 @@ const Orden = props => {
             <h5>Vendedor</h5>
             <p className="box-p">{Vendedor.Nombre}</p>
           </div>
+          <div className="box">
+            <h5>Encargado</h5>
+            <p className="box-p">{Encargado}</p>
+          </div>
 
           {/* <p className="box">Embarcado Por</p> */}
         </div>
@@ -151,6 +186,14 @@ const Orden = props => {
             <p className="box-p">
               {Planta == 1 ? "Su Planta" : "Nuestra Planta"}
             </p>
+          </div>
+          <div className="box">
+            <h5>Material</h5>
+            <p className="box-p">{TipoMaterial}</p>
+          </div>
+          <div className="box">
+            <h5># Cotizacion</h5>
+            <p className="box-p">{NumCot}</p>
           </div>
         </div>
       </div>

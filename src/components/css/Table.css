@@ -83,4 +83,9 @@ select {
   .table {
     overflow-x: scroll;
   }
+  table {
+    transform: scale(0.6) !important;
+    margin: 0;
+    transform-origin: left top;
+  }
 }

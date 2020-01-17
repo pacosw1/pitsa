@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../css/Form.css";
-import { LoadingScreen } from "./loadingScreen";
+import { LoadingScreen } from "./LoadingScreen";
 import ErrorPage from "./Error";
 let axios = require("../config/axios");
 let fieldData = require("./Fields");

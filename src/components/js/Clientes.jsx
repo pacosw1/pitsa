@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../css/OT.css";
 import ErrorPage from "./Error";
-import { LoadingScreen } from "./loadingScreen";
+import { LoadingScreen } from "./LoadingScreen";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
 let { clientesSchema } = require("./Fields");

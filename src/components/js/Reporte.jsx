@@ -1,43 +1,74 @@
 import React, { Component } from "react";
 import "../css/Orden.css";
-
+import { LoadingScreen } from "./LoadingScreen";
+let a = require("axios");
+let _ = require("lodash");
 var axios = require("../config/axios");
 var utils = require("../utlis/utils");
 class Reporte extends Component {
   state = {
     orders: [],
+    loaded: true,
+    err: false,
+    errMessage: "",
     fieldError: {},
-    fields: {}
+    fields: {
+      Sort: "Fecha",
+      Inicio: "",
+      Fin: ""
+    }
+  };
+
+  onGenerate = async () => {
+    let { Sort, Inicio, Fin } = this.state.fields;
+    if (Inicio != "" || Fin != "") {
+      this.setState({ loaded: false });
+
+      var res;
+      try {
+        res = await a.get("/ordenes/filter", {
+          params: { ...this.state.fields }
+        });
+        let data = _.get(res, "data");
+        data = _.get(data, "data");
+        if (data) this.setState({ orders: data, err: false, loaded: true });
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      this.setState({ errMessage: "Campos Invalidos o Vacios", err: true });
+    }
   };
 
   async componentWillMount() {
     //request API select data
-    try {
-      var orders = await utils.getData("ordenes");
-      console.log(orders);
-      this.setState({ orders: orders.data });
-    } catch (err) {
-      this.setState({ error: err.message });
-    }
+    // try {
+    //   // var orders = await utils.getData("ordenes");
+    //   // console.log(orders);
+    //   this.setState({ orders: orders.data });
+    // } catch (err) {
+    //   this.setState({ error: err.message });
     //load API select data
   }
   render() {
     let { orders } = this.state;
-    let renderOrders = orders.map(order => {
+    var renderOrders;
+    renderOrders = orders.map(order => {
       return <Orden Parts={order.Parts} order={order} />;
     });
 
-    let { fieldError } = this.state;
+    let { fieldError, fields } = this.state;
     return (
       <div className="orden">
         <div className="">
           <div className="wrap">
             <div>
               <h3>Generar Reporte</h3>
+              <p style={{ color: "red" }}>{this.state.errMessage}</p>
             </div>
 
             {utils.renderSelect(
-              "sort",
+              "Sort",
               [
                 <option value="Fecha">Por Fecha</option>,
                 <option value="Folio">Por Folio</option>
@@ -52,7 +83,8 @@ class Reporte extends Component {
               "Inicio",
               this,
               fieldError["Inicio"] ? true : false,
-              "logInput"
+              "logInput",
+              fields.Sort == "Fecha" ? "ex. 01/01/2020" : "ex: 6002"
             )}
 
             <br />
@@ -61,18 +93,30 @@ class Reporte extends Component {
               "Fin",
               this,
               fieldError["Fin"] ? true : false,
-              "logInput"
+              "logInput",
+              fields.Sort == "Fecha" ? "ex. 01/25/2020" : "ex: 6010"
             )}
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             {" "}
-            <button className="btn btn-primary">Generar</button>
+            <button
+              onClick={() => this.onGenerate()}
+              className="btn btn-primary"
+            >
+              Generar
+            </button>
           </div>
-
-          <div className="resultados">
-            <h2 style={{ marginLeft: "3rem" }}>Resultados</h2>
-            {renderOrders}
-          </div>
+          {!this.state.loaded ? (
+            <LoadingScreen />
+          ) : (
+            <div className="resultados">
+              <h2 style={{ marginLeft: "3rem" }}>
+                {" "}
+                {this.state.orders.length} Resultados
+              </h2>
+              {renderOrders}
+            </div>
+          )}
         </div>
       </div>
     );

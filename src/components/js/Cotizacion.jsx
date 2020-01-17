@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { LoadingScreen } from "./loadingScreen";
+import { LoadingScreen } from "./LoadingScreen";
 import ErrorPage from "./Error";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
@@ -141,7 +141,9 @@ class Cotizacion extends Component {
                         ? "Editar Cotizacion"
                         : "Nueva Cotizacion"}
                     </h4>
-                    <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                    <p style={{ color: "red", marginLeft: "2rem" }}>
+                      {this.state.errorMessage}
+                    </p>
                   </div>
 
                   <div className="btns">

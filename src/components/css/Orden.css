@@ -91,11 +91,7 @@ div.pagebr {
   border: 1px solid;
   border-color: rgb(119, 119, 119);
 }
-td {
-  word-wrap: break-word;
-}
+
 h1 {
   page-break-before: always;
-}
-table {
 }

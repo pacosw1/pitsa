@@ -88,7 +88,8 @@ export const renderInput = (
   field,
   x,
   error = false,
-  style = ""
+  style = "",
+  p
 ) => {
   if (field == "Importe" || field == "IVA") {
     return (
@@ -105,7 +106,7 @@ export const renderInput = (
             x.updateTotal(x.state[stateObject]["Parts"])
           ]}
           disabled={field == "Importe" ? true : false}
-          placeholder={field}
+          placeholder={p}
           value={x.state[stateObject][field]}
         />
       </div>
@@ -121,7 +122,7 @@ export const renderInput = (
         <input
           className={`${style}  ${error ? "errorInput" : "input"}`}
           onChange={e => [updateField(stateObject, field, e.target.value, x)]}
-          placeholder={field}
+          placeholder={p}
           defaultValue={x.state[stateObject][field]}
         />
       </div>

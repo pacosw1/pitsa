@@ -4,7 +4,7 @@ import "../css/Table.css";
 import "bootstrap/dist/css/bootstrap.css";
 import { Redirect, NavLink } from "react-router-dom";
 import ErrorPage from "./Error";
-import { LoadingScreen } from "./loadingScreen";
+import { LoadingScreen } from "./LoadingScreen";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
 class Catalogo extends Component {
@@ -68,7 +68,7 @@ class Catalogo extends Component {
         } else if (field.name == "Fecha" || field.name == "Entrega") {
           let date = utils.formatDate(record["Fecha"]);
           return (
-            <td key={field} onClick={() => this.selectRecord(record._id)}>
+            <td key={field.name} onClick={() => this.selectRecord(record._id)}>
               {date}
             </td>
           );

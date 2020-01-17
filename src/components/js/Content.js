@@ -69,7 +69,7 @@ class Content extends Component {
         <Route
           exact
           path="/catalogo/ordenes/new"
-          render={props => <OrdenTrabajo />}
+          render={props => <OrdenTrabajo {...props} />}
         />
         <Route
           exact

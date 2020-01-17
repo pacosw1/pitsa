@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../css/OT.css";
 import ErrorPage from "./Error";
-import { LoadingScreen } from "./loadingScreen";
+import { LoadingScreen } from "./LoadingScreen";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
 let _ = require("lodash");
@@ -100,7 +100,9 @@ class Vendedor extends Component {
                     <h4>
                       {this.props.edit ? "Editar Vendedor" : "Nuevo Vendedor"}
                     </h4>
-                    <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                    <p style={{ color: "red", marginLeft: "2rem" }}>
+                      {this.state.errorMessage}
+                    </p>
                   </div>
 
                   <div className="btns">

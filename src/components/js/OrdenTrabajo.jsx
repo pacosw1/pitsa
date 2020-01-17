@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "../css/OT.css";
 import ErrorPage from "./Error";
 import { ordenSchema } from "./Fields";
-import { LoadingScreen } from "./loadingScreen";
+import { LoadingScreen } from "./LoadingScreen";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
 let _ = require("lodash");
@@ -276,7 +276,9 @@ class OrdenTrabajo extends Component {
                         ? "Editar Orden de Trabajo"
                         : "Nueva Orden de Trabajo"}
                     </h4>
-                    <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                    <p style={{ color: "red", marginLeft: "2rem" }}>
+                      {this.state.errorMessage}
+                    </p>
                   </div>
 
                   <div className="btns">

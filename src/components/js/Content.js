@@ -206,7 +206,7 @@ class Content extends Component {
             <Form header="Unidades" fields={unidades} edit={true} {...props} />
           )}
         />
-        {/* <Route path="/" exact render={props => <Login {...props} />} /> */}
+        <Route path="/login" exact render={props => <Login {...props} />} />
       </div>
     );
   }

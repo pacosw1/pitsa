@@ -86,7 +86,11 @@ class Sidebar extends Component {
         style={{ width: widthVal, visibility: display, display: dis }}
       >
         <div id="top">{list}</div>
-        <div id="bottom">{<h4 id="tab-item">Cerrar Session</h4>}</div>
+        <div id="bottom">
+          <h4 onClick={() => localStorage.clear()} id="tab-item">
+            Cerrar Session
+          </h4>
+        </div>
       </div>
     );
   }

@@ -5,14 +5,23 @@ import Sidebar from "./components/js/Sidebar";
 import Navbar from "./components/js/Navbar";
 import Content from "./components/js/Content";
 import Login from "./components/js/Login";
+let axios = require("./components/config/axios");
 
 class App extends React.Component {
   state = {
     sidebarToggle: true,
     ClienteFields: {},
     cotSession: false,
-    login: true
+    login: false
   };
+
+  async componentWillMount() {
+    var loggedIn = await axios.getUser();
+    if (loggedIn) {
+      console.log(loggedIn);
+      this.setState({ login: true });
+    }
+  }
 
   updateField = (field, value) => {
     let fields = this.state.ClienteFields;
@@ -63,7 +72,7 @@ class App extends React.Component {
             </div>
           </React.Fragment>
         ) : (
-          <Login />
+          <Login {...this.props} />
         )}
       </div>
     );

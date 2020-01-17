@@ -49,9 +49,9 @@ class Catalogo extends Component {
     let dataList = data.map(record => {
       var status = [
         "Cancelada por Cliente",
+        "Vigente",
         "En Proceso",
-        "Perdida",
-        "Aprobada"
+        "Terminada"
       ];
       let td = fields.map(field => {
         if (

@@ -310,12 +310,7 @@ class OrdenTrabajo extends Component {
                     this,
                     errorField["Status"] ? true : false
                   )}
-                  {utils.renderInput(
-                    "fields",
-                    "Folio",
-                    this,
-                    errorField["Folio"] ? true : false
-                  )}
+
                   {utils.renderInput(
                     "fields",
                     "Pedido",

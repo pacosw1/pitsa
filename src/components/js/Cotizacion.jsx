@@ -9,19 +9,20 @@ let { cotizSchema } = require("./Fields");
 class Cotizacion extends Component {
   state = {
     Data: {
-      Clientes: []
+      Clientes: [],
+      Vendedores: []
     },
     saving: false,
     errorField: {},
     errorMessage: "",
-    selects: { Clientes: [] },
+    selects: { Clientes: [], Vendedores: [] },
     error: false,
     options: {
       Status: [
-        { _id: 0, value: "Cancelada" },
+        { _id: 0, value: "Pendiente" },
         { _id: 1, value: "Vigente" },
-        { _id: 2, value: "En Proceso" },
-        { _id: 3, value: "Terminada" }
+        { _id: 2, value: "Cancelada" }
+        // { _id: 3, value: "Terminada" }
       ]
     },
     fields: {
@@ -37,8 +38,17 @@ class Cotizacion extends Component {
 
     //request API select data
     var clientData = await utils.getSelectData("Clientes");
+    var sellerData = await utils.getSelectData("Vendedores");
 
     //load API select data
+    if (sellerData) {
+      selects["Vendedores"] = utils.loadSelectData(sellerData, "Nombre");
+      Data["Vendedores"] = sellerData;
+      fields.Vendedor = sellerData[0]._id;
+    } else {
+      this.setState({ error: true });
+    }
+
     if (clientData) {
       selects["Clientes"] = utils.loadSelectData(clientData, "Empresa");
       Data["Clientes"] = clientData;
@@ -59,6 +69,7 @@ class Cotizacion extends Component {
       if (result) {
         var currClient = result.Cliente;
         result.Cliente = result.Cliente._id;
+        result.Vendedor = result.Vendedor._id;
         result.Fecha = result.Fecha.slice(0, 10);
 
         this.setState({ fields: result, Cliente: currClient, loaded: true });
@@ -122,7 +133,7 @@ class Cotizacion extends Component {
   render() {
     //options for cond de pago.
 
-    let { Clientes, Status } = this.state.selects;
+    let { Clientes, Status, Vendedores } = this.state.selects;
     let { errorField } = this.state;
     return (
       <div className="OT">
@@ -164,12 +175,6 @@ class Cotizacion extends Component {
                 <div className="split-left">
                   {utils.renderInput(
                     "fields",
-                    "Folio",
-                    this,
-                    errorField["Folio"] ? true : false
-                  )}
-                  {utils.renderInput(
-                    "fields",
                     "Fecha",
                     this,
                     errorField["Fecha"] ? true : false
@@ -179,6 +184,13 @@ class Cotizacion extends Component {
                     "Concepto",
                     this,
                     errorField["Concepto"] ? true : false
+                  )}
+                  {utils.renderSelect(
+                    "Vendedor",
+                    Vendedores,
+                    "fields",
+                    this,
+                    errorField["Vendedor"] ? true : false
                   )}
                   {utils.renderInput(
                     "fields",

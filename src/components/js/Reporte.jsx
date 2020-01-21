@@ -71,7 +71,7 @@ class Reporte extends Component {
               "Sort",
               [
                 <option value="Fecha">Por Fecha</option>,
-                <option value="Folio">Por Folio</option>
+                <option value="ID">Por Folio</option>
               ],
               "fields",
               this
@@ -129,6 +129,7 @@ const Orden = props => {
     Folio,
     Fecha,
     Entrega,
+    ID,
     NumProvedor,
     Pedido,
     Moneda,
@@ -173,7 +174,7 @@ const Orden = props => {
     <div className="order">
       <div className="header">
         <h1>Orden De Trabajo</h1>
-        <h1># {Folio}</h1>
+        <h1># {ID}</h1>
       </div>
 
       <div className="split">

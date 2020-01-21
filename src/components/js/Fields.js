@@ -3,64 +3,60 @@ let Joi = require("@hapi/joi");
 exports.clientesSchema = Joi.object({
   __v: Joi.number(),
   _id: Joi.string(),
-  Status: Joi.number(),
+  // Status: Joi.number(),
   Vendedor: Joi.string()
     .alphanum()
     .length(24)
     .required(),
   Empresa: Joi.string()
     .min(3)
-    .max(30)
+    .max(100)
     .required(),
-  Calle: Joi.string()
+  Direccion: Joi.string()
     .min(3)
-    .max(20)
+    .max(100)
     .required(),
-  Colonia: Joi.string()
-    .min(3)
-    .max(50)
-    .required(),
+
   Planta: Joi.string()
     .min(3)
     .max(20)
     .required(),
   NumProvedor: Joi.string()
-    .min(3)
+    .min(1)
     .max(20),
 
-  Ciudad: Joi.string()
-    .min(3)
-    .max(20)
-    .required(),
+  // Ciudad: Joi.string()
+  //   .min(3)
+  //   .max(20)
+  //   .required(),
 
-  Estado: Joi.string()
-    .min(3)
-    .max(20)
-    .required(),
+  // Estado: Joi.string()
+  //   .min(3)
+  //   .max(20)
+  //   .required(),
 
-  CP: Joi.number()
-    .min(10000)
-    .max(99999)
-    .required(),
-  Telefono: Joi.string(),
+  // CP: Joi.number()
+  //   .min(10000)
+  //   .max(99999)
+  //   .required(),
+  // Telefono: Joi.string(),
 
-  RFC: Joi.string()
-    .alphanum()
-    .max(20)
-    .required(),
+  // RFC: Joi.string()
+  //   .alphanum()
+  //   .max(20)
+  //   .required(),
 
   Pais: Joi.string()
-    .min(3)
+    .min(2)
     .max(20)
     .required()
 });
 
 exports.cotizSchema = Joi.object({
+  ID: Joi.number(),
   __v: Joi.number(),
   _id: Joi.string(),
-  Folio: Joi.number()
-    .min(1)
-    .required(),
+
   Fecha: Joi.date().required(),
   Concepto: Joi.string()
     .min(3)
@@ -72,6 +68,9 @@ exports.cotizSchema = Joi.object({
   Cliente: Joi.string()
     .length(24)
     .required(),
+  Vendedor: Joi.string()
+    .length(24)
+    .required(),
   Status: Joi.number()
     .min(0)
     .max(5)
@@ -81,9 +80,7 @@ exports.cotizSchema = Joi.object({
 exports.ordenSchema = Joi.object({
   __v: Joi.number(),
   _id: Joi.string(),
-  Folio: Joi.number()
-    .min(1)
-    .required(),
+  ID: Joi.number(),
   Parts: Joi.array(),
   Status: Joi.number()
     .min(0)
@@ -156,6 +153,7 @@ exports.vendedorSchema = Joi.object({
 });
 
 exports.clientes = [
+  { type: "input", name: "ID", placeholder: "Folio" },
   {
     type: "input",
     name: "Empresa",
@@ -167,16 +165,16 @@ exports.clientes = [
     route: "vendedores",
     placeholder: "Vendedor"
   },
-  {
-    type: "input",
-    name: "Calle",
-    placeholder: "Calle"
-  },
-  {
-    type: "input",
-    name: "Colonia",
-    placeholder: "Colonia"
-  },
+  // {
+  //   type: "input",
+  //   name: "Calle",
+  //   placeholder: "Calle"
+  // },
+  // {
+  //   type: "input",
+  //   name: "Colonia",
+  //   placeholder: "Colonia"
+  // },
   {
     type: "input",
     name: "Planta",
@@ -187,31 +185,31 @@ exports.clientes = [
     name: "NumProvedor",
     placeholder: " # Provedor"
   },
-  {
-    type: "input",
-    name: "Ciudad",
-    placeholder: "Ciudad"
-  },
-  {
-    type: "input",
-    name: "Estado",
-    placeholder: "Estado"
-  },
-  {
-    type: "input",
-    name: "CP",
-    placeholder: "Codigo Postal"
-  },
-  {
-    type: "input",
-    name: "Telefono",
-    placeholder: "Telefono"
-  },
-  {
-    type: "input",
-    name: "RFC",
-    placeholder: "RFC"
-  },
+  // {
+  //   type: "input",
+  //   name: "Ciudad",
+  //   placeholder: "Ciudad"
+  // },
+  // {
+  //   type: "input",
+  //   name: "Estado",
+  //   placeholder: "Estado"
+  // },
+  // {
+  //   type: "input",
+  //   name: "CP",
+  //   placeholder: "Codigo Postal"
+  // },
+  // {
+  //   type: "input",
+  //   name: "Telefono",
+  //   placeholder: "Telefono"
+  // },
+  // {
+  //   type: "input",
+  //   name: "RFC",
+  //   placeholder: "RFC"
+  // },
   {
     type: "input",
     name: "Pais",
@@ -237,7 +235,8 @@ exports.unidades = [
 ];
 
 exports.ordenes = [
-  { type: "input", placeholder: "Folio", name: "Folio" },
+  { name: "ID", placeholder: "Folio" },
+
   { type: "input", placeholder: "Fecha", name: "Fecha" },
   {
     type: "select",
@@ -260,7 +259,7 @@ exports.ordenes = [
 ];
 
 exports.cotizaciones = [
-  { name: "Folio", placeholder: "Folio", type: "input" },
+  { name: "ID", placeholder: "Folio" },
   { name: "Fecha", placeholder: "Fecha", type: "input" },
   {
     name: "Cliente",
@@ -275,8 +274,8 @@ exports.cotizaciones = [
     route: "status",
     isStatic: true
   },
-  { name: "Concepto", placeholder: "Concepto", type: "input" },
-  { name: "Total", placeholder: "Total", type: "input" }
+  { name: "Concepto", placeholder: "Concepto", type: "input" }
+  // { name: "V", placeholder: "Total", type: "input" }
 ];
 exports.proovedores = [
   "RazonSocial",

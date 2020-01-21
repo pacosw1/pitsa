@@ -33,6 +33,7 @@ class Catalogo extends Component {
   onDelete = async id => {
     let { header } = this.props;
     let result = await axios.deleteItem(header, id);
+    console.log(result);
     return (window.location = "/catalogo/" + header.toLowerCase());
   };
 
@@ -47,6 +48,7 @@ class Catalogo extends Component {
       );
     });
     let dataList = data.map(record => {
+      var cotStatus = ["Pendiente", "Vigente", "Cancelada"];
       var status = [
         "Cancelada por Cliente",
         "Vigente",
@@ -65,6 +67,13 @@ class Catalogo extends Component {
                 : record["Cliente"].Empresa}
             </td>
           );
+        } else if (field.name == "Folio" && header == "Cotizaciones") {
+          return (
+            <td
+              key={field.name}
+              onClick={() => this.selectRecord(record._id)}
+            ></td>
+          );
         } else if (field.name == "Fecha" || field.name == "Entrega") {
           let date = utils.formatDate(record["Fecha"]);
           return (
@@ -79,14 +88,27 @@ class Catalogo extends Component {
             </td>
           );
         } else if (field.name == "Status") {
-          return (
-            <td
-              key={field.name.Empresa}
-              onClick={() => this.selectRecord(record._id)}
-            >
-              {status[record[field.name]]}
-            </td>
-          );
+          if (header == "Cotizaciones") {
+            return (
+              <td
+                key={field.name.Empresa}
+                onClick={() => this.selectRecord(record._id)}
+              >
+                {record[field.name] <= 3
+                  ? cotStatus[record[field.name]]
+                  : "OT" + record[field.name]}
+              </td>
+            );
+          } else {
+            return (
+              <td
+                key={field.name.Empresa}
+                onClick={() => this.selectRecord(record._id)}
+              >
+                {status[record[field.name]]}
+              </td>
+            );
+          }
         } else {
           return (
             <td key={field.name} onClick={() => this.selectRecord(record._id)}>

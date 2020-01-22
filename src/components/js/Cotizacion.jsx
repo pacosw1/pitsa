@@ -192,12 +192,12 @@ class Cotizacion extends Component {
                     this,
                     errorField["Vendedor"] ? true : false
                   )}
-                  {utils.renderInput(
+                  {/* {utils.renderInput(
                     "fields",
                     "Total",
                     this,
                     errorField["Total"] ? true : false
-                  )}
+                  )} */}
                   <br />
                   <button
                     className="btn btn-primary "

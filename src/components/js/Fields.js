@@ -16,7 +16,7 @@ exports.clientesSchema = Joi.object({
     .min(3)
     .max(100)
     .required(),
-
+  ID: Joi.string(),
   Planta: Joi.string()
     .min(3)
     .max(20)
@@ -62,9 +62,9 @@ exports.cotizSchema = Joi.object({
     .min(3)
     .max(30)
     .required(),
-  Total: Joi.number()
-    .min(0)
-    .required(),
+  // Total: Joi.number()
+  //   .min(0)
+  //   .required(),
   Cliente: Joi.string()
     .length(24)
     .required(),
@@ -94,16 +94,12 @@ exports.ordenSchema = Joi.object({
   Moneda: Joi.string()
     .length(3)
     .required(),
-  NumCot: Joi.string()
-    .alphanum()
-    .min(1)
-    .max(20)
-    .required(),
+  CotID: Joi.number().required(),
   Encargado: Joi.string()
     .min(1)
     .max(20)
     .required(),
-  TipoMaterial: Joi.string()
+  Concepto: Joi.string()
     .min(1)
     .max(20)
     .required(),
@@ -117,6 +113,10 @@ exports.ordenSchema = Joi.object({
   Cliente: Joi.string()
     .length(24)
     .required(),
+  Dossier: Joi.number().required(),
+  Vendedor: Joi.string()
+    .length(24)
+    .required(),
   IVA: Joi.number()
     .min(0)
     .max(100)
@@ -126,11 +126,11 @@ exports.ordenSchema = Joi.object({
   Enviar: {
     Cliente: Joi.string()
       .min(3)
-      .max(20)
+
       .required(),
     Direccion: Joi.string()
       .min(3)
-      .max(80)
+
       .required()
   }
 });

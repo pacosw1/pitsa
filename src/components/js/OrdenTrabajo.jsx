@@ -10,9 +10,12 @@ let _ = require("lodash");
 class OrdenTrabajo extends Component {
   state = {
     saving: false,
+    info: true,
+    partidas: false,
     errorField: {},
     errorMessage: "",
     error: false,
+    dossier: 0,
     Cliente: {
       Vendedor: {},
       Pais: "",
@@ -118,8 +121,17 @@ class OrdenTrabajo extends Component {
 
     //request API select data
     var clientData = await utils.getSelectData("clientes");
+    var sellerData = await utils.getSelectData("Vendedores");
 
     //load API select data
+    if (sellerData) {
+      selects["Vendedores"] = utils.loadSelectData(sellerData, "Nombre");
+      Data["Vendedores"] = sellerData;
+      fields.Vendedor = sellerData[0]._id;
+    } else {
+      this.setState({ error: true });
+    }
+    ////////
     if (clientData) {
       selects["Clientes"] = utils.loadSelectData(clientData, "Empresa");
       Data["Clientes"] = clientData;
@@ -156,6 +168,7 @@ class OrdenTrabajo extends Component {
         var currClient = result.Cliente;
         result.Cliente = result.Cliente._id;
         result.Entrega = result.Entrega.slice(0, 10);
+        result.Vendedor = result.Vendedor._id;
         result.Fecha = result.Fecha.slice(0, 10);
 
         this.setState({ fields: result, Cliente: currClient });
@@ -178,12 +191,16 @@ class OrdenTrabajo extends Component {
     try {
       await ordenSchema.validateAsync({ ...fields });
 
+      fields.Dossier = this.state.dossier ? 1 : 0;
+      fields.Vendedor = this.state.Data.Vendedores.find(
+        client => client._id == fields.Vendedor
+      );
+
       fields.Cliente = this.state.Data.Clientes.find(
         client => client._id == fields.Cliente
       );
       if (edit) {
         let id = match.params.id;
-
         result = await utils.onSubmit("ordenes", id, fields, true);
       } else result = await utils.onSubmit("ordenes", "", fields, false);
 
@@ -257,7 +274,14 @@ class OrdenTrabajo extends Component {
       );
     });
 
-    var { Status, CondPago, Clientes, Planta, Moneda } = this.state.selects;
+    var {
+      Status,
+      CondPago,
+      Clientes,
+      Vendedores,
+      Planta,
+      Moneda
+    } = this.state.selects;
     let { errorField } = this.state;
     return (
       <div className="OT">
@@ -271,12 +295,29 @@ class OrdenTrabajo extends Component {
               <React.Fragment>
                 <div className="split-header">
                   <div>
-                    <h4>
+                    {/* <h4>
                       {this.props.edit
                         ? "Editar Orden de Trabajo"
                         : "Nueva Orden de Trabajo"}
-                    </h4>
-                    <p style={{ color: "red", marginLeft: "2rem" }}>
+                    </h4> */}
+                    <button
+                      className={this.state.info ? "tabs active" : "tabs"}
+                      onClick={() =>
+                        this.setState({ info: true, partidas: false })
+                      }
+                    >
+                      Datos
+                    </button>
+                    <button
+                      className={this.state.partidas ? "tabs active" : "tabs"}
+                      onClick={() =>
+                        this.setState({ info: false, partidas: true })
+                      }
+                    >
+                      Partidas
+                    </button>
+
+                    <p style={{ color: "red", margin: "1rem 0rem" }}>
                       {this.state.errorMessage}
                     </p>
                   </div>
@@ -296,75 +337,85 @@ class OrdenTrabajo extends Component {
                     </button>
                   </div>
                 </div>
-                <div className="split-left">
-                  {utils.renderInput(
-                    "fields",
-                    "Fecha",
-                    this,
-                    errorField["Fecha"] ? true : false
-                  )}
-                  {utils.renderSelect(
-                    "Status",
-                    Status,
-                    "fields",
-                    this,
-                    errorField["Status"] ? true : false
-                  )}
 
-                  {utils.renderInput(
-                    "fields",
-                    "Pedido",
-                    this,
-                    errorField["Pedido"] ? true : false
-                  )}
-                  {utils.renderInput(
-                    "fields",
-                    "CotID",
-                    this,
-                    errorField["CotID"] ? true : false
-                  )}
-                  {utils.renderInput(
-                    "fields",
-                    "Encargado",
-                    this,
-                    errorField["Encargado"] ? true : false
-                  )}
-                  {utils.renderInput(
-                    "fields",
-                    "Concepto",
-                    this,
-                    errorField["Concepto"] ? true : false
-                  )}
-                  {utils.renderInput(
-                    "fields",
-                    "Entrega",
-                    this,
-                    errorField["Entrega"] ? true : false
-                  )}
-                  {utils.renderSelect(
-                    "CondPago",
-                    CondPago,
-                    "fields",
-                    this,
-                    errorField["CondPago"] ? true : false
-                  )}
+                {this.state.info ? (
+                  <div className="split-left">
+                    {utils.renderInput(
+                      "fields",
+                      "Fecha",
+                      this,
+                      errorField["Fecha"] ? true : false
+                    )}
+                    {utils.renderSelect(
+                      "Status",
+                      Status,
+                      "fields",
+                      this,
+                      errorField["Status"] ? true : false
+                    )}
 
-                  {utils.renderSelect(
-                    "Planta",
-                    Planta,
-                    "fields",
-                    this,
-                    errorField["Planta"] ? true : false
-                  )}
+                    {utils.renderInput(
+                      "fields",
+                      "Pedido",
+                      this,
+                      errorField["Pedido"] ? true : false
+                    )}
+                    {utils.renderInput(
+                      "fields",
+                      "CotID",
+                      this,
+                      errorField["CotID"] ? true : false
+                    )}
+                    {utils.renderInput(
+                      "fields",
+                      "Encargado",
+                      this,
+                      errorField["Encargado"] ? true : false
+                    )}
 
-                  {utils.renderSelect(
-                    "Cliente",
-                    Clientes,
-                    "fields",
-                    this,
-                    errorField["Cliente"] ? true : false
-                  )}
-                  {/* <span>Vendedor</span>
+                    {utils.renderInput(
+                      "fields",
+                      "Concepto",
+                      this,
+                      errorField["Concepto"] ? true : false
+                    )}
+                    {utils.renderInput(
+                      "fields",
+                      "Entrega",
+                      this,
+                      errorField["Entrega"] ? true : false
+                    )}
+                    {utils.renderSelect(
+                      "CondPago",
+                      CondPago,
+                      "fields",
+                      this,
+                      errorField["CondPago"] ? true : false
+                    )}
+
+                    {utils.renderSelect(
+                      "Planta",
+                      Planta,
+                      "fields",
+                      this,
+                      errorField["Planta"] ? true : false
+                    )}
+
+                    {utils.renderSelect(
+                      "Cliente",
+                      Clientes,
+                      "fields",
+                      this,
+                      errorField["Cliente"] ? true : false
+                    )}
+                    {utils.renderSelect(
+                      "Vendedor",
+                      Vendedores,
+                      "fields",
+                      this,
+                      errorField["Vendedor"] ? true : false
+                    )}
+                    {/* <span>Vendedor</span>
                   <input
                     disabled
                     defaultValue={this.state.Cliente.Vendedor.Nombre}
@@ -383,102 +434,138 @@ class OrdenTrabajo extends Component {
                     placeholder="Pais"
                     className="disabled"
                     disabled
-                    defaultValue={this.state.Cliente.Pais}
+                    defaultValue={this.st
+                      ate.Cliente.Pais}
                   /> */}
-                  <div>
-                    <h1
+                    <div
                       style={{
-                        fontSize: "15px",
-                        marginBottom: "0px",
-                        paddingTop: ".2rem"
+                        marginLeft: "3.5rem",
+                        marginTop: ".5rem",
+                        marginBottom: ".5rem"
                       }}
                     >
-                      Cliente{" "}
-                    </h1>
-                    <input
-                      defaultValue={this.state.fields.Enviar["Cliente"] || ""}
-                      placeholder="Cliente"
-                      className={errorField["cliente"] ? "errorInput" : "input"}
-                      onChange={e =>
-                        this.updateField({
-                          Enviar: true,
-                          name: "Cliente",
-                          value: e.target.value
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <h1
-                      style={{
-                        fontSize: "15px",
-                        marginBottom: "0px",
-                        paddingTop: ".2rem"
-                      }}
-                    >
-                      Direccion
-                    </h1>
-                    <input
-                      placeholder="Direccion"
-                      className={
-                        errorField["Direccion"] ? "errorInput" : "input"
-                      }
-                      defaultValue={this.state.fields.Enviar["Direccion"] || ""}
-                      onChange={e =>
-                        this.updateField({
-                          Enviar: true,
-                          name: "Direccion",
-                          value: e.target.value
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="split-header">
-                  <div>
-                    <button
-                      className="btn btn-primary subBtn"
-                      onClick={() => this.addPart()}
-                    >
-                      Nueva Parte
-                    </button>
-                  </div>
-                  <div>
-                    <div className="ot-total">
-                      {utils.renderInput(
-                        "fields",
-                        "Importe",
-                        this,
-                        false,
-                        "currencyBorder disabled"
-                      )}
-                      {utils.renderSelect(
-                        "Moneda",
-                        Moneda,
-                        "fields",
-                        this,
-                        errorField["Moneda"] ? true : false,
-                        "currencySelect"
-                      )}
-                      {utils.renderInput("fields", "IVA", this, false, "IVA")}
+                      <span>Dossier </span>
+                      <input
+                        defaultChecked={this.state.fields.Dossier}
+                        onChange={e =>
+                          this.setState({
+                            dossier: e.target.checked
+                          })
+                        }
+                        type="checkbox"
+                        checked={this.state.fields.dossier}
+                        style={{ width: "5rem !important" }}
+                      />
+                    </div>
+
+                    <div>
+                      <h1
+                        style={{
+                          fontSize: "15px",
+                          marginBottom: "0px",
+                          paddingTop: ".2rem"
+                        }}
+                      >
+                        Enviar a Cliente{" "}
+                      </h1>
+                      <input
+                        defaultValue={this.state.fields.Enviar["Cliente"] || ""}
+                        placeholder="Cliente"
+                        className={
+                          errorField["cliente"] ? "errorInput" : "input"
+                        }
+                        onChange={e =>
+                          this.updateField({
+                            Enviar: true,
+                            name: "Cliente",
+                            value: e.target.value
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <h1
+                        style={{
+                          fontSize: "15px",
+                          marginBottom: "0px",
+                          paddingTop: ".2rem"
+                        }}
+                      >
+                        Enviar a Direccion
+                      </h1>
+                      <input
+                        placeholder="Direccion"
+                        className={
+                          errorField["Direccion"] ? "errorInput" : "input"
+                        }
+                        defaultValue={
+                          this.state.fields.Enviar["Direccion"] || ""
+                        }
+                        onChange={e =>
+                          this.updateField({
+                            Enviar: true,
+                            name: "Direccion",
+                            value: e.target.value
+                          })
+                        }
+                      />
                     </div>
                   </div>
-                </div>
-                <div className="split-left tableX">
-                  <table className=" table">
-                    <thead>
-                      <tr scope="col">
-                        <th scope="col">Parte</th>
-                        <th scope="col">Cantidad</th>
-                        <th scope="col">Concepto</th>
-                        <th scope="col">Precio Unitario</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
+                ) : (
+                  <React.Fragment>
+                    <div className="split-header">
+                      <div>
+                        <button
+                          className="btn btn-primary subBtn"
+                          onClick={() => this.addPart()}
+                        >
+                          Nueva Parte
+                        </button>
+                      </div>
+                      <div>
+                        <div className="ot-total">
+                          {utils.renderInput(
+                            "fields",
+                            "Importe",
+                            this,
+                            false,
+                            "currencyBorder disabled"
+                          )}
+                          {utils.renderSelect(
+                            "Moneda",
+                            Moneda,
+                            "fields",
+                            this,
+                            errorField["Moneda"] ? true : false,
+                            "currencySelect"
+                          )}
+                          {utils.renderInput(
+                            "fields",
+                            "IVA",
+                            this,
+                            false,
+                            "IVA"
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className=" tableX">
+                      <table className=" table">
+                        <thead>
+                          <tr scope="col">
+                            <th scope="col">Parte</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Concepto</th>
+                            <th scope="col">Precio Unitario</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
 
-                    <tbody className="scroll-body">{renderParts}</tbody>
-                  </table>
-                </div>
+                        <tbody className="scroll-body">{renderParts}</tbody>
+                      </table>
+                    </div>
+                  </React.Fragment>
+                )}
               </React.Fragment>
             )}
           </React.Fragment>
@@ -512,7 +599,7 @@ const Part = props => {
       </td>
       <td>
         <textarea
-          style={{ width: "20rem" }}
+          style={{ width: "40rem", height: "15rem" }}
           multiple
           defaultValue={props.concepto}
           onChange={e => updatePart(id, "concepto", e.target.value)}

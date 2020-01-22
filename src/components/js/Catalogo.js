@@ -41,10 +41,15 @@ class Catalogo extends Component {
     searchCopy.filters = utils.loadFilters(fields);
 
     //render them
-
-    if (result.status !== 200) this.setState({ error: true });
+    let data = _.get(result, "data");
+    if (!data) this.setState({ error: true });
     else {
-      this.setState({ data: result.data, loaded: true, search: searchCopy });
+      this.setState({
+        data: data,
+
+        loaded: true,
+        search: searchCopy
+      });
     }
 
     // this.setState({ data: result });
@@ -183,7 +188,9 @@ class Catalogo extends Component {
                   >
                     <button className="btn btn-primary">Nuevo</button>
                   </NavLink>
+                  {/* <p>mostrando {this.state.data.length}</p> */}
                 </div>
+
                 <div>
                   <select
                     onChange={e => this.setState({ filter: e.target.value })}

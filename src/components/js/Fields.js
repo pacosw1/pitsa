@@ -246,7 +246,7 @@ exports.ordenes = [
   },
   { type: "input", placeholder: "Importe", name: "Importe" },
   { type: "input", placeholder: "Pedido", name: "Pedido" },
-  { type: "input", placeholder: "Concepto", name: "TipoMaterial" },
+  { type: "input", placeholder: "Concepto", name: "Concepto" },
   { type: "input", placeholder: "Condiciones", name: "CondPago" },
   { type: "input", placeholder: "Fecha Limite", name: "Entrega" }
 

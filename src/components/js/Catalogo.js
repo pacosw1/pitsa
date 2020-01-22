@@ -4,13 +4,24 @@ import "../css/Table.css";
 import "bootstrap/dist/css/bootstrap.css";
 import { Redirect, NavLink } from "react-router-dom";
 import ErrorPage from "./Error";
+
 import { LoadingScreen } from "./LoadingScreen";
+import { string } from "joi";
+let f = require("./Fields");
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
+let _ = require("lodash");
 class Catalogo extends Component {
   state = {
     data: [],
-    loaded: false
+    searchValue: "",
+    filter: "ID",
+    loaded: false,
+    search: {
+      value: "",
+      filter: "",
+      filters: []
+    }
   };
 
   selectRecord = id => {
@@ -20,15 +31,40 @@ class Catalogo extends Component {
   };
   async componentWillMount() {
     let { header } = this.props;
+    let { search } = this.state;
     let result = (await axios.getData(header.toLowerCase())) || [];
+    var options, fields;
+    //load search filters
+    var searchCopy = search;
+    fields = [...f[header.toLowerCase()]];
+
+    searchCopy.filters = utils.loadFilters(fields);
+
+    //render them
 
     if (result.status !== 200) this.setState({ error: true });
     else {
-      this.setState({ data: result.data, loaded: true });
+      this.setState({ data: result.data, loaded: true, search: searchCopy });
     }
 
     // this.setState({ data: result });
   }
+
+  onSearch = async () => {
+    this.setState({ loaded: false });
+    let val = this.state.searchValue;
+    // if (this.state.filter == "ID") val = parseInt(val);
+    let result = await axios.createItem(
+      `${this.props.header.toLowerCase()}/search`,
+      {
+        value: val,
+        filter: this.state.filter
+      }
+    );
+    var data = _.get(result, "data");
+    if (data) this.setState({ data: result.data, loaded: true });
+    else this.setState({ error: true });
+  };
 
   onDelete = async id => {
     let { header } = this.props;
@@ -149,14 +185,25 @@ class Catalogo extends Component {
                   </NavLink>
                 </div>
                 <div>
-                  {/* <select style={{ height: "2rem" }}>
-                    <option>Por Empresa</option>
-                  </select> */}
-                  {/* <input
+                  <select
+                    onChange={e => this.setState({ filter: e.target.value })}
+                    style={{ height: "2.5rem", width: "6.4rem" }}
+                  >
+                    {this.state.search.filters}
+                  </select>
+                  <input
                     placeholder="Search"
-                    style={{ width: "10rem", height: "2rem" }}
+                    style={{ height: "2.5rem", paddingLeft: "1rem" }}
+                    onChange={e =>
+                      this.setState({ searchValue: e.target.value })
+                    }
                   ></input>
-                  <button className="search-button">Buscar</button> */}
+                  <button
+                    className="search-button"
+                    onClick={() => this.onSearch()}
+                  >
+                    Buscar
+                  </button>
                 </div>
               </div>
               <div id="tables">

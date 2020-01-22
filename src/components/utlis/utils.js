@@ -12,6 +12,20 @@ export var getData = async route => {
   }
 };
 
+export var loadFilters = options => {
+  let res = options.map(item => {
+    if (
+      item.placeholder !== "Fecha" &&
+      item.placeholder !== "Importe" &&
+      item.placeholder !== "Condiciones" &&
+      item.placeholder !== "Fecha Limite" &&
+      item.placeholder !== "Estatus"
+    )
+      return <option value={item.name}>{item.placeholder}</option>;
+  });
+  return res;
+};
+
 export var formatDate = date => {
   var months = [
     "Enero",

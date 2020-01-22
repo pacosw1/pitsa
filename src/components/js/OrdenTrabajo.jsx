@@ -319,9 +319,9 @@ class OrdenTrabajo extends Component {
                   )}
                   {utils.renderInput(
                     "fields",
-                    "NumCot",
+                    "CotID",
                     this,
-                    errorField["NumCot"] ? true : false
+                    errorField["CotID"] ? true : false
                   )}
                   {utils.renderInput(
                     "fields",
@@ -331,9 +331,9 @@ class OrdenTrabajo extends Component {
                   )}
                   {utils.renderInput(
                     "fields",
-                    "TipoMaterial",
+                    "Concepto",
                     this,
-                    errorField["TipoMaterial"] ? true : false
+                    errorField["Concepto"] ? true : false
                   )}
                   {utils.renderInput(
                     "fields",

@@ -151,6 +151,7 @@ const Orden = props => {
     Estado,
     Pais,
     Telefono,
+    Direccion,
     Vendedor,
     Empresa
   } = Cliente;
@@ -187,13 +188,8 @@ const Orden = props => {
           <br className="br" />
           <div className="box">
             <h5>Vendido A</h5>
-            <p>{Empresa}</p> <p className="box-p">{Calle}</p>
-            <p>
-              {Colonia}, {CP}
-            </p>
-            <p>
-              {Estado}, {Pais}
-            </p>
+            <p>{Empresa}</p>
+            {Direccion}, {Pais}
           </div>
         </div>
         <div className="Datos-info half">

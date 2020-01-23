@@ -65,9 +65,7 @@ exports.cotizSchema = Joi.object({
   // Total: Joi.number()
   //   .min(0)
   //   .required(),
-  Cliente: Joi.string()
-    .length(24)
-    .required(),
+  Cliente: Joi.object().required(),
   Vendedor: Joi.string()
     .length(24)
     .required(),
@@ -110,9 +108,7 @@ exports.ordenSchema = Joi.object({
     .min(0)
     .max(1)
     .required(),
-  Cliente: Joi.string()
-    .length(24)
-    .required(),
+  Cliente: Joi.object().required(),
   Dossier: Joi.number().required(),
   Vendedor: Joi.string()
     .length(24)
@@ -153,12 +149,12 @@ exports.vendedorSchema = Joi.object({
 });
 
 exports.clientes = [
-  { type: "input", name: "ID", placeholder: "Folio" },
   {
     type: "input",
     name: "Empresa",
     placeholder: "Empresa"
   },
+  { type: "input", name: "ID", placeholder: "Folio" },
   {
     type: "select",
     name: "Vendedor",

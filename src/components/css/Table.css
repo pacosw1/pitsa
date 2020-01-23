@@ -13,7 +13,8 @@ input::placeholder {
 }
 .delete-button {
   color: white;
-  width: 2.5rem !important;
+  width: 3rem !important;
+  height: 01rem !important;
   background-color: rgb(194, 23, 23) !important;
 }
 

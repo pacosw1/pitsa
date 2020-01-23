@@ -52,7 +52,7 @@ export var formatDate = date => {
     "Domingo"
   ];
   date = new Date(date);
-  let day = date.getDate() + 1;
+  let day = date.getDate();
   let month = months[date.getMonth()];
   let year = date.getFullYear();
 
@@ -105,7 +105,7 @@ export const renderInput = (
   style = "",
   p
 ) => {
-  if (field == "Importe" || field == "IVA") {
+  if (field == "Importe") {
     return (
       <div>
         <h1

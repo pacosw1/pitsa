@@ -1,7 +1,7 @@
 let axios = require("axios");
 let _ = require("lodash");
 let jwtDecode = require("jwt-decode");
-axios.defaults.baseURL = "http://67.207.87.121/";
+axios.defaults.baseURL = "http://localhost:5000/";
 axios.defaults.headers.common["token"] = localStorage.token;
 
 ///67.207.87.121

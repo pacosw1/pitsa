@@ -3,7 +3,7 @@ import "../css/OT.css";
 import ErrorPage from "./Error";
 import { ordenSchema } from "./Fields";
 import { LoadingScreen } from "./LoadingScreen";
-import { clientes } from "./Fields";
+import { clientes, cotizaciones } from "./Fields";
 import SelectClient from "./SelectClient";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
@@ -16,6 +16,10 @@ class OrdenTrabajo extends Component {
     partidas: false,
     clientSelect: false,
     errorField: {},
+    cotizSelect: false,
+    Cotiz: {
+      ID: ""
+    },
     errorMessage: "",
     error: false,
     dossier: 0,
@@ -117,8 +121,13 @@ class OrdenTrabajo extends Component {
   selectRecord = client => {
     console.log(client);
     let { fields } = this.state;
-    fields.Cliente = client;
-    this.setState({ Cliente: client, fields, clientSelect: false });
+    if (client.Fecha) {
+      fields.Cotiz = client;
+      this.setState({ Cotiz: client, fields, cotizSelect: false });
+    } else {
+      fields.Cliente = client;
+      this.setState({ Cliente: client, fields, clientSelect: false });
+    }
   };
 
   findSelected = (id, field) => {
@@ -131,7 +140,7 @@ class OrdenTrabajo extends Component {
     alert("working");
   };
 
-  async componentWillMount() {
+  async componentDidMount() {
     let { fields, parts, Data } = this.state;
     let { match, edit } = this.props;
     var selects = {};
@@ -189,13 +198,18 @@ class OrdenTrabajo extends Component {
         result.Entrega = result.Entrega.slice(0, 10);
         result.Vendedor = result.Vendedor._id;
         date = new Date(result.Fecha);
+
         setDate = new Date(result.Entrega);
         result.Entrega = `${setDate.getMonth() +
           1}/${setDate.getDate()}/${setDate.getFullYear()}`;
         result.Fecha = `${date.getMonth() +
           1}/${date.getDate()}/${date.getFullYear()}`;
 
-        this.setState({ fields: result, Cliente: currClient });
+        this.setState({
+          fields: result,
+          Cliente: currClient,
+          Cotiz: result.Cotiz ? result.Cotiz : { ID: "" }
+        });
       } else this.setState({ error: true });
     }
     ///////
@@ -323,6 +337,12 @@ class OrdenTrabajo extends Component {
                       fields={clientes}
                     />
                   </React.Fragment>
+                ) : this.state.cotizSelect ? (
+                  <SelectClient
+                    header="cotizaciones"
+                    fields={cotizaciones}
+                    selectRecord={this.selectRecord}
+                  />
                 ) : (
                   <React.Fragment>
                     <div className="split-header">
@@ -389,18 +409,53 @@ class OrdenTrabajo extends Component {
                           this,
                           errorField["Status"] ? true : false
                         )}
-
                         {utils.renderInput(
                           "fields",
                           "Pedido",
                           this,
                           errorField["Pedido"] ? true : false
-                        )}
-                        {utils.renderInput(
+                        )}{" "}
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <h1 style={{ fontSize: "20px", marginTop: ".5rem" }}>
+                            Cliente
+                          </h1>
+                          <input disabled value={this.state.Cliente.Empresa} />
+                          <button
+                            className="btn btn-primary"
+                            onClick={e => this.setState({ clientSelect: true })}
+                            style={{ height: "2.5rem" }}
+                          >
+                            Selecionar
+                          </button>
+                        </div>
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <h1 style={{ fontSize: "20px", marginTop: ".5rem" }}>
+                            Cotizacion
+                          </h1>
+                          <input disabled value={this.state.Cotiz.ID} />
+                          <button
+                            className="btn btn-primary"
+                            onClick={e =>
+                              this.setState({
+                                cotizSelect: true,
+                                clientSelect: false
+                              })
+                            }
+                            style={{ height: "2.5rem" }}
+                          >
+                            Selecionar
+                          </button>
+                        </div>
+                        {utils.renderSelect(
+                          "Vendedor",
+                          Vendedores,
                           "fields",
-                          "CotID",
                           this,
-                          errorField["CotID"] ? true : false
+                          errorField["Vendedor"] ? true : false
                         )}
                         {utils.renderInput(
                           "fields",
@@ -408,7 +463,6 @@ class OrdenTrabajo extends Component {
                           this,
                           errorField["Encargado"] ? true : false
                         )}
-
                         {utils.renderInput(
                           "fields",
                           "Concepto",
@@ -430,36 +484,12 @@ class OrdenTrabajo extends Component {
                           this,
                           errorField["CondPago"] ? true : false
                         )}
-
                         {utils.renderSelect(
                           "Planta",
                           Planta,
                           "fields",
                           this,
                           errorField["Planta"] ? true : false
-                        )}
-
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <h1 style={{ fontSize: "20px", marginTop: ".5rem" }}>
-                            Cliente
-                          </h1>
-                          <input disabled value={this.state.Cliente.Empresa} />
-                          <button
-                            className="btn btn-primary"
-                            onClick={e => this.setState({ clientSelect: true })}
-                            style={{ height: "2.5rem" }}
-                          >
-                            Selecionar
-                          </button>
-                        </div>
-                        {utils.renderSelect(
-                          "Vendedor",
-                          Vendedores,
-                          "fields",
-                          this,
-                          errorField["Vendedor"] ? true : false
                         )}
                         {/* <span>Vendedor</span>
                   <input
@@ -503,7 +533,6 @@ class OrdenTrabajo extends Component {
                             style={{ width: "5rem !important" }}
                           />
                         </div>
-
                         <div>
                           <h1
                             style={{

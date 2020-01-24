@@ -20,6 +20,7 @@ import Cotizacion from "./Cotizacion";
 import Reporte from "./Reporte";
 import Login from "./Login";
 import Remision from "./Remisiones";
+import ReporteRem from "./ReporteRem";
 require("../css/Content.css");
 
 class Content extends Component {
@@ -38,6 +39,11 @@ class Content extends Component {
           exact
           path="/reportes/ordenes"
           render={props => <Reporte {...props} />}
+        />
+        <Route
+          exact
+          path="/reportes/remisiones"
+          render={props => <ReporteRem {...props} />}
         />
         <Route
           exact

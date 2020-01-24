@@ -195,12 +195,13 @@ class Remision extends Component {
       if (result) {
         var currClient = result.Cliente;
         result.Vendedor = result.Vendedor._id;
+
         date = new Date(result.Fecha);
 
         result.Fecha = `${date.getMonth() +
           1}/${date.getDate()}/${date.getFullYear()}`;
 
-        this.setState({ fields: result, Cliente: currClient });
+        this.setState({ fields: result, Cliente: currClient, OT: result.OT });
       } else this.setState({ error: true });
     }
     ///////

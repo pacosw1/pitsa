@@ -21,7 +21,11 @@ export var loadFilters = options => {
       item.placeholder !== "Fecha Limite" &&
       item.placeholder !== "Estatus"
     )
-      return <option value={item.name}>{item.placeholder}</option>;
+      return (
+        <option key={item.name} value={item.name}>
+          {item.placeholder}
+        </option>
+      );
   });
   return res;
 };
@@ -93,7 +97,7 @@ export var searchData = (dataObject, resultObject, field, value) => {
   var data = this.state[dataObject];
   var resultData;
 
-  resultData = data.find(item => item[field] == value);
+  resultData = data.find(item => item[field] === value);
   this.setState({ [resultObject]: resultData });
 };
 
@@ -105,7 +109,7 @@ export const renderInput = (
   style = "",
   p
 ) => {
-  if (field == "Importe") {
+  if (field === "Importe") {
     return (
       <div>
         <h1
@@ -119,7 +123,7 @@ export const renderInput = (
             updateField(stateObject, field, e.target.value, x),
             x.updateTotal(x.state[stateObject]["Parts"])
           ]}
-          disabled={field == "Importe" ? true : false}
+          disabled={field === "Importe" ? true : false}
           placeholder={p}
           value={x.state[stateObject][field]}
         />
@@ -134,6 +138,7 @@ export const renderInput = (
           {field}
         </h1>
         <input
+          type={field === "password" ? "password" : "text"}
           className={`${style}  ${error ? "errorInput" : "input"}`}
           onChange={e => [updateField(stateObject, field, e.target.value, x)]}
           placeholder={p}
@@ -225,7 +230,7 @@ export const getRecord = async (route, id) => {
 };
 
 export const getCond = cond => {
-  if (cond == 100) return "100% P/F";
+  if (cond === 100) return "100% P/F";
   else return `${cond} Dias`;
 };
 

@@ -74,7 +74,7 @@ button:focus {
   border-top-left-radius: 0;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 69vh;
+  height: 85vh;
 }
 
 .datos {

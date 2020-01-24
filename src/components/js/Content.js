@@ -9,7 +9,8 @@ import {
   parametros,
   unidades,
   proovedores,
-  cotizaciones
+  cotizaciones,
+  remisiones
 } from "./Fields";
 import Form from "./Form";
 import OrdenTrabajo from "./OrdenTrabajo";
@@ -18,6 +19,7 @@ import Cliente from "./Clientes";
 import Cotizacion from "./Cotizacion";
 import Reporte from "./Reporte";
 import Login from "./Login";
+import Remision from "./Remisiones";
 require("../css/Content.css");
 
 class Content extends Component {
@@ -75,6 +77,24 @@ class Content extends Component {
           exact
           path="/catalogo/ordenes/get/:id"
           render={props => <OrdenTrabajo edit={true} {...props} />}
+        />
+
+        <Route
+          exact
+          path="/catalogo/remisiones"
+          render={props => (
+            <Catalogo header="Remisiones" fields={remisiones} {...props} />
+          )}
+        />
+        <Route
+          exact
+          path="/catalogo/remisiones/new"
+          render={props => <Remision {...props} />}
+        />
+        <Route
+          exact
+          path="/catalogo/remisiones/get/:id"
+          render={props => <Remision edit={true} {...props} />}
         />
 
         <Route

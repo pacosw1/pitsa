@@ -131,6 +131,48 @@ exports.ordenSchema = Joi.object({
   }
 });
 
+exports.remShcmea = Joi.object({
+  __v: Joi.number(),
+  _id: Joi.string(),
+  ID: Joi.number(),
+  Parts: Joi.array(),
+  Pedido: Joi.string()
+    .min(1)
+    .max(20)
+    .required(),
+  Moneda: Joi.string()
+    .length(3)
+    .required(),
+  OT: Joi.object().required(),
+
+  Concepto: Joi.string()
+    .min(1)
+    .max(20)
+    .required(),
+  Fecha: Joi.date().required(),
+  Planta: Joi.number()
+    .min(0)
+    .max(1)
+    .required(),
+  Cliente: Joi.object().required(),
+
+  Vendedor: Joi.string()
+    .length(24)
+    .required(),
+
+  Importe: Joi.number().required(),
+
+  Enviar: {
+    Cliente: Joi.string()
+      .min(3)
+
+      .required(),
+    Direccion: Joi.string()
+      .min(3)
+      .required()
+  }
+});
+
 exports.vendedorSchema = Joi.object({
   __v: Joi.number(),
   _id: Joi.string(),
@@ -148,6 +190,18 @@ exports.vendedorSchema = Joi.object({
     .required()
 });
 
+exports.remisiones = [
+  { name: "ID", placeholder: "Folio" },
+
+  { placeholder: "Fecha", name: "Fecha" },
+  {
+    placeholder: "Cliente",
+    name: "Cliente"
+  },
+  { type: "input", placeholder: "Importe", name: "Importe" },
+  { type: "input", placeholder: "Pedido", name: "Pedido" },
+  { type: "input", placeholder: "Concepto", name: "Concepto" }
+];
 exports.clientes = [
   {
     type: "input",

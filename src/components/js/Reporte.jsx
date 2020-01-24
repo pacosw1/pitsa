@@ -13,7 +13,7 @@ class Reporte extends Component {
     errMessage: "",
     fieldError: {},
     fields: {
-      Sort: "Fecha",
+      Sort: "ID",
       Inicio: "",
       Fin: ""
     }
@@ -70,8 +70,8 @@ class Reporte extends Component {
             {utils.renderSelect(
               "Sort",
               [
-                <option value="Fecha">Por Fecha</option>,
-                <option value="ID">Por Folio</option>
+                <option value="ID">Por Folio</option>,
+                <option value="Fecha">Por Fecha</option>
               ],
               "fields",
               this
@@ -141,6 +141,7 @@ const Orden = props => {
     Cliente,
     Importe,
     IVA,
+    Dossier,
     Enviar
   } = props.order;
 
@@ -240,6 +241,11 @@ const Orden = props => {
       </div>
 
       <div>
+        <div>
+          <h3 style={{ marginLeft: "1rem" }}>
+            {Dossier ? "SE REQUIERE DOSSIER" : ""}
+          </h3>
+        </div>
         <div style={{ display: "flex", marginBottom: "1rem" }}>
           <div className="box">
             <h5>Subtotal</h5>

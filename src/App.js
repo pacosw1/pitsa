@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
 import "./App.css";
 import Sidebar from "./components/js/Sidebar";
 import Navbar from "./components/js/Navbar";
@@ -15,7 +15,7 @@ class App extends React.Component {
     login: false
   };
 
-  async componentWillMount() {
+  async componentDidMount() {
     var loggedIn = await axios.getUser();
     if (loggedIn) {
       console.log(loggedIn);

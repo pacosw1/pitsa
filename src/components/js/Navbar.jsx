@@ -25,7 +25,7 @@ class Navbar extends Component {
         </div>
         <div id="right">
           <NavLink to="/account">
-            <button class="btn btn-purple">{this.state.username}</button>
+            <button className="btn btn-purple">{this.state.username}</button>
           </NavLink>
         </div>
       </div>

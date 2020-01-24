@@ -19,7 +19,7 @@ class Form extends Component {
     error: false
   };
 
-  async componentWillMount() {
+  async componentDidMount() {
     let { selectData, fields } = this.state;
     let { match, edit, header } = this.props;
     var result;
@@ -27,7 +27,7 @@ class Form extends Component {
     try {
       //find select to be filled by data
       let selects = fieldData[header.toLowerCase()].filter(
-        x => x.type == "select"
+        x => x.type === "select"
       );
       //fill all selects with their respective data from server
       selects.forEach(async ({ route, name, placeholder, isStatic }) => {
@@ -85,14 +85,14 @@ class Form extends Component {
     try {
       //try to perfor save / edit request
       //handle save request for different tables
-      if (header == "clientes") {
+      if (header === "clientes") {
         //find seller specified in select
         var seller = this.state.selectData["vendedores"].find(
-          seller => seller._id == this.state.fields.Vendedor
+          seller => seller._id === this.state.fields.Vendedor
         );
         //set its object value in its field in state;
         fields["Vendedor"] = seller;
-      } else if (header == "cotizaciones") {
+      } else if (header === "cotizaciones") {
         //async call
         let client = await axios.getItem("clientes", this.state.fields.Cliente);
         //update with asyc result;
@@ -137,10 +137,10 @@ class Form extends Component {
   render() {
     let { fields, onChange, header } = this.props;
 
-    let inputs = fields.filter(field => field.type == "input");
+    let inputs = fields.filter(field => field.type === "input");
 
     let selects = fieldData[header.toLowerCase()].filter(
-      x => x.type == "select"
+      x => x.type === "select"
     );
     console.log(selects);
 
@@ -154,7 +154,7 @@ class Form extends Component {
       console.log(options);
       if (options) {
         let renderOptions = options.map(option => {
-          if (route == "status") {
+          if (route === "status") {
             return (
               <option
                 key={option.value}
@@ -165,7 +165,7 @@ class Form extends Component {
                 {option.placeholder}
               </option>
             );
-          } else if (route == "clientes") {
+          } else if (route === "clientes") {
             return (
               <option
                 key={option[optField[route]]}
@@ -176,7 +176,7 @@ class Form extends Component {
                 {option[optField[route]]}
               </option>
             );
-          } else if (route == "vendedores") {
+          } else if (route === "vendedores") {
             return (
               <option
                 key={option[optField[route]]}

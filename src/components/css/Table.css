@@ -6,18 +6,31 @@
 
   margin: 0.5rem;
   margin-bottom: 0;
+  transition: ease-in 1s;
 }
 
 input::placeholder {
   margin: 2rem !important;
 }
+.table-item {
+  height: 5.6rem !important ;
+}
 .delete-button {
   color: white;
+  transition: ease-in 0.3s;
+
   width: 3rem !important;
-  height: 01rem !important;
+  height: 0.5rem !important;
   background-color: rgb(194, 23, 23) !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
+.table-item:hover .delete-button {
+  height: 2rem !important;
+  background-color: red;
+  transition: ease-in 0.2s;
+}
 .search-button {
   color: white;
   border-top-left-radius: 0 !important;
@@ -47,6 +60,7 @@ select {
   padding: 0.5rem;
   padding-bottom: 0;
   overflow-y: scroll;
+  transition: ease-in 1s;
   /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 
   border-radius: 0.2rem;
@@ -91,6 +105,7 @@ table {
 
 .table-item {
   align-content: baseline !important;
+  justify-content: baseline;
   align-items: center !important;
 }
 

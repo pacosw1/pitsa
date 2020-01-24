@@ -29,7 +29,7 @@ class Catalogo extends Component {
       `/catalogo/${this.props.header.toLowerCase()}/get/${id}`
     );
   };
-  async componentWillMount() {
+  async componentDidMount() {
     let { header } = this.props;
     let { search } = this.state;
     let result = (await axios.getData(header.toLowerCase())) || [];
@@ -58,7 +58,7 @@ class Catalogo extends Component {
   onSearch = async () => {
     this.setState({ loaded: false });
     let val = this.state.searchValue;
-    // if (this.state.filter == "ID") val = parseInt(val);
+    // if (this.state.filter ==== "ID") val = parseInt(val);
     let result = await axios.createItem(
       `${this.props.header.toLowerCase()}/search`,
       {
@@ -98,41 +98,41 @@ class Catalogo extends Component {
       ];
       let td = fields.map(field => {
         if (
-          field.name == "Cliente" ||
-          (field.name == "Planta" && header == "Cotizaciones")
+          field.name === "Cliente" ||
+          (field.name === "Planta" && header === "Cotizaciones")
         ) {
           return (
             <td key={field.name} onClick={() => this.selectRecord(record._id)}>
-              {field.name == "Planta"
+              {field.name === "Planta"
                 ? record["Cliente"]["planta"]
                 : record["Cliente"].Empresa}
             </td>
           );
-        } else if (field.name == "Folio" && header == "Cotizaciones") {
+        } else if (field.name === "Folio" && header === "Cotizaciones") {
           return (
             <td
               key={field.name}
               onClick={() => this.selectRecord(record._id)}
             ></td>
           );
-        } else if (field.name == "Fecha" || field.name == "Entrega") {
+        } else if (field.name === "Fecha" || field.name === "Entrega") {
           let date = utils.formatDate(record["Fecha"]);
           return (
             <td key={field.name} onClick={() => this.selectRecord(record._id)}>
               {date}
             </td>
           );
-        } else if (field.name == "Vendedor") {
+        } else if (field.name === "Vendedor") {
           return (
             <td key={field} onClick={() => this.selectRecord(record._id)}>
               {record["Vendedor"]["Nombre"]}
             </td>
           );
-        } else if (field.name == "Status") {
-          if (header == "Cotizaciones") {
+        } else if (field.name === "Status") {
+          if (header === "Cotizaciones") {
             return (
               <td
-                key={field.name.Empresa}
+                key={record._id}
                 onClick={() => this.selectRecord(record._id)}
               >
                 {record[field.name] <= 3
@@ -165,7 +165,9 @@ class Catalogo extends Component {
             <button
               className="delete-button"
               onClick={() => this.onDelete(record._id)}
-            ></button>
+            >
+              x
+            </button>
           </td>
         </tr>
       );

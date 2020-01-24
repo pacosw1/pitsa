@@ -149,16 +149,16 @@ class Cliente extends Component {
                   )}
                   {utils.renderInput(
                     "fields",
-                    "Calle",
+                    "Direccion",
                     this,
-                    errorField["Calle"] ? true : false
+                    errorField["Direccion"] ? true : false
                   )}
-                  {utils.renderInput(
+                  {/* {utils.renderInput(
                     "fields",
                     "Colonia",
                     this,
                     errorField["Colonia"] ? true : false
-                  )}
+                  )} */}
                   {utils.renderInput(
                     "fields",
                     "Planta",
@@ -171,36 +171,36 @@ class Cliente extends Component {
                     this,
                     errorField["NumProvedor"] ? true : false
                   )}
-                  {utils.renderInput(
+                  {/* {utils.renderInput(
                     "fields",
                     "Ciudad",
                     this,
                     errorField["Ciudad"] ? true : false
-                  )}
-                  {utils.renderInput(
+                  )} */}
+                  {/* {utils.renderInput(
                     "fields",
                     "Estado",
                     this,
                     errorField["Estado"] ? true : false
-                  )}
-                  {utils.renderInput(
+                  )} */}
+                  {/* {utils.renderInput(
                     "fields",
                     "CP",
                     this,
                     errorField["CP"] ? true : false
-                  )}
-                  {utils.renderInput(
+                  )} */}
+                  {/* {utils.renderInput(
                     "fields",
                     "Telefono",
                     this,
                     errorField["Telefono"] ? true : false
-                  )}
-                  {utils.renderInput(
+                  )} */}
+                  {/* {utils.renderInput(
                     "fields",
                     "RFC",
                     this,
                     errorField["RFC"] ? true : false
-                  )}
+                  )} */}
                   {utils.renderInput(
                     "fields",
                     "Pais",

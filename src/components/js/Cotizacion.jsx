@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { LoadingScreen } from "./LoadingScreen";
 import ErrorPage from "./Error";
+import { clientes } from "./Fields";
+import SelectClient from "./SelectClient";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
 let _ = require("lodash");
@@ -9,40 +11,59 @@ let { cotizSchema } = require("./Fields");
 class Cotizacion extends Component {
   state = {
     Data: {
-      Clientes: []
+      Clientes: [],
+      Vendedores: []
     },
+    Cliente: {
+      Empresa: ""
+    },
+    clientSelect: false,
     saving: false,
     errorField: {},
     errorMessage: "",
-    selects: { Clientes: [] },
+    selects: { Clientes: [], Vendedores: [] },
     error: false,
     options: {
       Status: [
-        { _id: 0, value: "Cancelada" },
+        { _id: 0, value: "Pendiente" },
         { _id: 1, value: "Vigente" },
-        { _id: 2, value: "En Proceso" },
-        { _id: 3, value: "Terminada" }
+        { _id: 2, value: "Cancelada" }
+        // { _id: 3, value: "Terminada" }
       ]
     },
     fields: {
-      Status: 0
+      Status: 0,
+      Fecha:
+        new Date().getDate() +
+        "/" +
+        new Date().getMonth() +
+        1 +
+        "/" +
+        new Date().getFullYear()
     }
+  };
+
+  selectRecord = client => {
+    console.log(client);
+    let { fields } = this.state;
+    fields.Cliente = client;
+    this.setState({ Cliente: client, fields, clientSelect: false });
   };
 
   async componentWillMount() {
     let { fields, Data } = this.state;
     let { match, edit, cotSession, getCotSession } = this.props;
     var selects = {};
-    var result;
+    var result, date;
 
     //request API select data
-    var clientData = await utils.getSelectData("Clientes");
+    var sellerData = await utils.getSelectData("Vendedores");
 
     //load API select data
-    if (clientData) {
-      selects["Clientes"] = utils.loadSelectData(clientData, "Empresa");
-      Data["Clientes"] = clientData;
-      fields.Cliente = clientData[0]._id;
+    if (sellerData) {
+      selects["Vendedores"] = utils.loadSelectData(sellerData, "Nombre");
+      Data["Vendedores"] = sellerData;
+      fields.Vendedor = sellerData[0]._id;
     } else {
       this.setState({ error: true });
     }
@@ -58,8 +79,10 @@ class Cotizacion extends Component {
       result = await utils.getRecord("cotizaciones", id);
       if (result) {
         var currClient = result.Cliente;
-        result.Cliente = result.Cliente._id;
-        result.Fecha = result.Fecha.slice(0, 10);
+        result.Vendedor = result.Vendedor._id;
+        date = new Date(result.Fecha);
+        result.Fecha = `${date.getMonth() +
+          1}/${date.getDate()}/${date.getFullYear()}`;
 
         this.setState({ fields: result, Cliente: currClient, loaded: true });
       } else {
@@ -95,8 +118,9 @@ class Cotizacion extends Component {
     try {
       res = await cotizSchema.validateAsync({ ...fields });
 
-      fields.Cliente = this.state.Data.Clientes.find(
-        client => client._id == fields.Cliente
+      fields.Cliente = this.state.Cliente;
+      fields.Vendedor = this.state.Data.Vendedores.find(
+        client => client._id == fields.Vendedor
       );
 
       if (edit) {
@@ -122,7 +146,7 @@ class Cotizacion extends Component {
   render() {
     //options for cond de pago.
 
-    let { Clientes, Status } = this.state.selects;
+    let { Clientes, Status, Vendedores } = this.state.selects;
     let { errorField } = this.state;
     return (
       <div className="OT">
@@ -134,86 +158,107 @@ class Cotizacion extends Component {
               <ErrorPage />
             ) : (
               <React.Fragment>
-                <div className="split-header">
-                  <div>
-                    <h4>
-                      {this.props.edit
-                        ? "Editar Cotizacion"
-                        : "Nueva Cotizacion"}
-                    </h4>
-                    <p style={{ color: "red", marginLeft: "2rem" }}>
-                      {this.state.errorMessage}
-                    </p>
-                  </div>
+                {this.state.clientSelect ? (
+                  <React.Fragment>
+                    <SelectClient
+                      selectRecord={this.selectRecord}
+                      header="clientes"
+                      fields={clientes}
+                    />
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <div className="split-header">
+                      <div>
+                        <h4>
+                          {this.props.edit
+                            ? "Editar Cotizacion"
+                            : "Nueva Cotizacion"}
+                        </h4>
+                        <p style={{ color: "red", marginLeft: "2rem" }}>
+                          {this.state.errorMessage}
+                        </p>
+                      </div>
 
-                  <div className="btns">
-                    <button
-                      onClick={() => this.props.history.goBack()}
-                      className=" btn btn-danger subBtn"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      onClick={() => this.onSubmit()}
-                      className="btn subBtn btn-primary "
-                    >
-                      Guardar
-                    </button>
-                  </div>
-                </div>
-                <div className="split-left">
-                  {utils.renderInput(
-                    "fields",
-                    "Folio",
-                    this,
-                    errorField["Folio"] ? true : false
-                  )}
-                  {utils.renderInput(
-                    "fields",
-                    "Fecha",
-                    this,
-                    errorField["Fecha"] ? true : false
-                  )}
-                  {utils.renderInput(
-                    "fields",
-                    "Concepto",
-                    this,
-                    errorField["Concepto"] ? true : false
-                  )}
-                  {utils.renderInput(
+                      <div className="btns">
+                        <button
+                          onClick={() => this.props.history.goBack()}
+                          className=" btn btn-danger subBtn"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={() => this.onSubmit()}
+                          className="btn subBtn btn-primary "
+                        >
+                          Guardar
+                        </button>
+                      </div>
+                    </div>
+                    <div className="split-left">
+                      {utils.renderInput(
+                        "fields",
+                        "Fecha",
+                        this,
+                        errorField["Fecha"] ? true : false,
+                        "",
+                        "MM/DD/YYYY"
+                      )}
+                      {utils.renderInput(
+                        "fields",
+                        "Concepto",
+                        this,
+                        errorField["Concepto"] ? true : false
+                      )}
+                      {utils.renderSelect(
+                        "Vendedor",
+                        Vendedores,
+                        "fields",
+                        this,
+                        errorField["Vendedor"] ? true : false
+                      )}
+                      {/* {utils.renderInput(
                     "fields",
                     "Total",
                     this,
                     errorField["Total"] ? true : false
-                  )}
-                  <br />
-                  <button
-                    className="btn btn-primary "
-                    onClick={() => [
-                      this.props.saveFields(this.state.fields),
-                      this.newClient()
-                    ]}
-                    style={{ width: " 400px" }}
-                  >
-                    Nuevo Cliente
-                  </button>
-                  <br />
-                  <span>O escoge cliente existente</span>
-                  {utils.renderSelect(
-                    "Cliente",
-                    Clientes,
-                    "fields",
-                    this,
-                    errorField["Cliente"] ? true : false
-                  )}
-                  {utils.renderSelect(
-                    "Status",
-                    Status,
-                    "fields",
-                    this,
-                    errorField["Status"] ? true : false
-                  )}
-                </div>
+                  )} */}
+                      <br />
+                      <button
+                        className="btn btn-primary "
+                        onClick={() => [
+                          this.props.saveFields(this.state.fields),
+                          this.newClient()
+                        ]}
+                        style={{ width: " 400px" }}
+                      >
+                        Nuevo Cliente
+                      </button>
+                      <br />
+                      <span> o cliente existente</span>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <h1 style={{ fontSize: "20px", marginTop: ".5rem" }}>
+                          Cliente
+                        </h1>
+                        <input disabled value={this.state.Cliente.Empresa} />
+                        <button
+                          className="btn btn-primary"
+                          onClick={e => this.setState({ clientSelect: true })}
+                          style={{ height: "2.5rem" }}
+                        >
+                          Selecionar
+                        </button>
+                      </div>
+                      {utils.renderSelect(
+                        "Status",
+                        Status,
+                        "fields",
+                        this,
+                        errorField["Status"] ? true : false
+                      )}
+                    </div>
+                  </React.Fragment>
+                )}
               </React.Fragment>
             )}
           </React.Fragment>

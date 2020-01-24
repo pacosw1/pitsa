@@ -13,7 +13,7 @@ class Reporte extends Component {
     errMessage: "",
     fieldError: {},
     fields: {
-      Sort: "Fecha",
+      Sort: "ID",
       Inicio: "",
       Fin: ""
     }
@@ -70,8 +70,8 @@ class Reporte extends Component {
             {utils.renderSelect(
               "Sort",
               [
-                <option value="Fecha">Por Fecha</option>,
-                <option value="Folio">Por Folio</option>
+                <option value="ID">Por Folio</option>,
+                <option value="Fecha">Por Fecha</option>
               ],
               "fields",
               this
@@ -129,6 +129,7 @@ const Orden = props => {
     Folio,
     Fecha,
     Entrega,
+    ID,
     NumProvedor,
     Pedido,
     Moneda,
@@ -140,6 +141,7 @@ const Orden = props => {
     Cliente,
     Importe,
     IVA,
+    Dossier,
     Enviar
   } = props.order;
 
@@ -150,6 +152,7 @@ const Orden = props => {
     Estado,
     Pais,
     Telefono,
+    Direccion,
     Vendedor,
     Empresa
   } = Cliente;
@@ -173,7 +176,7 @@ const Orden = props => {
     <div className="order">
       <div className="header">
         <h1>Orden De Trabajo</h1>
-        <h1># {Folio}</h1>
+        <h1># {ID}</h1>
       </div>
 
       <div className="split">
@@ -186,13 +189,8 @@ const Orden = props => {
           <br className="br" />
           <div className="box">
             <h5>Vendido A</h5>
-            <p>{Empresa}</p> <p className="box-p">{Calle}</p>
-            <p>
-              {Colonia}, {CP}
-            </p>
-            <p>
-              {Estado}, {Pais}
-            </p>
+            <p>{Empresa}</p>
+            {Direccion}, {Pais}
           </div>
         </div>
         <div className="Datos-info half">
@@ -243,6 +241,11 @@ const Orden = props => {
       </div>
 
       <div>
+        <div>
+          <h3 style={{ marginLeft: "1rem" }}>
+            {Dossier ? "SE REQUIERE DOSSIER" : ""}
+          </h3>
+        </div>
         <div style={{ display: "flex", marginBottom: "1rem" }}>
           <div className="box">
             <h5>Subtotal</h5>

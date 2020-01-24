@@ -12,6 +12,24 @@ export var getData = async route => {
   }
 };
 
+export var loadFilters = options => {
+  let res = options.map(item => {
+    if (
+      item.placeholder !== "Fecha" &&
+      item.placeholder !== "Importe" &&
+      item.placeholder !== "Condiciones" &&
+      item.placeholder !== "Fecha Limite" &&
+      item.placeholder !== "Estatus"
+    )
+      return (
+        <option key={item.name} value={item.name}>
+          {item.placeholder}
+        </option>
+      );
+  });
+  return res;
+};
+
 export var formatDate = date => {
   var months = [
     "Enero",
@@ -38,7 +56,7 @@ export var formatDate = date => {
     "Domingo"
   ];
   date = new Date(date);
-  let day = date.getDate() + 1;
+  let day = date.getDate();
   let month = months[date.getMonth()];
   let year = date.getFullYear();
 
@@ -79,7 +97,7 @@ export var searchData = (dataObject, resultObject, field, value) => {
   var data = this.state[dataObject];
   var resultData;
 
-  resultData = data.find(item => item[field] == value);
+  resultData = data.find(item => item[field] === value);
   this.setState({ [resultObject]: resultData });
 };
 
@@ -91,7 +109,7 @@ export const renderInput = (
   style = "",
   p
 ) => {
-  if (field == "Importe" || field == "IVA") {
+  if (field === "Importe") {
     return (
       <div>
         <h1
@@ -105,7 +123,7 @@ export const renderInput = (
             updateField(stateObject, field, e.target.value, x),
             x.updateTotal(x.state[stateObject]["Parts"])
           ]}
-          disabled={field == "Importe" ? true : false}
+          disabled={field === "Importe" ? true : false}
           placeholder={p}
           value={x.state[stateObject][field]}
         />
@@ -120,6 +138,7 @@ export const renderInput = (
           {field}
         </h1>
         <input
+          type={field === "password" ? "password" : "text"}
           className={`${style}  ${error ? "errorInput" : "input"}`}
           onChange={e => [updateField(stateObject, field, e.target.value, x)]}
           placeholder={p}
@@ -211,7 +230,7 @@ export const getRecord = async (route, id) => {
 };
 
 export const getCond = cond => {
-  if (cond == 100) return "100% P/F";
+  if (cond === 100) return "100% P/F";
   else return `${cond} Dias`;
 };
 

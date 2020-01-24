@@ -1,12 +1,12 @@
 .orden {
   display: flex;
 
-  height: 98v;
+  min-height: 98vh;
   width: 100% !important;
   overflow-y: scroll;
   /* background-color: white; */
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   padding: 0.5rem;
 
   /* overflow-y: scroll; */
@@ -84,7 +84,6 @@ div.pagebr {
   size: 7in 9.25in;
   min-height: 14.25in;
   padding: 1rem 0.5rem;
-  /* background-color: white; */
   margin: 27mm 16mm 27mm 16mm;
   page-break-before: always !important;
   background-color: white;

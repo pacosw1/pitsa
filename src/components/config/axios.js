@@ -1,6 +1,9 @@
 let axios = require("axios");
+let _ = require("lodash");
+let jwtDecode = require("jwt-decode");
+axios.defaults.baseURL = "http://localhost:5000/";
+axios.defaults.headers.common["token"] = localStorage.token;
 
-axios.defaults.baseURL = "http://67.207.87.121:5000/";
 ///67.207.87.121
 exports.getData = async route => {
   var result;
@@ -8,6 +11,29 @@ exports.getData = async route => {
     result = await axios.get(route);
     return result;
   } catch (err) {}
+};
+
+exports.login = async account => {
+  var res, data;
+  try {
+    res = await axios.post("auth", {
+      account
+    });
+
+    data = _.get(res, "data");
+
+    if (data) return data;
+    else return false;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+exports.getUser = () => {
+  if (localStorage.token) {
+    return jwtDecode(localStorage.token);
+  } else return false;
 };
 
 exports.getItem = async (route, id) => {

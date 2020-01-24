@@ -13,7 +13,8 @@ class Sidebar extends Component {
           "Clientes",
           "Cotizaciones",
           "Vendedores",
-          "Ordenes"
+          "Ordenes",
+          "Remisiones"
           // "Parametros",
           // "Unidades"
         ],
@@ -34,17 +35,15 @@ class Sidebar extends Component {
       {
         id: 3,
         title: "Reportes",
-        items: ["Ordenes", "Por Cliente", "Por Producto"],
+        items: ["Ordenes", "Remisiones"],
         open: true
       }
     ]
   };
 
   onToggle = id => {
-    let { toggle, onMenu } = this.props;
-
     let { tabs } = this.state;
-    let x = tabs.find(item => item.id == id);
+    let x = tabs.find(item => item.id === id);
     x.open = !x.open;
     this.setState({ tabs: tabs });
   };
@@ -86,7 +85,14 @@ class Sidebar extends Component {
         style={{ width: widthVal, visibility: display, display: dis }}
       >
         <div id="top">{list}</div>
-        <div id="bottom">{<h4 id="tab-item">Cerrar Session</h4>}</div>
+        <div id="bottom">
+          <h4
+            onClick={() => [localStorage.clear(), (window.location = "/login")]}
+            id="tab-item"
+          >
+            Cerrar Session
+          </h4>
+        </div>
       </div>
     );
   }

@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import "../css/OT.css";
 import ErrorPage from "./Error";
-import { ordenSchema } from "./Fields";
+import { ordenSchema, remShcmea } from "./Fields";
 import { LoadingScreen } from "./LoadingScreen";
-import { clientes } from "./Fields";
+import { clientes, remisiones } from "./Fields";
 import SelectClient from "./SelectClient";
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
 let _ = require("lodash");
 
-class OrdenTrabajo extends Component {
+class Remision extends Component {
   state = {
     saving: false,
     info: true,
@@ -18,7 +18,10 @@ class OrdenTrabajo extends Component {
     errorField: {},
     errorMessage: "",
     error: false,
-    dossier: 0,
+    // dossier: 0,
+    OT: {
+      ID: ""
+    },
     Cliente: {
       Vendedor: {},
       Pais: "",
@@ -30,10 +33,10 @@ class OrdenTrabajo extends Component {
     fields: {
       Enviar: { Direccion: "", Cliente: "" },
       Parts: [],
-      CondPago: 100,
+      //   CondPago: 100,
       Planta: 0,
       Moneda: "MXN",
-      Status: 0,
+      //   Status: 0,
       Fecha: new Date().toLocaleDateString(),
       Cliente: ""
     },
@@ -106,7 +109,6 @@ class OrdenTrabajo extends Component {
       sum += cant * pu;
     });
 
-    sum = sum * (1 + fields.IVA / 100);
     sum = sum.toFixed(2);
     copy.Importe = sum;
     sum = utils.formatMoney(sum);
@@ -115,10 +117,16 @@ class OrdenTrabajo extends Component {
   };
 
   selectRecord = client => {
-    console.log(client);
     let { fields } = this.state;
-    fields.Cliente = client;
-    this.setState({ Cliente: client, fields, clientSelect: false });
+
+    if (client.Importe) {
+      fields.OT = client;
+      this.setState({ OT: client, fields, otSelect: false });
+    } else {
+      fields.Cliente = client;
+      this.setState({ Cliente: client, fields, clientSelect: false });
+    }
+    console.log(client);
   };
 
   findSelected = (id, field) => {
@@ -131,7 +139,7 @@ class OrdenTrabajo extends Component {
     alert("working");
   };
 
-  async componentWillMount() {
+  async componentDidMount() {
     let { fields, parts, Data } = this.state;
     let { match, edit } = this.props;
     var selects = {};
@@ -183,15 +191,12 @@ class OrdenTrabajo extends Component {
     if (edit) {
       let id = match.params.id;
 
-      result = await utils.getRecord("ordenes", id);
+      result = await utils.getRecord("remisiones", id);
       if (result) {
         var currClient = result.Cliente;
-        result.Entrega = result.Entrega.slice(0, 10);
         result.Vendedor = result.Vendedor._id;
         date = new Date(result.Fecha);
-        setDate = new Date(result.Entrega);
-        result.Entrega = `${setDate.getMonth() +
-          1}/${setDate.getDate()}/${setDate.getFullYear()}`;
+
         result.Fecha = `${date.getMonth() +
           1}/${date.getDate()}/${date.getFullYear()}`;
 
@@ -210,24 +215,26 @@ class OrdenTrabajo extends Component {
     let { fields } = this.state;
     let { match, edit } = this.props;
     var result,
+      ot,
       errorField = {};
 
     try {
-      await ordenSchema.validateAsync({ ...fields });
+      await remShcmea.validateAsync({ ...fields });
 
-      fields.Dossier = this.state.dossier ? 1 : 0;
+      //   fields.Dossier = this.state.dossier ? 1 : 0;
       fields.Vendedor = this.state.Data.Vendedores.find(
         client => client._id == fields.Vendedor
       );
 
       fields.Cliente = this.state.Cliente;
+      fields.OT = this.state.OT;
       if (edit) {
         let id = match.params.id;
-        result = await utils.onSubmit("ordenes", id, fields, true);
-      } else result = await utils.onSubmit("ordenes", "", fields, false);
+        result = await utils.onSubmit("remisiones", id, fields, true);
+      } else result = await utils.onSubmit("remisiones", "", fields, false);
 
       if (!result) this.setState({ error: true });
-      else this.props.history.push(`/catalogo/ordenes`);
+      else this.props.history.push(`/catalogo/remisiones`);
     } catch (err) {
       this.setState({ saving: false });
 
@@ -323,6 +330,12 @@ class OrdenTrabajo extends Component {
                       fields={clientes}
                     />
                   </React.Fragment>
+                ) : this.state.otSelect ? (
+                  <SelectClient
+                    selectRecord={this.selectRecord}
+                    header="ordenes"
+                    fields={remisiones}
+                  />
                 ) : (
                   <React.Fragment>
                     <div className="split-header">
@@ -382,13 +395,13 @@ class OrdenTrabajo extends Component {
                           "",
                           "MM/DD/YYYY"
                         )}
-                        {utils.renderSelect(
+                        {/* {utils.renderSelect(
                           "Status",
                           Status,
                           "fields",
                           this,
                           errorField["Status"] ? true : false
-                        )}
+                        )} */}
 
                         {utils.renderInput(
                           "fields",
@@ -398,46 +411,52 @@ class OrdenTrabajo extends Component {
                         )}
                         {utils.renderInput(
                           "fields",
-                          "CotID",
-                          this,
-                          errorField["CotID"] ? true : false
-                        )}
-                        {utils.renderInput(
-                          "fields",
-                          "Encargado",
-                          this,
-                          errorField["Encargado"] ? true : false
-                        )}
-
-                        {utils.renderInput(
-                          "fields",
                           "Concepto",
                           this,
                           errorField["Concepto"] ? true : false
                         )}
-                        {utils.renderInput(
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <h1 style={{ fontSize: "20px", marginTop: ".5rem" }}>
+                            Orden de Trabajo
+                          </h1>
+                          <input disabled value={"OT" + this.state.OT.ID} />
+                          <button
+                            className="btn btn-primary"
+                            onClick={e =>
+                              this.setState({
+                                otSelect: true,
+                                clientSelect: false
+                              })
+                            }
+                            style={{ height: "2.5rem" }}
+                          >
+                            Selecionar
+                          </button>
+                        </div>
+                        {/* {utils.renderInput(
+                          "fields",
+                          "Encargado",
+                          this,
+                          errorField["Encargado"] ? true : false
+                        )} */}
+
+                        {/* {utils.renderInput(
                           "fields",
                           "Entrega",
                           this,
                           errorField["Entrega"] ? true : false,
                           "",
                           "DD/MM/YYYY"
-                        )}
-                        {utils.renderSelect(
+                        )} */}
+                        {/* {utils.renderSelect(
                           "CondPago",
                           CondPago,
                           "fields",
                           this,
                           errorField["CondPago"] ? true : false
-                        )}
-
-                        {utils.renderSelect(
-                          "Planta",
-                          Planta,
-                          "fields",
-                          this,
-                          errorField["Planta"] ? true : false
-                        )}
+                        )} */}
 
                         <div
                           style={{ display: "flex", flexDirection: "column" }}
@@ -454,6 +473,14 @@ class OrdenTrabajo extends Component {
                             Selecionar
                           </button>
                         </div>
+
+                        {utils.renderSelect(
+                          "Planta",
+                          Planta,
+                          "fields",
+                          this,
+                          errorField["Planta"] ? true : false
+                        )}
                         {utils.renderSelect(
                           "Vendedor",
                           Vendedores,
@@ -483,7 +510,7 @@ class OrdenTrabajo extends Component {
                     defaultValue={this.st
                       ate.Cliente.Pais}
                   /> */}
-                        <div
+                        {/* <div
                           style={{
                             marginLeft: "3.5rem",
                             marginTop: ".5rem",
@@ -502,7 +529,7 @@ class OrdenTrabajo extends Component {
                             checked={this.state.fields.dossier}
                             style={{ width: "5rem !important" }}
                           />
-                        </div>
+                        </div> */}
 
                         <div>
                           <h1
@@ -587,13 +614,13 @@ class OrdenTrabajo extends Component {
                                 errorField["Moneda"] ? true : false,
                                 "currencySelect"
                               )}
-                              {utils.renderInput(
+                              {/* {utils.renderInput(
                                 "fields",
                                 "IVA",
                                 this,
                                 false,
                                 "IVA"
-                              )}
+                              )} */}
                             </div>
                           </div>
                         </div>
@@ -625,7 +652,7 @@ class OrdenTrabajo extends Component {
   }
 }
 
-export default OrdenTrabajo;
+export default Remision;
 
 //components
 

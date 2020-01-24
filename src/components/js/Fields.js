@@ -3,73 +3,70 @@ let Joi = require("@hapi/joi");
 exports.clientesSchema = Joi.object({
   __v: Joi.number(),
   _id: Joi.string(),
-  Status: Joi.number(),
+  // Status: Joi.number(),
   Vendedor: Joi.string()
     .alphanum()
     .length(24)
     .required(),
   Empresa: Joi.string()
     .min(3)
-    .max(30)
+    .max(100)
     .required(),
-  Calle: Joi.string()
+  Direccion: Joi.string()
     .min(3)
-    .max(20)
+    .max(100)
     .required(),
-  Colonia: Joi.string()
-    .min(3)
-    .max(50)
-    .required(),
+  ID: Joi.string(),
   Planta: Joi.string()
     .min(3)
     .max(20)
     .required(),
   NumProvedor: Joi.string()
-    .min(3)
+    .min(1)
     .max(20),
 
-  Ciudad: Joi.string()
-    .min(3)
-    .max(20)
-    .required(),
+  // Ciudad: Joi.string()
+  //   .min(3)
+  //   .max(20)
+  //   .required(),
 
-  Estado: Joi.string()
-    .min(3)
-    .max(20)
-    .required(),
+  // Estado: Joi.string()
+  //   .min(3)
+  //   .max(20)
+  //   .required(),
 
-  CP: Joi.number()
-    .min(10000)
-    .max(99999)
-    .required(),
-  Telefono: Joi.string(),
+  // CP: Joi.number()
+  //   .min(10000)
+  //   .max(99999)
+  //   .required(),
+  // Telefono: Joi.string(),
 
-  RFC: Joi.string()
-    .alphanum()
-    .max(20)
-    .required(),
+  // RFC: Joi.string()
+  //   .alphanum()
+  //   .max(20)
+  //   .required(),
 
   Pais: Joi.string()
-    .min(3)
+    .min(2)
     .max(20)
     .required()
 });
 
 exports.cotizSchema = Joi.object({
+  ID: Joi.number(),
   __v: Joi.number(),
   _id: Joi.string(),
-  Folio: Joi.number()
-    .min(1)
-    .required(),
+
   Fecha: Joi.date().required(),
   Concepto: Joi.string()
     .min(3)
     .max(30)
     .required(),
-  Total: Joi.number()
-    .min(0)
-    .required(),
-  Cliente: Joi.string()
+  // Total: Joi.number()
+  //   .min(0)
+  //   .required(),
+  Cliente: Joi.object().required(),
+  Vendedor: Joi.string()
     .length(24)
     .required(),
   Status: Joi.number()
@@ -81,9 +78,7 @@ exports.cotizSchema = Joi.object({
 exports.ordenSchema = Joi.object({
   __v: Joi.number(),
   _id: Joi.string(),
-  Folio: Joi.number()
-    .min(1)
-    .required(),
+  ID: Joi.number(),
   Parts: Joi.array(),
   Status: Joi.number()
     .min(0)
@@ -97,16 +92,12 @@ exports.ordenSchema = Joi.object({
   Moneda: Joi.string()
     .length(3)
     .required(),
-  NumCot: Joi.string()
-    .alphanum()
-    .min(1)
-    .max(20)
-    .required(),
+  CotID: Joi.number().required(),
   Encargado: Joi.string()
     .min(1)
     .max(20)
     .required(),
-  TipoMaterial: Joi.string()
+  Concepto: Joi.string()
     .min(1)
     .max(20)
     .required(),
@@ -117,7 +108,9 @@ exports.ordenSchema = Joi.object({
     .min(0)
     .max(1)
     .required(),
-  Cliente: Joi.string()
+  Cliente: Joi.object().required(),
+  Dossier: Joi.number().required(),
+  Vendedor: Joi.string()
     .length(24)
     .required(),
   IVA: Joi.number()
@@ -129,11 +122,53 @@ exports.ordenSchema = Joi.object({
   Enviar: {
     Cliente: Joi.string()
       .min(3)
-      .max(20)
+
       .required(),
     Direccion: Joi.string()
       .min(3)
-      .max(80)
+
+      .required()
+  }
+});
+
+exports.remShcmea = Joi.object({
+  __v: Joi.number(),
+  _id: Joi.string(),
+  ID: Joi.number(),
+  Parts: Joi.array(),
+  Pedido: Joi.string()
+    .min(1)
+    .max(20)
+    .required(),
+  Moneda: Joi.string()
+    .length(3)
+    .required(),
+  OT: Joi.object().required(),
+
+  Concepto: Joi.string()
+    .min(1)
+    .max(20)
+    .required(),
+  Fecha: Joi.date().required(),
+  Planta: Joi.number()
+    .min(0)
+    .max(1)
+    .required(),
+  Cliente: Joi.object().required(),
+
+  Vendedor: Joi.string()
+    .length(24)
+    .required(),
+
+  Importe: Joi.number().required(),
+
+  Enviar: {
+    Cliente: Joi.string()
+      .min(3)
+
+      .required(),
+    Direccion: Joi.string()
+      .min(3)
       .required()
   }
 });
@@ -155,28 +190,41 @@ exports.vendedorSchema = Joi.object({
     .required()
 });
 
+exports.remisiones = [
+  { name: "ID", placeholder: "Folio" },
+
+  { placeholder: "Fecha", name: "Fecha" },
+  {
+    placeholder: "Cliente",
+    name: "Cliente"
+  },
+  { type: "input", placeholder: "Importe", name: "Importe" },
+  { type: "input", placeholder: "Pedido", name: "Pedido" },
+  { type: "input", placeholder: "Concepto", name: "Concepto" }
+];
 exports.clientes = [
   {
     type: "input",
     name: "Empresa",
     placeholder: "Empresa"
   },
+  { type: "input", name: "ID", placeholder: "Folio" },
   {
     type: "select",
     name: "Vendedor",
     route: "vendedores",
     placeholder: "Vendedor"
   },
-  {
-    type: "input",
-    name: "Calle",
-    placeholder: "Calle"
-  },
-  {
-    type: "input",
-    name: "Colonia",
-    placeholder: "Colonia"
-  },
+  // {
+  //   type: "input",
+  //   name: "Calle",
+  //   placeholder: "Calle"
+  // },
+  // {
+  //   type: "input",
+  //   name: "Colonia",
+  //   placeholder: "Colonia"
+  // },
   {
     type: "input",
     name: "Planta",
@@ -187,31 +235,31 @@ exports.clientes = [
     name: "NumProvedor",
     placeholder: " # Provedor"
   },
-  {
-    type: "input",
-    name: "Ciudad",
-    placeholder: "Ciudad"
-  },
-  {
-    type: "input",
-    name: "Estado",
-    placeholder: "Estado"
-  },
-  {
-    type: "input",
-    name: "CP",
-    placeholder: "Codigo Postal"
-  },
-  {
-    type: "input",
-    name: "Telefono",
-    placeholder: "Telefono"
-  },
-  {
-    type: "input",
-    name: "RFC",
-    placeholder: "RFC"
-  },
+  // {
+  //   type: "input",
+  //   name: "Ciudad",
+  //   placeholder: "Ciudad"
+  // },
+  // {
+  //   type: "input",
+  //   name: "Estado",
+  //   placeholder: "Estado"
+  // },
+  // {
+  //   type: "input",
+  //   name: "CP",
+  //   placeholder: "Codigo Postal"
+  // },
+  // {
+  //   type: "input",
+  //   name: "Telefono",
+  //   placeholder: "Telefono"
+  // },
+  // {
+  //   type: "input",
+  //   name: "RFC",
+  //   placeholder: "RFC"
+  // },
   {
     type: "input",
     name: "Pais",
@@ -237,7 +285,8 @@ exports.unidades = [
 ];
 
 exports.ordenes = [
-  { type: "input", placeholder: "Folio", name: "Folio" },
+  { name: "ID", placeholder: "Folio" },
+
   { type: "input", placeholder: "Fecha", name: "Fecha" },
   {
     type: "select",
@@ -247,7 +296,7 @@ exports.ordenes = [
   },
   { type: "input", placeholder: "Importe", name: "Importe" },
   { type: "input", placeholder: "Pedido", name: "Pedido" },
-  { type: "input", placeholder: "Concepto", name: "TipoMaterial" },
+  { type: "input", placeholder: "Concepto", name: "Concepto" },
   { type: "input", placeholder: "Condiciones", name: "CondPago" },
   { type: "input", placeholder: "Fecha Limite", name: "Entrega" }
 
@@ -260,7 +309,7 @@ exports.ordenes = [
 ];
 
 exports.cotizaciones = [
-  { name: "Folio", placeholder: "Folio", type: "input" },
+  { name: "ID", placeholder: "Folio" },
   { name: "Fecha", placeholder: "Fecha", type: "input" },
   {
     name: "Cliente",
@@ -275,8 +324,8 @@ exports.cotizaciones = [
     route: "status",
     isStatic: true
   },
-  { name: "Concepto", placeholder: "Concepto", type: "input" },
-  { name: "Total", placeholder: "Total", type: "input" }
+  { name: "Concepto", placeholder: "Concepto", type: "input" }
+  // { name: "V", placeholder: "Total", type: "input" }
 ];
 exports.proovedores = [
   "RazonSocial",

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import "../css/Table.css";
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -11,7 +12,7 @@ let f = require("./Fields");
 let axios = require("../config/axios");
 let utils = require("../utlis/utils");
 let _ = require("lodash");
-class Catalogo extends Component {
+class SelectClient extends Component {
   state = {
     data: [],
     searchValue: "",
@@ -24,12 +25,7 @@ class Catalogo extends Component {
     }
   };
 
-  selectRecord = id => {
-    this.props.history.push(
-      `/catalogo/${this.props.header.toLowerCase()}/get/${id}`
-    );
-  };
-  async componentDidMount() {
+  async componentWillMount() {
     let { header } = this.props;
     let { search } = this.state;
     let result = (await axios.getData(header.toLowerCase())) || [];
@@ -58,7 +54,7 @@ class Catalogo extends Component {
   onSearch = async () => {
     this.setState({ loaded: false });
     let val = this.state.searchValue;
-    // if (this.state.filter ==== "ID") val = parseInt(val);
+    // if (this.state.filter == "ID") val = parseInt(val);
     let result = await axios.createItem(
       `${this.props.header.toLowerCase()}/search`,
       {
@@ -98,42 +94,48 @@ class Catalogo extends Component {
       ];
       let td = fields.map(field => {
         if (
-          field.name === "Cliente" ||
-          (field.name === "Planta" && header === "Cotizaciones")
+          field.name == "Cliente" ||
+          (field.name == "Planta" && header == "Cotizaciones")
         ) {
           return (
-            <td key={field.name} onClick={() => this.selectRecord(record._id)}>
-              {field.name === "Planta"
+            <td
+              key={field.name}
+              onClick={() => this.props.selectRecord(record)}
+            >
+              {field.name == "Planta"
                 ? record["Cliente"]["planta"]
                 : record["Cliente"].Empresa}
             </td>
           );
-        } else if (field.name === "Folio" && header === "Cotizaciones") {
+        } else if (field.name == "Folio" && header == "Cotizaciones") {
           return (
             <td
               key={field.name}
-              onClick={() => this.selectRecord(record._id)}
+              onClick={() => this.props.selectRecord(record)}
             ></td>
           );
-        } else if (field.name === "Fecha" || field.name === "Entrega") {
+        } else if (field.name == "Fecha" || field.name == "Entrega") {
           let date = utils.formatDate(record["Fecha"]);
           return (
-            <td key={field.name} onClick={() => this.selectRecord(record._id)}>
+            <td
+              key={field.name}
+              onClick={() => this.props.selectRecord(record)}
+            >
               {date}
             </td>
           );
-        } else if (field.name === "Vendedor") {
+        } else if (field.name == "Vendedor") {
           return (
-            <td key={field} onClick={() => this.selectRecord(record._id)}>
+            <td key={field} onClick={() => this.props.selectRecord(record)}>
               {record["Vendedor"]["Nombre"]}
             </td>
           );
-        } else if (field.name === "Status") {
-          if (header === "Cotizaciones") {
+        } else if (field.name == "Status") {
+          if (header == "Cotizaciones") {
             return (
               <td
-                key={record._id}
-                onClick={() => this.selectRecord(record._id)}
+                key={field.name.Empresa}
+                onClick={() => this.props.selectRecord(record)}
               >
                 {record[field.name] <= 3
                   ? cotStatus[record[field.name]]
@@ -144,7 +146,7 @@ class Catalogo extends Component {
             return (
               <td
                 key={field.name.Empresa}
-                onClick={() => this.selectRecord(record._id)}
+                onClick={() => this.props.selectRecord(record)}
               >
                 {status[record[field.name]]}
               </td>
@@ -152,7 +154,10 @@ class Catalogo extends Component {
           }
         } else {
           return (
-            <td key={field.name} onClick={() => this.selectRecord(record._id)}>
+            <td
+              key={field.name}
+              onClick={() => this.props.selectRecord(record)}
+            >
               {record[field.name]}
             </td>
           );
@@ -161,14 +166,6 @@ class Catalogo extends Component {
       return (
         <tr key={record._id} className="table-item">
           {td}
-          <td>
-            <button
-              className="delete-button"
-              onClick={() => this.onDelete(record._id)}
-            >
-              x
-            </button>
-          </td>
         </tr>
       );
     });
@@ -219,10 +216,7 @@ class Catalogo extends Component {
                 ) : (
                   <table className="table">
                     <thead>
-                      <tr>
-                        {fieldsList}
-                        <th>Eliminar</th>
-                      </tr>
+                      <tr>{fieldsList}</tr>
                     </thead>
 
                     <tbody>{dataList}</tbody>
@@ -237,4 +231,4 @@ class Catalogo extends Component {
   }
 }
 
-export default Catalogo;
+export default SelectClient;

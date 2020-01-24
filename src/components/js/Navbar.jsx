@@ -1,9 +1,19 @@
 import React, { Component } from "react";
 import "../css/Navbar.css";
 import { NavLink } from "react-router-dom";
+let axios = require("../config/axios");
 
 class Navbar extends Component {
-  state = {};
+  state = {
+    username: ""
+  };
+
+  componentDidMount() {
+    let user = axios.getUser();
+    if (user.username) {
+      this.setState({ username: user.username });
+    }
+  }
   render() {
     let { onMenu } = this.props;
     return (
@@ -14,8 +24,8 @@ class Navbar extends Component {
           </button>
         </div>
         <div id="right">
-          <NavLink to="/login">
-            <button class="btn btn-purple">Iniciar Sesion</button>
+          <NavLink to="/account">
+            <button className="btn btn-purple">{this.state.username}</button>
           </NavLink>
         </div>
       </div>

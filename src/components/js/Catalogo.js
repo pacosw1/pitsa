@@ -126,7 +126,10 @@ class Catalogo extends Component {
             ></td>
           );
         } else if (field.name === "Fecha" || field.name === "Entrega") {
-          let date = utils.formatDate(record["Fecha"]);
+          let date =
+            field.name === "Fecha"
+              ? utils.formatDate(record["Fecha"])
+              : utils.formatDate(record["Entrega"]);
           return (
             <td key={field.name} onClick={() => this.selectRecord(record._id)}>
               {date}

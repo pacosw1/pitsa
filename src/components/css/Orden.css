@@ -1,12 +1,12 @@
 .orden {
   display: flex;
 
-  min-height: 98vh;
+  height: 98v;
   width: 100% !important;
   overflow-y: scroll;
   /* background-color: white; */
   flex-direction: column;
-  /* justify-content: center; */
+  justify-content: center;
   padding: 0.5rem;
 
   /* overflow-y: scroll; */
@@ -47,7 +47,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  border-bottom: 1px solid;
+  border-bottom: 0.5px solid;
   padding: 1rem 0rem;
   margin-bottom: 1rem;
 }
@@ -56,7 +56,7 @@
   margin-left: 0.8rem;
 }
 .br {
-  border: 1px solid !important;
+  /* border: 1px solid !important; */
   border-color: black !important;
 }
 .orden p {
@@ -81,10 +81,13 @@ div.pagebr {
 }
 
 .order {
-  size: 7in 9.25in;
-  min-height: 14.25in;
+  size: 7in 9.25in !important;
+  min-height: 14.5in;
   padding: 1rem 0.5rem;
-  margin: 27mm 16mm 27mm 16mm;
+  /* background-color: white; */
+  margin: 0;
+  padding: 0;
+  margin: 3rem 6rem;
   page-break-before: always !important;
   background-color: white;
   border: 1px solid;
@@ -93,4 +96,22 @@ div.pagebr {
 
 h1 {
   page-break-before: always;
+}
+
+@media print {
+  .order {
+    margin: 10mm 0mm 10mm 0mm;
+    transform: scale(1);
+    /* border: 0; */
+  }
+  #sidebar {
+    width: 0 !important;
+    display: none;
+  }
+  .wrap {
+    display: none;
+  }
+  .navbar {
+    display: none;
+  }
 }

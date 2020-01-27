@@ -106,18 +106,18 @@ class Reporte extends Component {
               Generar
             </button>
           </div>
-          {!this.state.loaded ? (
-            <LoadingScreen />
-          ) : (
-            <div className="resultados">
-              <h2 style={{ marginLeft: "3rem" }}>
-                {" "}
-                {this.state.orders.length} Resultados
-              </h2>
-              {renderOrders}
-            </div>
-          )}
         </div>
+        {!this.state.loaded ? (
+          <LoadingScreen />
+        ) : (
+          <div className="resultados">
+            <h2 style={{ marginLeft: "3rem" }}>
+              {" "}
+              {this.state.orders.length} Resultados
+            </h2>
+            {renderOrders}
+          </div>
+        )}
       </div>
     );
   }

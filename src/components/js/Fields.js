@@ -93,7 +93,7 @@ exports.ordenSchema = Joi.object({
     .length(3)
     .required(),
   CotID: Joi.number(),
-  Cotiz: Joi.object().required(),
+  Cotiz: Joi.object(),
   Encargado: Joi.string()
     .min(1)
     .max(20)

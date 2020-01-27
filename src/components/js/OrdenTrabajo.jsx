@@ -18,7 +18,7 @@ class OrdenTrabajo extends Component {
     errorField: {},
     cotizSelect: false,
     Cotiz: {
-      ID: ""
+      ID: "No Hay"
     },
     errorMessage: "",
     error: false,
@@ -34,7 +34,9 @@ class OrdenTrabajo extends Component {
     fields: {
       Enviar: { Direccion: "", Cliente: "" },
       Parts: [],
-      CondPago: 100,
+      CondPago: "100",
+
+      Dossier: false,
       Planta: 0,
       Moneda: "MXN",
       Status: 0,
@@ -110,7 +112,6 @@ class OrdenTrabajo extends Component {
       sum += cant * pu;
     });
 
-    sum = sum * (1 + fields.IVA / 100);
     sum = sum.toFixed(2);
     copy.Importe = sum;
     sum = utils.formatMoney(sum);
@@ -208,7 +209,7 @@ class OrdenTrabajo extends Component {
         this.setState({
           fields: result,
           Cliente: currClient,
-          Cotiz: result.Cotiz ? result.Cotiz : { ID: "" }
+          Cotiz: result.Cotiz ? result.Cotiz : { ID: "Pendiente o Inexistente" }
         });
       } else this.setState({ error: true });
     }
@@ -227,9 +228,9 @@ class OrdenTrabajo extends Component {
       errorField = {};
 
     try {
+      fields.Dossier = this.state.dossier ? 1 : 0;
       await ordenSchema.validateAsync({ ...fields });
 
-      fields.Dossier = this.state.dossier ? 1 : 0;
       fields.Vendedor = this.state.Data.Vendedores.find(
         client => client._id == fields.Vendedor
       );
@@ -265,11 +266,13 @@ class OrdenTrabajo extends Component {
   };
 
   updatePart = (id, name, value) => {
-    let { Parts } = this.state.fields;
+    var { Parts } = this.state.fields;
+
     let copy = Parts;
 
-    let part = copy.find(part => part.id == id);
+    let part = copy.find(part => part.parte == id);
     part[name] = value;
+
     this.updateTotal(copy);
     this.setState({ Parts: copy });
   };
@@ -293,15 +296,15 @@ class OrdenTrabajo extends Component {
 
     let { Parts } = this.state.fields;
 
-    let renderParts = Parts.map(part => {
+    let renderParts = Parts.map((part, index) => {
       console.log(part);
       let { parte, cant, concepto, pu, id } = part;
       return (
         <Part
           deletePart={this.deletePart}
           updatePart={this.updatePart}
-          id={id}
-          key={id}
+          id={index}
+          key={index}
           parte={parte}
           cant={cant}
           concepto={concepto}
@@ -666,14 +669,14 @@ const Part = props => {
         <input
           defaultValue={props.parte}
           style={{ width: "10rem" }}
-          onChange={e => updatePart(id, "parte", e.target.value)}
+          onChange={e => updatePart(props.parte, "parte", e.target.value)}
         />
       </td>
       <td>
         <input
           defaultValue={props.cant}
           style={{ width: "3rem" }}
-          onChange={e => updatePart(id, "cant", e.target.value)}
+          onChange={e => updatePart(props.parte, "cant", e.target.value)}
         />
       </td>
       <td>
@@ -681,21 +684,21 @@ const Part = props => {
           style={{ width: "40rem", height: "15rem" }}
           multiple
           defaultValue={props.concepto}
-          onChange={e => updatePart(id, "concepto", e.target.value)}
+          onChange={e => updatePart(props.parte, "concepto", e.target.value)}
         />
       </td>
       <td>
         <input
           defaultValue={props.pu}
           style={{ width: "5rem" }}
-          onChange={e => updatePart(id, "pu", e.target.value)}
+          onChange={e => updatePart(props.parte, "pu", e.target.value)}
         />
       </td>
       <td>
         <button
           style={{ color: "white" }}
           className="btn delete-button"
-          onClick={() => deletePart(id)}
+          onClick={() => deletePart(props.parte)}
         >
           x
         </button>

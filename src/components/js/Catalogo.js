@@ -72,10 +72,20 @@ class Catalogo extends Component {
   };
 
   onDelete = async id => {
+    this.setState({ loaded: false });
     let { header } = this.props;
-    let result = await axios.deleteItem(header, id);
-    console.log(result);
-    return (window.location = "/catalogo/" + header.toLowerCase());
+    let { data } = this.state;
+    try {
+      let result = await axios.deleteItem(header, id);
+
+      if (result) {
+        data = data.filter(item => item._id !== id);
+        this.setState({ data, loaded: true });
+      }
+    } catch (err) {
+      console.log(err.message);
+      this.setState({ error: true });
+    }
   };
 
   render() {

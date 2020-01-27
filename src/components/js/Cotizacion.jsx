@@ -34,10 +34,10 @@ class Cotizacion extends Component {
     fields: {
       Status: 0,
       Fecha:
-        new Date().getDate() +
-        "/" +
         new Date().getMonth() +
         1 +
+        "/" +
+        new Date().getDate() +
         "/" +
         new Date().getFullYear()
     }

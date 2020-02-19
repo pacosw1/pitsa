@@ -1,11 +1,11 @@
 let axios = require("axios");
 let _ = require("lodash");
 let jwtDecode = require("jwt-decode");
-axios.defaults.baseURL = "http://67.207.87.121:5000/";
+axios.defaults.baseURL = "https://api.pitsa.app/";
 axios.defaults.headers.common["token"] = localStorage.token;
 
 ///67.207.87.121
-exports.getData = async route => {
+export var getData = async route => {
   var result;
   try {
     result = await axios.get(route);
@@ -13,7 +13,7 @@ exports.getData = async route => {
   } catch (err) {}
 };
 
-exports.login = async account => {
+export var login = async account => {
   var res, data;
   try {
     res = await axios.post("auth", {
@@ -30,13 +30,13 @@ exports.login = async account => {
   }
 };
 
-exports.getUser = () => {
+export var getUser = () => {
   if (localStorage.token) {
     return jwtDecode(localStorage.token);
   } else return false;
 };
 
-exports.getItem = async (route, id) => {
+export var getItem = async (route, id) => {
   var result;
   try {
     result = await axios.get(`${route}/${id}`);
@@ -44,7 +44,7 @@ exports.getItem = async (route, id) => {
   } catch (err) {}
 };
 
-exports.editItem = async (route, fields, id) => {
+export var editItem = async (route, fields, id) => {
   var result;
   try {
     result = await axios.put(`${route}/${id}`, fields);
@@ -52,7 +52,7 @@ exports.editItem = async (route, fields, id) => {
   } catch (err) {}
 };
 
-exports.createItem = async (route, fields) => {
+export var createItem = async (route, fields) => {
   var result;
   try {
     result = await axios.post(route, fields);
@@ -60,7 +60,7 @@ exports.createItem = async (route, fields) => {
   } catch (err) {}
 };
 
-exports.deleteItem = (route, id) =>
+export var deleteItem = (route, id) =>
   axios
     .delete(`${route}/${id}`)
     .then(result => {
